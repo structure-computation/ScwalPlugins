@@ -1,0 +1,18 @@
+#ifndef SCILLSRASULTUPDATER_H
+#define SCILLSRASULTUPDATER_H
+
+#include <Soca/Updater.h>
+class SodaClient;
+class QDataStream;
+
+
+/**
+*/
+class UnvReaderUpdater2D : public Updater {
+protected:
+    bool run( MP mp );
+    virtual QString type() const { return "UnvReaderUpdater"; }
+    SodaClient *sc;
+};
+
+#endif // SCILLSRASULTUPDATER_H
