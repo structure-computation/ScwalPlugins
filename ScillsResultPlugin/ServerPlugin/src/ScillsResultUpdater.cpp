@@ -1,3 +1,4 @@
+#include <Soca/Com/SodaClient.h>
 #include <Soca/Model/TypedArray.h>
 #include <QtCore/QTemporaryFile>
 #include <QtCore/QDataStream>
@@ -5,7 +6,6 @@
 #include "ScillsResultUpdater.h"
 
 #include <string.h>
-
 
 #include "../COMPUTE/DataUser.h"
 #include "../COMPUTE/FieldStructureUser.h"

@@ -14,6 +14,7 @@ int main( int argc, char **argv ) {
         MP mp = event.mp();
         if ( mp.type() == "UnvReaderItem3D" ) {
             UnvReaderUpdater3D mu;
+            mu.sc = &sc;
             mu.exec( mp );
         }
     }

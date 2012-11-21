@@ -12,6 +12,8 @@ class UnvReaderUpdater2D : public Updater {
 protected:
     bool run( MP mp );
     virtual QString type() const { return "UnvReaderUpdater"; }
+    
+public:
     SodaClient *sc;
 };
 

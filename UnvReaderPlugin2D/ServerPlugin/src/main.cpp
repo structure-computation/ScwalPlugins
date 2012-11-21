@@ -1,6 +1,5 @@
 #include <Soca/Com/SodaClient.h>
 #include "UnvReaderUpdater2D.h"
-// #include "UnvReaderUpdater3D.h"
 
 int main( int argc, char **argv ) {
     // connection
@@ -9,18 +8,14 @@ int main( int argc, char **argv ) {
 
     //
     sc.reg_type( "UnvReaderItem2D" );
-//     sc.reg_type( "UnvReaderItem3D" );
 
     // attente
     while ( SodaClient::Event event = sc.event() ) {
         MP mp = event.mp();
         if ( mp.type() == "UnvReaderItem2D" ) {
             UnvReaderUpdater2D mu;
+            mu.sc = &sc;
             mu.exec( mp );
         }
-//         if ( mp.type() == "UnvReaderItem3D" ) {
-//             UnvReaderUpdater_3D mu;
-//             mu.exec( mp );
-//         }
     }
 }

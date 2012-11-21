@@ -1,10 +1,10 @@
 #ifndef SCILLSRASULTUPDATER_H
 #define SCILLSRASULTUPDATER_H
 
-//#include "DisplayScene.h"
-
 #include <Soca/Updater.h>
+class SodaClient;
 class QDataStream;
+
 
 /**
 */
@@ -13,6 +13,8 @@ protected:
     bool run( MP mp );
     virtual QString type() const { return "ScillsResultUpdater"; }
     
+public:
+    SodaClient *sc;   
 };
 
 #endif // SCILLSRASULTUPDATER_H

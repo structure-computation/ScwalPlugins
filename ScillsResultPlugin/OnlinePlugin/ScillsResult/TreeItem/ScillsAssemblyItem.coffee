@@ -1,5 +1,5 @@
 #
-class ScillsAssemblyItem extends TreeItem_Computable
+class ScillsAssemblyItem extends TreeItem
     constructor: (name = "Assembly" ) ->
         super()
         #@add_attr
@@ -18,17 +18,19 @@ class ScillsAssemblyItem extends TreeItem_Computable
         
         # attributes
         @add_attr
-            id_model: 217
-            id_calcul: -1
             nb_parts: 0
             nb_interfaces: 0
             nb_edges: 0
+            compute_parts: false
+            compute_interfaces: true
+            compute_edges: false
     
     accept_child: ( ch ) ->
         #false
         ch instanceof ScillsPartSetItem or 
         ch instanceof ScillsInterfaceSetItem or
-        ch instanceof ScillsEdgeSetItem
+        ch instanceof ScillsEdgeSetItem or
+        ch instanceof FileItem
     
     #cosmetic_attribute: ( name ) ->
     #    super( name ) or ( name in [ "_mesh", "visualization" ] )    

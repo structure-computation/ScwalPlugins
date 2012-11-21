@@ -74,7 +74,7 @@ void new_list_points_mesh_2D(MP om, MeshUser &mesh_user){
         om[ "points" ] << pnt;
         
     }
-    qDebug() << om[ "points" ] ;
+    //qDebug() << om[ "points" ] ;
 };
 
 //création de la liste des éléments a partire du maillage MeshUser de scult
@@ -96,56 +96,53 @@ void new_list_elements_mesh_2D(MP om, MeshUser &mesh_user){
 
 
 bool UnvReaderUpdater2D::run( MP mp ) {
-    int ch = mp[ "compute" ];
     MP  file_unv = mp[ "_children[ 0 ]" ];
-    QString file_unv_name = file_unv[ "name" ];
-    qDebug() << ch;
+    qDebug() << file_unv;
+    QString file_unv_name = file_unv[ "_name" ];
     qDebug() << file_unv_name;
     if (file_unv.ok()){
         quint64 ptr = file_unv[ "_ptr" ];
-        QString name = file_unv[ "name" ];
-        qDebug() << ptr;
-        qDebug() << name;
+        QString name = file_unv[ "_name" ];
         MP data = sc->load_ptr( ptr );
-        qDebug() << "on lit le path 3";
+        qDebug() << "on lit le path";
+        QString path_unv;
         if( data.ok() and data.type() == "Path") {
-            QString p = data;
-            qDebug() << p; 
+            QString path_temp = data;
+            path_unv = path_temp;
+            qDebug() << path_unv; 
         }
-    }
-    // add_message( mp, ET_Info, "Test info msg" );
     
-    if (ch == 1) {
-        // version 1------------------------------------------------------------------
-        double id_model = mp[ "id_model" ];
-        if ( id_model == -1 ) {
-            add_message( mp, ET_Error, "Model is not available" );
-            //return false;
-        }
-        
-        Sc2String str_id_model;
-        str_id_model << id_model;
-        Sc2String model_path = "/share/sc2/Developpement/MODEL/";
-        Sc2String file = model_path + "model_" + str_id_model + "/MESH/model_id.json";
-
         //lecture du maillage utilisateur -------------------------------------------
-        MeshUser mesh_user( model_path, str_id_model );
-        mesh_user.create_mesh_unv( model_path, file, ".unv");
+        QByteArray byteArray = path_unv.toUtf8();
+        const char* c_path_unv = byteArray.constData();
+        Sc2String file;
+        file << c_path_unv;
         
-        MP om = mp[ "_mesh" ];
+        qDebug() << "on lit le maillage unv";
+        MeshUser mesh_user( file, "0" );
+        qDebug() << "on lit le maillage unv";
+        mesh_user.create_mesh_unv( file, ".unv");
+        
+        qDebug() << "on lit le path";
+        
+        //MP om = mp[ "_mesh" ];
+        MP om = mp[  "_output[ 0 ].mesh" ];
+        //MP mm = mp[  "_mesh" ];
         om[ "points" ].clear();
         om[ "_elements" ].clear();
         
+        //mm = om;
         //liste des points du maillage------------
         new_list_points_mesh_2D(om, mesh_user);
         
         //liste des éléments du maillage----------
         new_list_elements_mesh_2D(om, mesh_user);
-       
-        mp[ "compute" ] = 0;
+      
+        //mp[ "_output[ 0 ].mesh" ] << om;
+        mp[ "_computation_mode" ] = false;
         mp.flush();
         add_message( mp, ET_Info, "UnvReaderUpdater2D just finish" );
-    } 
+    }
     add_message( mp, ET_Info, "UnvReaderUpdater2D just finish" );
 }
 
