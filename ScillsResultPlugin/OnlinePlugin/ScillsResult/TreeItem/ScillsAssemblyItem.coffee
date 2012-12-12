@@ -2,11 +2,7 @@
 class ScillsAssemblyItem extends TreeItem
     constructor: (name = "Assembly" ) ->
         super()
-        #@add_attr
-        #    _mesh        : new Mesh( not_editable: true )
-        # 
-        #@add_attr
-        #    visualization: @_mesh.visualization
+
             
         # default values
         @_name.set name
@@ -24,6 +20,8 @@ class ScillsAssemblyItem extends TreeItem
             compute_parts: false
             compute_interfaces: true
             compute_edges: false
+            _path: new Path
+            _path_loaded: false
     
     accept_child: ( ch ) ->
         #false

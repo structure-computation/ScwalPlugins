@@ -10,7 +10,7 @@ class UnvReaderItem2D extends TreeItem_Computable
         #    cell_type    : new Choice( 0, [ "Triangle 3", "Triangle 6", "Quad 4",  "Quad 8" ] )
 
         @_name.set name
-        @_ico.set "img/unvReader.png"
+        @_ico.set "img/unv2D.png"
         @_viewable.set false
         
         @add_output new SketchItem

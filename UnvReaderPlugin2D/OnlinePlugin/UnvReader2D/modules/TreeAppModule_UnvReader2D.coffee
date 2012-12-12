@@ -9,7 +9,7 @@ class TreeAppModule_UnvReader2D extends TreeAppModule
             app.data.focus.get() != app.selected_canvas_inst()?[ 0 ]?.cm.view_id
             
         @actions.push
-            ico: "img/unvReader.png"
+            ico: "img/unv2D.png"
             siz: 1
             txt: "unv reader 2d"
             ina: _ina

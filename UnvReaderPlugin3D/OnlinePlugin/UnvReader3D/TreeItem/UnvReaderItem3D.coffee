@@ -3,7 +3,7 @@ class UnvReaderItem3D extends TreeItem_Computable
     constructor: ( name = "UnvReader_3D" ) ->
         super()
         @_name.set name
-        @_ico.set "img/unvReader.png"
+        @_ico.set "img/unv3D.png"
         @_viewable.set false
         
         @add_output new SketchItem
