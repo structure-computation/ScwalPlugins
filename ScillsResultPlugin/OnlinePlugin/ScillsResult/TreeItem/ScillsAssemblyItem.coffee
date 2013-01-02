@@ -39,3 +39,23 @@ class ScillsAssemblyItem extends TreeItem
     #z_index: ->
     #    @_mesh.z_index()
      
+    
+    #work on parts--------------------------------------------------
+    filter_part: (part_filter, mat_id)->
+        if @_children[0]?
+            @_children[0].filter_part(part_filter, mat_id)
+        
+    clear_material_id: ->
+        if @_children[0]?
+            @_children[0].clear_material_id()
+            
+    #work on interfaces--------------------------------------------------
+    filter_interface: (inter_filter, link_id)->
+        if @_children[1]?
+            @_children[1].filter_interface(inter_filter, link_id, @_children[0])
+        
+    clear_link_id: ->
+        if @_children[1]?
+            @_children[1].clear_link_id()
+            
+    
