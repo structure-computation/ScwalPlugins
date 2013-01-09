@@ -34,8 +34,8 @@ class ScillsInterfaceSetItem extends TreeItem
             
     filter_interface: (interface_filter, link_id, part_set)->
         if interface_filter._children.lenght != 0 
-            for link in interface_filter._children
-                link.link_id.set parseInt(-1)
+            for inter in interface_filter._children
+                inter.link_id.set parseInt(-1)
             interface_filter._children.clear()
        
             
@@ -62,12 +62,14 @@ class ScillsInterfaceSetItem extends TreeItem
                                 if inter.id >= piece_id[0] and inter.id <= piece_id[1]
                                     if parseInt(inter.link_id) == -1 or parseInt(inter.link_id) == parseInt(link_id) # test if part is already assigned
                                         interface_filter.add_child  inter
+                                        inter.link_id.set parseInt(link_id)
                         else if range.length==1
                             piece_id[0] = parseFloat(range[0]) + modulo
                             for inter in @_children
                                 if inter.id == piece_id[0]
                                     if parseInt(inter.link_id) == -1 or parseInt(inter.link_id) == parseInt(link_id) # test if part is already assigned
                                         interface_filter.add_child  inter
+                                        inter.link_id.set parseInt(link_id)
                         modulo += modulo_id
                         if (parseFloat(range[0]) + modulo) > @_children.length
                             #alert modulo
@@ -86,12 +88,14 @@ class ScillsInterfaceSetItem extends TreeItem
                             if inter.id >= piece_id[0] and inter.id <= piece_id[1]
                                 if parseInt(inter.link_id) == -1  or parseInt(inter.link_id) == parseInt(link_id)# test if part is already assigned
                                     interface_filter.add_child  inter
+                                    inter.link_id.set parseInt(link_id)
                     else if range.length==1
                         piece_id[0] = parseFloat(range[0])
                         for inter in @_children
                             if parseInt(inter.id) == piece_id[0]
                                 if parseInt(inter.link_id) == -1 or parseInt(inter.link_id) == parseInt(link_id)# test if part is already assigned
                                     interface_filter.add_child  inter
+                                    inter.link_id.set parseInt(link_id)
                                     
                                     
         if interface_filter.type.toString() == "between materials"  
@@ -107,4 +111,6 @@ class ScillsInterfaceSetItem extends TreeItem
                     if materialIDs.indexOf(parseInt(group[0])) != -1 and materialIDs.indexOf(parseInt(group[1])) != -1
                         # If firstID and secondID are the same (searching between an interface in contact with the same material)
                         # Then materialIDs have to be the same
-                        interface_filter.add_child inter if group[0] != group[1] or (materialIDs[0] == materialIDs[1])
+                        if group[0] != group[1] or (materialIDs[0] == materialIDs[1])
+                            interface_filter.add_child inter 
+                            inter.link_id.set parseInt(link_id)

@@ -27,3 +27,6 @@ class ScillsEdgeItem extends TreeItem
     
     sub_canvas_items: ->
         [ @_mesh ]
+        
+    clear: ->
+        @_mesh.clear()

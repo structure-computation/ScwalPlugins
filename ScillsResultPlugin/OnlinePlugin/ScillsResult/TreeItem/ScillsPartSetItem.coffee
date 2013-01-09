@@ -40,8 +40,8 @@ class ScillsPartSetItem extends TreeItem
     
     filter_part: (part_filter, mat_id)->
         if part_filter._children.lenght != 0 
-            for mat in part_filter._children
-                mat.material_id.set parseInt(-1)
+            for part in part_filter._children
+                part.material_id.set parseInt(-1)
             part_filter._children.clear()
        
             
@@ -68,12 +68,14 @@ class ScillsPartSetItem extends TreeItem
                                 if part.id >= piece_id[0] and part.id <= piece_id[1]
                                     if parseInt(part.material_id) == -1 or parseInt(part.material_id) == parseInt(mat_id) # test if part is already assigned
                                         part_filter.add_child  part
+                                        part.material_id.set parseInt(mat_id)
                         else if range.length==1
                             piece_id[0] = parseFloat(range[0]) + modulo
                             for part in @_children
                                 if part.id == piece_id[0]
                                     if parseInt(part.material_id) == -1 or parseInt(part.material_id) == parseInt(mat_id) # test if part is already assigned
                                         part_filter.add_child  part
+                                        part.material_id.set parseInt(mat_id)
                         modulo += modulo_id
                         if (parseFloat(range[0]) + modulo) > @_children.length
                             out = false
@@ -89,11 +91,13 @@ class ScillsPartSetItem extends TreeItem
                             if part.id >= piece_id[0] and part.id <= piece_id[1]
                                 if parseInt(part.material_id) == -1  or parseInt(part.material_id) == parseInt(mat_id)# test if part is already assigned
                                     part_filter.add_child  part
+                                    part.material_id.set parseInt(mat_id)
                     else if range.length==1
                         piece_id[0] = parseFloat(range[0])
                         for part in @_children
                             if parseInt(part.id) == piece_id[0]
                                 if parseInt(part.material_id) == -1 or parseInt(part.material_id) == parseInt(mat_id)# test if part is already assigned
                                     part_filter.add_child  part
+                                    part.material_id.set parseInt(mat_id)
     
     
