@@ -10,7 +10,7 @@ class TemporalStepSetItem extends TreeItem
         
     
     change_step_bounds: ->
-        bound = 1
+        bound = 0
         for num_step in [ 0 ... @_children.length ]
             @_children[num_step].initial_time.set(  bound )
             initial_time = @_children[num_step].initial_time

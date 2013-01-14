@@ -63,7 +63,8 @@ class MaterialSetItem extends TreeItem
                 for part in part_filter._children
                     if parseInt(part.material_id) == -1
                         part.material_id.set mat._id
-            
+                    if parseInt(part.group_id) == -1
+                        part.group_id.set part_filter._id
         
         
         

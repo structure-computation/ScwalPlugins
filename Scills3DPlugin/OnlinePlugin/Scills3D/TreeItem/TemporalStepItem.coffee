@@ -17,7 +17,7 @@ class TemporalStepItem extends TreeItem
             nb_steps: 1
             
         @bind =>
-            if  @time_step.has_been_modified() or @nb_step.has_been_modified()
+            if  @time_step.has_been_modified() or @nb_steps.has_been_modified()
                 @_parents[0]._parents[0].change_step_bounds()
     
     accept_child: ( ch ) ->

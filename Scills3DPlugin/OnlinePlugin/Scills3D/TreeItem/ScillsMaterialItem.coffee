@@ -10,7 +10,7 @@ class ScillsMaterialItem extends TreeItem
 
         # attributes
         @add_attr
-            nb_part_filters: 1
+            nb_part_filters: 0
             alias: name
             _id: id_mat
             _info_ok: parseInt(0)
@@ -42,54 +42,14 @@ class ScillsMaterialItem extends TreeItem
        res.model_editor[ "type" ] = ModelEditorItem_ChoiceWithEditableItems
     
     accept_child: ( ch ) ->
-        #
+        ch instanceof ScillsPartFilterItem
 
     z_index: ->
         #
          
     sub_canvas_items: ->
         [ ]
-    
-    
-    add_attr_plasticity: ()->
-        if not @plasticity?
-            @add_attr  
-                plasticity:
-                  R0: 0
-                  Kp: 0
-                  Mp: 0
-                  C: 0
-              
-    add_attr_dammage: ()->
-        if not @dammage?
-            @add_attr
-                dammage:
-                  Y0: 0
-                  Yc: 0
-                  Ycf: 0
-                  Dmax: 0
-                  Bc: 0
-                  a: 0
-                  tau: 0
-    
-    change_material_type: ()->
-        if @type.toString()=="elastique isotrope"
-            @rem_attr @plasticity if @plasticity?
-            @rem_attr @dammage if @dammage?
-                      
-        if @type.toString()=="elastique orthotrope"
-            @rem_attr @plasticity if @plasticity?
-            @rem_attr @dammage if @dammage?
-            
-        if @type.toString()=="elastoplastique isotrope"
-            @add_attr_plasticity() if not @plasticity?
-            @rem_attr @dammage if @dammage?
-            
-        if @type.toString()=="mésomodèle"
-            @rem_attr @plasticity if @plasticity?
-            @add_attr_dammage() if not @dammage?
-            
-    
+   
     set_filter_part: (part_filter)->
         @_parents[0]._parents[0].set_filter_part(part_filter,@_id)
     

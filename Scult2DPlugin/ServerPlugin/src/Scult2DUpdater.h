@@ -15,6 +15,7 @@ protected:
     
 public:
     SodaClient *sc;
+    void new_obj(const char* arg1);
 };
 
 #endif // SCULT2DUPDATER_H
