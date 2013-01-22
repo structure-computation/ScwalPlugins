@@ -10,11 +10,11 @@ GLOB_VAR = -D$(MACHINE_TYPE) -DDIM=$(DIM) -DTYPE=float -DTYPEREEL=float -DLDL -D
 
 all:
 	make -C ../../Soca
-	metil_comp -O3 -g3 -I../../LMT/include -I../../Soca/src $(GLOB_VAR) $(DIR_SOURCES_LMT) $(DIR_SOURCES_COMPUTE) $(CFLAGS) $(LIBS) ServerPlugin/src/main.cpp
+	metil_comp -ne -O3 -g3 -I../../LMT/include -I../../Soca/src $(GLOB_VAR) $(DIR_SOURCES_LMT) $(DIR_SOURCES_COMPUTE) $(CFLAGS) $(LIBS) ServerPlugin/src/main.cpp
 
 gdb:
-	metil_comp --gdb -O3 -g3 -I../../LMT/include -I../../Soca/src ServerPlugin/src/main.cpp
+	metil_comp -ne --gdb -O3 -g3 -I../../LMT/include -I../../Soca/src ServerPlugin/src/main.cpp
 
 val:
-	metil_comp --valgrind -O3 -g3 -I../../LMT/include -I../../Soca/src ServerPlugin/src/main.cpp
+	metil_comp -ne --valgrind -O3 -g3 -I../../LMT/include -I../../Soca/src ServerPlugin/src/main.cpp
 

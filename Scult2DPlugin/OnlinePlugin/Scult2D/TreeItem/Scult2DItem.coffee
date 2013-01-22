@@ -2,7 +2,7 @@
 class Scult2DItem extends TreeItem_Computable
     constructor: ( name = "Scult_2D" ) ->
         super()
-
+        
         @_name.set name
         @_ico.set "img/scult2D.png"
         @_viewable.set true

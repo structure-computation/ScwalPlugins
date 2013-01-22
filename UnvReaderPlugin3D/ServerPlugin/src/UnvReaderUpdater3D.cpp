@@ -125,10 +125,6 @@ bool UnvReaderUpdater3D::run( MP mp ) {
         new_list_points_mesh_3D(om, mesh_user);
         //liste des éléments du maillage----------
         new_list_elements_mesh_3D(om, mesh_user);
-//         
-        mp[ "_computation_mode" ] = false;   
-        mp.flush();
-        add_message( mp, ET_Info, "UnvReaderUpdater3D just finish" );
     }
     add_message( mp, ET_Info, "UnvReaderUpdater3D just finish" );
 }

@@ -414,12 +414,9 @@ bool Scult2DUpdater::run( MP mp ) {
         assembly[ "nb_parts" ] = nb_parts;
         assembly[ "nb_interfaces" ] = nb_interfaces;
         assembly[ "nb_edges" ] = nb_edges;
-        
-        mp[ "_computation_mode" ] = false;
-        mp.flush();
-        add_message( mp, ET_Info, "Scult2DUpdater just finish" );
     } 
     add_message( mp, ET_Info, "Scult2DUpdater just finish" );
+    qDebug() << "Scult2DUpdater just finish";
 }
 
 

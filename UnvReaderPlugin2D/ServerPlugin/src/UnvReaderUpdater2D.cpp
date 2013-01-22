@@ -97,7 +97,7 @@ void new_list_elements_mesh_2D(MP om, MeshUser &mesh_user){
 
 bool UnvReaderUpdater2D::run( MP mp ) {
     MP  file_unv = mp[ "_children[ 0 ]" ];
-    qDebug() << file_unv;
+//     qDebug() << mp;
     QString file_unv_name = file_unv[ "_name" ];
     qDebug() << file_unv_name;
     if (file_unv.ok()){
@@ -120,10 +120,10 @@ bool UnvReaderUpdater2D::run( MP mp ) {
         
         qDebug() << "on lit le maillage unv";
         MeshUser mesh_user( file, "0" );
-        qDebug() << "on lit le maillage unv";
+//         qDebug() << "on lit le maillage unv";
         mesh_user.create_mesh_unv( file, ".unv");
         
-        qDebug() << "on lit le path";
+//         qDebug() << "on lit le path";
         
         //MP om = mp[ "_mesh" ];
         MP om = mp[  "_output[ 0 ].mesh" ];
@@ -137,13 +137,9 @@ bool UnvReaderUpdater2D::run( MP mp ) {
         
         //liste des éléments du maillage----------
         new_list_elements_mesh_2D(om, mesh_user);
-      
-        //mp[ "_output[ 0 ].mesh" ] << om;
-        mp[ "_computation_mode" ] = false;
-        mp.flush();
-        add_message( mp, ET_Info, "UnvReaderUpdater2D just finish" );
     }
     add_message( mp, ET_Info, "UnvReaderUpdater2D just finish" );
+    qDebug() << "UnvReaderUpdater2D just finish";
 }
 
 

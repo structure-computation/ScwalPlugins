@@ -22,7 +22,7 @@ class TreeAppModule_Scills3D extends TreeAppModule
         @actions.push
             ico: "img/scult2D.png"
             siz: 1
-            txt: "SCult 2d"
+            txt: "Scult 2d"
             ina: _ina
             fun: ( evt, app ) =>
                 app.undo_manager.snapshot()

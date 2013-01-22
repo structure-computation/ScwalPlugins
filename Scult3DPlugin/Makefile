@@ -34,6 +34,6 @@ OPT = -j$(NB_COMP_PROC) -O3 -ffast-math -fexpensive-optimizations
 
 all:
 	make -C ../../Soca
-	metil_comp -O3 -g3 $(GLOB_VAR) $(DIR_SOURCES_LMT) $(DIR_SOURCES_SC) $(DIR_SOURCES_GEOMETRY) $(DIR_SOURCES_MPI) $(CFLAGS) $(LIBS) $(OPT) $(DIR_SOURCES_SOCA) ServerPlugin/src/main.cpp
+	metil_comp -ne -O3 -g3 $(GLOB_VAR) $(DIR_SOURCES_LMT) $(DIR_SOURCES_SC) $(DIR_SOURCES_GEOMETRY) $(DIR_SOURCES_MPI) $(CFLAGS) $(LIBS) $(OPT) $(DIR_SOURCES_SOCA) ServerPlugin/src/main.cpp
 
 

@@ -146,7 +146,7 @@ bool MeshUpdater::run( MP mp ) {
         //            om[ "lines" ] << rs;
         //        }
 
-        // qDebug() << om;
+        qDebug() << om;
     }
     
     add_message( mp, ET_Info, "Mesher -> OK" );
