@@ -1,13 +1,21 @@
 #
 class InBoxEdgeFilter extends Model
-    constructor: ( ) ->
+    constructor: (dim = 3 ) ->
         super()
 
         # attributes
         @add_attr 
             _name: "in_box"
-            point_1: [0,0,0]
-            point_2: [0,0,0]
+            _dim: dim
+            
+        if (parseInt(@_dim) == 3)
+            @add_attr 
+                point_1: [0,0,0]
+                point_2: [0,0,0]
+        else
+            @add_attr 
+                point_1: [0,0]
+                point_2: [0,0]
      
               
     toString: ->

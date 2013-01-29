@@ -1,6 +1,6 @@
 #
 class ScillsMaterialItem extends TreeItem
-    constructor: (name = "Material", id_mat = 0 ) ->
+    constructor: (name = "Material", id_mat = 0, dim = 3 ) ->
         super()
         
         # default values
@@ -14,15 +14,16 @@ class ScillsMaterialItem extends TreeItem
             alias: name
             _id: id_mat
             _info_ok: parseInt(0)
+            _dim: dim
         
         @add_attr
             type: new Choice
         
         elastic_isotrop_mat = new ElasticIsotropMaterial
-        elastic_orthotrop_mat = new ElasticOrthotropMaterial
+        elastic_orthotrop_mat = new ElasticOrthotropMaterial @_dim
         plastic_isotrop_mat = new PlasticIsotropMaterial
         dammage_isotrop_mat = new DammageIsotropMaterial
-        mesomodel_mat = new MesomodelMaterial
+        mesomodel_mat = new MesomodelMaterial @_dim
        
         @type.lst.push elastic_isotrop_mat
         @type.lst.push elastic_orthotrop_mat

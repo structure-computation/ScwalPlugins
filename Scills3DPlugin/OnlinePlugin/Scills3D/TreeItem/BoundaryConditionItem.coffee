@@ -1,6 +1,6 @@
 #
 class BoundaryConditionItem extends TreeItem
-    constructor: (name = "Boundary_condition", id_bc = 0) ->
+    constructor: (name = "Boundary_condition", id_bc = 0, dim = 3) ->
         super()
         
         # default values
@@ -14,16 +14,17 @@ class BoundaryConditionItem extends TreeItem
             alias: name
             _id: id_bc
             _info_ok: parseInt(0)
+            _dim: dim
         
         @add_attr
             type: new Choice
             
-        displacement_bc = new DisplacementBC
+        displacement_bc = new DisplacementBC @_dim
         normal_displacement_bc = new NormalDisplacementBC
         symetry_bc = new SymetrytBC
-        speed_bc = new SpeedBC
+        speed_bc = new SpeedBC @_dim
         normal_speed_bc = new NormalSpeedBC
-        stress_density_bc = new StressDensityBC
+        stress_density_bc = new StressDensityBC @_dim
         normal_stress_density_bc = new NormalStressDensityBC
         
         @type.lst.push displacement_bc

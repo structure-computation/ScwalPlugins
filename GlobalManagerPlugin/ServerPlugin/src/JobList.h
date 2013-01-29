@@ -66,9 +66,9 @@ class Job : public QObject {
     
     bool job_to_kill(){
         bool find = false;
-        if(not thread)                  { find = true;}
-        else if(thread->isFinished())   { find = true;}
-        else if(as_been_killed)         { find = true;}
+        if(thread->isFinished())          { find = true;}
+        //else if(not thread)   { find = true;}
+        //else if(as_been_killed)         { find = true;}
         return find;
     }
     
@@ -198,8 +198,8 @@ class Job : public QObject {
         }
         if(launcher_exists and thread_exists and stop){
             qDebug() << "job quit thread------------------------- : " << model_id;
-            thread->quit();
-            as_been_killed = true;
+            //thread->quit();
+            //as_been_killed = true;
         }
         
     }

@@ -1,6 +1,6 @@
 #
 class MesomodelMaterial extends Model
-    constructor: ( ) ->
+    constructor: ( dim = 3 ) ->
         super()
         
         # default values
@@ -14,17 +14,35 @@ class MesomodelMaterial extends Model
             _type_num: 4
             _type_plast: "0"
             _type_endo: "0"
-            main_directions:
-              direction_1: [1, 0, 0]
-              direction_2: [0, 1, 0]
-              direction_3: [0, 0, 1]
-            generic:
-              alpha: ["1e-6", "1e-6", "1e-6"]
-              density: "2000"
-            elasticity:
-              E: ["200000", "200000", "200000"]
-              nu: ["0.3", "0.3", "0.3"]
-              G: ["0", "0", "0"]
+            _dim: dim
+            
+        if (parseInt(@_dim) == 3)
+            @add_attr 
+                main_directions:
+                    direction_1: [1, 0, 0]
+                    direction_2: [0, 1, 0]
+                    direction_3: [0, 0, 1]   
+                generic:
+                    alpha: ["1e-6", "1e-6", "1e-6"]
+                    density: "2000"
+                elasticity:
+                    E: ["200000", "200000", "200000"]
+                    nu: ["0.3", "0.3", "0.3"]
+                    G: ["0", "0", "0"]
+        else
+           @add_attr 
+                main_directions:
+                    direction_1: [1, 0]
+                    direction_2: [0, 1]  
+                generic:
+                    alpha: ["1e-6", "1e-6"]
+                    density: "2000"
+                elasticity:
+                    E: ["200000", "200000"]
+                    nu: ["0.3", "0.3"]
+                    G: ["0", "0"] 
+                    
+        @add_attr    
             dammage:
               Yo: "0"
               Yc: "0"

@@ -139,17 +139,18 @@ bool MeshUpdater::run( MP mp ) {
         om[ "_elements" ] << tetrahedra;
 
 
-        mp.flush();
+        //mp.flush();
         //        foreach( TL l, lines ) {
         //            MP rs = MP::new_lst();
         //            rs << l.first << l.second;
         //            om[ "lines" ] << rs;
         //        }
 
-        qDebug() << om;
+        //qDebug() << om;
     }
     
     add_message( mp, ET_Info, "Mesher -> OK" );
+    qDebug() << "Mesher just finish";
 }
 
 void MeshUpdater::make_geo( QTextStream &geo, const MP &ch, double base_size ) {

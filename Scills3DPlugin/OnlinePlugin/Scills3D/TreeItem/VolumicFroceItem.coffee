@@ -1,6 +1,6 @@
 #
 class VolumicForceItem extends TreeItem
-    constructor: (name = "VolumicForce" ) ->
+    constructor: (name = "VolumicForce", dim = 3 ) ->
         super()
         
         # default values 
@@ -12,7 +12,14 @@ class VolumicForceItem extends TreeItem
         @add_attr
             alias: name
             gamma: "2"
-            space_function: ["0","0","-1"]
+            _dim: dim
+        
+        if (parseInt(@_dim) == 3)
+            @add_attr 
+                space_function: ["0","0","-1"]
+        else 
+            @add_attr 
+                space_function: ["0","-1"]
         
         @bind =>
             if  @alias.has_been_modified()

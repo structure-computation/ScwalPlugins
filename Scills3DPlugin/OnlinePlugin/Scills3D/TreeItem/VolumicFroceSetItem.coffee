@@ -1,6 +1,6 @@
 #
 class VolumicForceSetItem extends TreeItem
-    constructor: ( ) ->
+    constructor: ( dim = 3 ) ->
         super()
         
         # default values
@@ -11,6 +11,7 @@ class VolumicForceSetItem extends TreeItem
         # attributes
         @add_attr
             nb_loads: 0
+            _dim: dim
             
         @bind =>
             if  @nb_loads.has_been_modified()
@@ -36,4 +37,4 @@ class VolumicForceSetItem extends TreeItem
             size_child0_child = @_children.length
             for num_c in [ size_child0_child ... @nb_loads ]
                 name_temp = "F_" + num_c.toString()
-                @add_child  (new VolumicForceItem name_temp)
+                @add_child  (new VolumicForceItem name_temp, @_dim)

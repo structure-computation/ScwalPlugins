@@ -1,14 +1,22 @@
 #
 class OnDiscEdgeFilter extends Model
-    constructor: ( ) ->
+    constructor: (dim = 3 ) ->
         super()
 
         # attributes
         @add_attr 
             _name: "on_disc"
-            point: [0,0,0]
-            direction: [0,0,0]
+            _dim: dim
             radius: 0
+            
+        if (parseInt(@_dim) == 3)
+            @add_attr 
+                point: [0,0,0]
+                direction: [0,0,0]
+        else
+            @add_attr 
+                point: [0,0]
+                direction: [0,0]
      
               
     toString: ->

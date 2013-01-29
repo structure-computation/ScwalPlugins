@@ -1,6 +1,6 @@
 #
 class MaterialSetItem extends TreeItem
-    constructor: ( @app_data, @panel_id ) ->
+    constructor: ( dim = 3 ) ->
         super()
         
         # default values
@@ -13,6 +13,7 @@ class MaterialSetItem extends TreeItem
             nb_materials:0
             _incr_id_material:0
             _incr_id_group_part:0
+            _dim: dim
             
         @bind =>
             if  @nb_materials.has_been_modified()
@@ -50,7 +51,7 @@ class MaterialSetItem extends TreeItem
             for num_c in [ size_child0_child ... @nb_materials ]
                 id_mat = @ask_for_id_mat()
                 name_temp = "Mat_" + id_mat.toString()
-                @add_child  (new ScillsMaterialItem name_temp, id_mat)
+                @add_child  (new ScillsMaterialItem name_temp, id_mat, @_dim)
                 
                 
     set_filter_part: (part_filter,mat_id)->

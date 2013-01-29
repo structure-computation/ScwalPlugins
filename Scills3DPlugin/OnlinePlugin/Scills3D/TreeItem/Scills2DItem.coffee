@@ -1,10 +1,10 @@
 #
-class Scills3DItem extends TreeItem_Computable
-    constructor: (name = "Scills3D" ) ->
+class Scills2DItem extends TreeItem_Computable
+    constructor: (name = "Scills2D" ) ->
         super()
 
         @_name.set name
-        @_ico.set "img/scills3D.png"
+        @_ico.set "img/scills2D.png"
         @_viewable.set false
         
         # attributes
@@ -15,7 +15,7 @@ class Scills3DItem extends TreeItem_Computable
             nb_tokens: 0
             _compute_edges: false
             _compute_scills: false
-            _dim: 3
+            _dim: 2
         
         @add_child new ScillsStructureItem
         @add_child new ComputationParametersItem

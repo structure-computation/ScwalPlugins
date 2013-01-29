@@ -1,6 +1,6 @@
 #
 class BoundaryConditionSetItem extends TreeItem
-    constructor: ( ) ->
+    constructor: ( dim = 3 ) ->
         super()
         
         # default values
@@ -13,6 +13,7 @@ class BoundaryConditionSetItem extends TreeItem
             nb_bcs:0
             _incr_id_bc:0
             _incr_id_group_edge:0
+            _dim: dim
             
         @bind =>
             if  @nb_bcs.has_been_modified()
@@ -51,7 +52,7 @@ class BoundaryConditionSetItem extends TreeItem
             for num_c in [ size_child0_child ... @nb_bcs ]
                 id_bc = @ask_for_id_bc()
                 name_temp = "BC_" + id_bc.toString()
-                @add_child  (new BoundaryConditionItem name_temp, id_bc)
+                @add_child  (new BoundaryConditionItem name_temp, id_bc, @_dim)
                 
                 
     set_filter_edge: (edge_filter,bc_id)->

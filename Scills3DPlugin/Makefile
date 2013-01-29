@@ -16,7 +16,8 @@ DIR_SOURCES_SC = -IServerPlugin/build_scills -IServerPlugin/build_scills/problem
 DIR_SOURCES_GEOMETRY = -IServerPlugin/src_scills -IServerPlugin/src_scills/GEOMETRY -IServerPlugin/src_scills/COMPUTE -IServerPlugin/src_scills/UTILS -IServerPlugin/src_scills/UTILS/hdf -IServerPlugin/src_scills/UTILS/xdmf -IServerPlugin/src_scills/UTILS/json_spirit 
 
 # options communes
-GLOB_VAR = -DDIM=$(DIM) -D$(ARCHITECTURE)  -DTYPE=double -DTYPEREEL=double  -DLDL -Dcrout_alain
+#GLOB_VAR = -DDIM=$(DIM) -D$(ARCHITECTURE)  -DTYPE=double -DTYPEREEL=double  -DLDL -Dcrout_alain
+GLOB_VAR = -D$(ARCHITECTURE)  -DTYPE=double -DTYPEREEL=double  -DLDL -Dcrout_alain
 CFLAGS= -LServerPlugin/UTIL_scills/metis -lmetis -L$(MPI_LIB)/lib -lmpi -lmpi_cxx
 DIR_SOURCES_LMT =  -IServerPlugin/LMT -IServerPlugin/LMT/include -Iusr/include/suitesparse
 DIR_SOURCES_CUDA = -Iusr/local/cuda/include -Ihome/ubuntu/driver_toolkit/NVIDIA_GPU_Computing_SDK/C/common/inc 
@@ -32,6 +33,10 @@ OPT = -j$(NB_COMP_PROC) -O3 -ffast-math -fexpensive-optimizations
 #all:
 #	$(LOC_MC)  -o scillsResultClient.exe $(GLOB_VAR) $(DIR_SOURCES_LMT) $(DIR_SOURCES_SC) $(DIR_SOURCES_GEOMETRY) $(DIR_SOURCES_MPI) $(CFLAGS) $(LIBS) $(OPT) $(DIR_SOURCES_SOCA) ServerPlugin/src/main.cpp
 
-all:
+RELEASE3D:
 	make -C ../../Soca
-	metil_comp -ne -O3 -g3 $(GLOB_VAR) $(DIR_SOURCES_LMT) $(DIR_SOURCES_SC) $(DIR_SOURCES_GEOMETRY) $(DIR_SOURCES_MPI) $(CFLAGS) $(LIBS) $(OPT) $(DIR_SOURCES_SOCA) ServerPlugin/src/main.cpp
+	metil_comp -ne -O3 -g3 -DDIM=3 $(GLOB_VAR) $(DIR_SOURCES_LMT) $(DIR_SOURCES_SC) $(DIR_SOURCES_GEOMETRY) $(DIR_SOURCES_MPI) $(CFLAGS) $(LIBS) $(OPT) $(DIR_SOURCES_SOCA) ServerPlugin/src/main3D.cpp
+
+RELEASE2D:
+	make -C ../../Soca
+	metil_comp -ne -O3 -g3 -DDIM=2 $(GLOB_VAR) $(DIR_SOURCES_LMT) $(DIR_SOURCES_SC) $(DIR_SOURCES_GEOMETRY) $(DIR_SOURCES_MPI) $(CFLAGS) $(LIBS) $(OPT) $(DIR_SOURCES_SOCA) ServerPlugin/src/main2D.cpp

@@ -1,13 +1,20 @@
 #
 class DisplacementBC extends Model
-    constructor: ( ) ->
+    constructor: (dim = 3) ->
         super()
 
         # attributes
         @add_attr 
             _name: "displacement"
             _num_type: 0
-            space_function: ["0","0","0"]
+            _dim: dim
+        
+        if (parseInt(@_dim) == 3)
+            @add_attr 
+                space_function: ["0","0","0"]
+        else 
+            @add_attr 
+                space_function: ["0","0"]
      
               
     toString: ->

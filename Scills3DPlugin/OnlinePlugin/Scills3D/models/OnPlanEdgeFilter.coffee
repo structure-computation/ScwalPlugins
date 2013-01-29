@@ -1,13 +1,21 @@
 #
 class OnPlanEdgeFilter extends Model
-    constructor: ( ) ->
+    constructor: (dim = 3 ) ->
         super()
 
         # attributes
         @add_attr 
             _name: "on_plan"
-            point: [0,0,0]
-            direction: [0,0,0]
+            _dim: dim
+            
+        if (parseInt(@_dim) == 3)
+            @add_attr 
+                point: [0,0,0]
+                direction: [0,0,0]
+        else
+            @add_attr 
+                point: [0,0]
+                direction: [0,0]
      
               
     toString: ->

@@ -100,7 +100,13 @@ class Launcher : public QObject {
               commande = "../Scills3DPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main_cpp.exe " + temp_str ;
               output = std::system(commande.c_str());
           }
-          else if(mp.type() == "CorrelationItem" or mp.type() == "MesherItem" or mp.type() == "File" or mp.type() == "Img" or mp.type() == "ServerAssistedVisualization" ){
+          else if(mp.type() == "MesherItem" ){
+              qDebug() << "run_mesher-----------" ;
+              commande = "../CorreliPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main_gmsh_cpp.exe " + temp_str ;
+              output = std::system(commande.c_str());
+              qDebug() << "quit_mesher-----------" ;
+          }
+          else if(mp.type() == "CorrelationItem" or mp.type() == "File" or mp.type() == "Img" or mp.type() == "ServerAssistedVisualization" ){
               commande = "../CorreliPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main_cpp.exe " + temp_str ;
               output = std::system(commande.c_str());
           }
