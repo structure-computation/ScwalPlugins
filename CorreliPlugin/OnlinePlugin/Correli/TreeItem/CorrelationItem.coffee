@@ -63,9 +63,9 @@ class CorrelationItem extends TreeItem_Computable
         ch instanceof BoundariesSelectionItem
         
     sub_canvas_items: ->
-        res = []
-        if @nothing_to_do()
-            res.push @visualization
+        res = [@visualization]
+#         if @nothing_to_do()
+#             res.push @visualization
         return res
         
     cosmetic_attribute: ( name ) ->

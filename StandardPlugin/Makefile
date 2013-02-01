@@ -1,4 +1,4 @@
-DIR_SOURCES_SOCA = -IServerPlugin -IServerPlugin/src  -I../../Soca/src  -IServerPlugin/LMT/include -IServerPlugin/dic
+DIR_SOURCES_SOCA = -IServerPlugin -IServerPlugin/src  -I../../Soca/src  -IServerPlugin/LMT/include
 
 all:
 	make -C ../../Soca

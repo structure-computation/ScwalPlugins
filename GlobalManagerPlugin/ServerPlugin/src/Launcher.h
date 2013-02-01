@@ -4,6 +4,7 @@
 #include <QtCore/QProcess>
 #include <sstream>
 #include <string.h>
+#include "HttpClientRuby.h"
 
 class SodaClient;
 
@@ -24,55 +25,7 @@ class Launcher : public QObject {
           output = std::system(commande.c_str());
       }; 
       
-      void run_app_2(){   //fonction à définir dans chaque launcher
-          //qDebug() << mp;
-      
-//           int mp_server_id = mp.get_server_id();
-//           std::stringstream strs;
-//           strs << mp_server_id;
-//           std::string temp_str = strs.str();
-//           
-//           QProcess *myProcess = new QProcess(this);
-//           
-//           if(mp.type() == "UnvReaderItem2D" ){
-//               QString program = "../UnvReaderPlugin2D/ServerPlugin/src/compilations/ServerPlugin_src_main_cpp.exe";
-//               QStringList arguments;
-//               arguments << temp_str.c_str();
-//               myProcess->start(program, arguments);
-//           }
-//           else if(mp.type() == "UnvReaderItem3D" ){
-//               QString program = "../UnvReaderPlugin3D/ServerPlugin/src/compilations/ServerPlugin_src_main_cpp.exe";
-//               qDebug() << program;
-//               QStringList arguments;
-//               arguments << temp_str.c_str();
-//               myProcess->start(program, arguments);
-//           }
-//           else if(mp.type() == "Scult2DItem" ){
-//               QString program = "../Scult2DPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main_cpp.exe";
-//               QStringList arguments;
-//               arguments << temp_str.c_str();
-//               myProcess->start(program, arguments);
-//           }
-//           else if(mp.type() == "Scult3DItem" ){
-//               QString program = "../Scult3DPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main_cpp.exe";
-//               QStringList arguments;
-//               arguments << temp_str.c_str();
-//               myProcess->start(program, arguments);
-//           }
-//           else if(mp.type() == "Scills3DItem" ){
-//               QString program = "../Scills3DPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main_cpp.exe";
-//               QStringList arguments;
-//               arguments << temp_str.c_str();
-//               myProcess->start(program, arguments);
-//           }
-//           else if(mp.type() == "CorrelationItem" or mp.type() == "MesherItem" or mp.type() == "File" or mp.type() == "Img" or mp.type() == "ServerAssistedVisualization" ){
-//               QString program = "../CorreliPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main_cpp.exe";
-//               QStringList arguments;
-//               arguments << temp_str.c_str();
-//               myProcess->start(program, arguments);
-//           }
-//           myProcess->waitForFinished();
-          
+      void run_app_2(){   //fonction à définir dans chaque launcher         
           int mp_server_id = mp.get_server_id();
           std::stringstream strs;
           strs << mp_server_id;
@@ -96,31 +49,55 @@ class Launcher : public QObject {
               commande = "../Scult3DPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main_cpp.exe " + temp_str ;
               output = std::system(commande.c_str());
           }
-          else if(mp.type() == "Scills3DItem" ){
-              commande = "../Scills3DPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main_cpp.exe " + temp_str ;
+          else if(mp.type() == "Scills2DItem" ){
+              commande = "../Scills3DPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main2D_cpp.exe " + temp_str ;
               output = std::system(commande.c_str());
           }
-//           else if(mp.type() == "MesherItem" ){
-//               qDebug() << "run_mesher-----------" ;
-//               commande = "../CorreliPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main_gmsh_cpp.exe " + temp_str ;
-//               output = std::system(commande.c_str());
-//               qDebug() << "quit_mesher-----------" ;
-//           }
+          else if(mp.type() == "Scills3DItem" ){
+              commande = "../Scills3DPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main3D_cpp.exe " + temp_str ;
+              output = std::system(commande.c_str());
+          }
+          else if(mp.type() == "GmshItem" ){
+              commande = "../GmshPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main_cpp.exe " + temp_str ;
+              output = std::system(commande.c_str());
+          }
+          else if(mp.type() == "CorrelationItem" ){
+              commande = "../CorreliPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main_cpp.exe " + temp_str ;
+              output = std::system(commande.c_str());
+          }
 //           else if(mp.type() == "CorrelationItem" or mp.type() == "File" or mp.type() == "Img" or mp.type() == "ServerAssistedVisualization" ){
 //               commande = "../CorreliPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main_cpp.exe " + temp_str ;
 //               output = std::system(commande.c_str());
-//           }
-          
-          mp[ "_computation_mode" ] = false;
-          mp[ "_computation_state" ] = false;
-          mp[ "_processing_state" ] = false;
-          mp.flush();
+//           }         
       }; 
+      
+      void log_tool(){
+          qDebug() << "requette log_tool-----------" ;
+          Client http_client;
+          http_client.connexion();
+      };
               
-      void launch(){
+      void launch(){ 
+          qDebug() << "###############   launch tool ###############" ;
+          mp[ "_ready_state" ]        = false;
+          mp[ "_computation_state" ]  = true;
+          mp[ "_pending_state" ]      = false;
+          mp[ "_processing_state" ]   = true;
+          mp[ "_finish_state" ]       = false;
+          mp[ "_stop_state" ]         = false;
+          mp.flush();
           run_app_2();
-          
+          mp[ "_computation_mode" ]   = false;
+          mp[ "_ready_state" ]        = true;
+          mp[ "_computation_state" ]  = false;
+          mp[ "_pending_state" ]      = false;
+          mp[ "_processing_state" ]   = false;
+          mp[ "_finish_state" ]       = false;
+          mp[ "_stop_state" ]         = false;
+          mp.flush();
+          log_tool();
           emit finished();
+          qDebug() << "###############   finish tool ###############" ;
       };
  signals:  
       void finished();  

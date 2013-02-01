@@ -2,7 +2,7 @@
 #include <QtCore/QTemporaryFile>
 #include <QtCore/QDataStream>
 #include <containers/vec.h>
-#include "MeshUpdater.h"
+#include "GmshUpdater.h"
 
 typedef LMT::Vec<double,3> Pvec;
 
@@ -12,13 +12,15 @@ struct AutoRm {
     QString f;
 };
 
-bool MeshUpdater::run( MP mp ) {
+bool GmshUpdater::run( MP mp ) {
     MP ch = mp[ "_children[ 0 ].mesh" ];
     qDebug() << ch[ "points" ] ;
     qDebug() << ch[ "_elements" ] ;
+    
     // add_message( mp, ET_Info, "Test info msg" );
     
     if ( ch.ok() ) {
+//         qDebug() << ch[ "_mesh" ] ;
         double base_size = mp[ "base_size" ];
         if ( base_size <= 0 ) {
             add_message( mp, ET_Error, "Please specify a valid base size" );
@@ -146,14 +148,14 @@ bool MeshUpdater::run( MP mp ) {
         //            om[ "lines" ] << rs;
         //        }
 
-        //qDebug() << om;
+        qDebug() << om;
     }
     
     add_message( mp, ET_Info, "Mesher -> OK" );
     qDebug() << "Mesher just finish";
 }
 
-void MeshUpdater::make_geo( QTextStream &geo, const MP &ch, double base_size ) {
+void GmshUpdater::make_geo( QTextStream &geo, const MP &ch, double base_size ) {
     // points
     MP points = ch[ "points" ];
     int np = points.size(), ne = 0;
@@ -169,7 +171,7 @@ void MeshUpdater::make_geo( QTextStream &geo, const MP &ch, double base_size ) {
         make_geo_rec( elem_corr, geo, elements[ i ], base_size, points, np, ne );
 }
 
-void MeshUpdater::make_geo_rec( QMap<Model *,QVector<int> > &elem_corr, QTextStream &geo, const MP &elem, double base_size, const MP &points, int &np, int &ne ) {
+void GmshUpdater::make_geo_rec( QMap<Model *,QVector<int> > &elem_corr, QTextStream &geo, const MP &elem, double base_size, const MP &points, int &np, int &ne ) {
     if ( elem.ok() ) {
         // recursivity
         QVector<int> &res = elem_corr[ elem.model() ];

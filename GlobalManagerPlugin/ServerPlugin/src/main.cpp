@@ -11,9 +11,10 @@ int main( int argc, char **argv ) {
     sc.reg_type( "UnvReaderItem3D" );
     sc.reg_type( "Scult2DItem" );
     sc.reg_type( "Scult3DItem" );
+    sc.reg_type( "Scills2DItem" );
     sc.reg_type( "Scills3DItem" );
     sc.reg_type( "CorrelationItem" );
-    sc.reg_type( "MesherItem" );
+    sc.reg_type( "GmshItem" );
     sc.reg_type( "File" );
     sc.reg_type( "Img" );
     sc.reg_type( "ServerAssistedVisualization" );

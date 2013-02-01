@@ -7,6 +7,17 @@ class TreeAppModule_Scills3D extends TreeAppModule
         _ina = ( app ) =>
             app.data.focus.get() != app.selected_canvas_inst()?[ 0 ]?.cm.view_id
         
+         #scills application 2D
+        @actions.push
+            ico: "img/scills2D.png"
+            txt: "Scills2D"
+            ina: _ina
+            siz: 1
+            fun: ( evt, app ) =>
+                app.undo_manager.snapshot()
+                #@add_ass app.data
+                m = @add_item_depending_selected_tree app.data, Scills2DItem
+        
         #scills application 3D
         @actions.push
             ico: "img/scills3D.png"
@@ -17,17 +28,6 @@ class TreeAppModule_Scills3D extends TreeAppModule
                 app.undo_manager.snapshot()
                 #@add_ass app.data
                 m = @add_item_depending_selected_tree app.data, Scills3DItem
-                
-        #scills application 2D
-        @actions.push
-            ico: "img/scills2D.png"
-            txt: "Scills2D"
-            ina: _ina
-            siz: 1
-            fun: ( evt, app ) =>
-                app.undo_manager.snapshot()
-                #@add_ass app.data
-                m = @add_item_depending_selected_tree app.data, Scills2DItem
     
         #scult application 2D
         @actions.push

@@ -10,6 +10,7 @@ class DiscretizationItem extends TreeItem
 #         @add_child new SketchItem
     
     accept_child: ( ch ) ->
+        ch instanceof GmshItem or 
         ch instanceof MaskItem or 
         ch instanceof MesherItem or 
         ch instanceof SketchItem or 

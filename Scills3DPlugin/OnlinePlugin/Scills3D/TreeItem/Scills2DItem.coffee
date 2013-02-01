@@ -45,6 +45,7 @@ class Scills2DItem extends TreeItem_Computable
         @_compute_scills.set false
         @_compute_edges.set true
         @_computation_mode.set true
+        alert "compute edges"
         
     set_compute_scills: ()->
         @_compute_edges.set false

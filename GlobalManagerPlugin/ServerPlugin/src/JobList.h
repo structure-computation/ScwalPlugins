@@ -11,10 +11,19 @@ class Job : public QObject {
     MP model;
     SodaClient *sc;
     quint64 model_id;
+    quint64 model_ready_state;
+    quint64 model_computation_state;
+    quint64 model_pending_state;
+    quint64 model_processing_state;
+    quint64 model_finish_state;
+    quint64 model_stop_state;
+    
+    
     bool run;
+    bool pending;
     bool processing;
-    bool stop;
     bool finish;
+    bool stop;
     bool as_been_killed;
     Launcher *launcher;
     QThread *thread;
@@ -89,47 +98,64 @@ class Job : public QObject {
         return false;
     }
     
-    bool run_model_test(MP model_test){
-        bool test = true;
+    bool model_set_state(MP model_test){
         // model state
-        quint64 model_processing_state          = model_test[ "_processing_state" ];
-        quint64 model_computation_mode          = model_test[ "_computation_mode" ];
-        quint64 model_computation_state         = model_test[ "_computation_state" ];
+        model_ready_state               = model_test[ "_ready_state" ];
+        model_computation_state         = model_test[ "_computation_state" ];
+        model_pending_state             = model_test[ "_pending_state" ];
+        model_processing_state          = model_test[ "_processing_state" ];
+        model_finish_state              = model_test[ "_finish_state" ];
+        model_stop_state                = model_test[ "_stop_state" ];
+        
+        
+        //thread state
+        run             = false;
+        pending         = false;
+        processing      = false;
+        finish          = false;
+        stop            = false;
+        
+        if ( model_computation_state == true ){
+            run = true;
+        }
+        if ( model_pending_state == true ){
+            pending = true;
+        }
+        if ( model_processing_state == true ){
+            processing = true;
+        }
+        if ( model_finish_state == true ){
+            finish = true;
+        }
+        if ( model_stop_state == true ){
+            stop = true;
+        }
+    }
+    
+    bool run_model_test(MP model_test){
+        bool run_app = false;
+        model_set_state(model_test);
+
+        quint64 model_computation_mode          = model_test[ "_computation_mode" ]; 
         quint64 model_computation_req_date      = model_test[ "_computation_req_date" ];
         quint64 model_computation_rep_date      = model_test[ "_computation_rep_date" ];
         
 //         qDebug() << "model_computation_mode : " << model_computation_mode << "  model_computation_state : " << model_computation_state;
-        if ( model_processing_state == false){
-            stop = true;
-        }
-        
-        if ( model_computation_mode == false && model_computation_state == false ){
-            test = false;
+        if ( model_computation_state == true ){
+            run_app = true;
         }
         if ( model_computation_req_date <= model_computation_rep_date ){
-            test = false;
+            run_app = false;
         }
-//         qDebug() << "test : " << test;
+//         qDebug() << "run_app : " << run_app;
         
-        return test;
-    }
-    
-    void set_model_computation_state_to_false(){
-        quint64 model_computation_mode          = model[ "_computation_mode" ];
-        quint64 model_computation_state         = model[ "_computation_state" ];
-        quint64 model_computation_req_date      = model[ "_computation_req_date" ];
-        quint64 model_computation_rep_date      = model[ "_computation_rep_date" ];
-        
-        model[ "_computation_rep_date" ] = model[ "_computation_req_date" ];
-        if ( model_computation_mode == false and model_computation_state == true ){
-           model[ "_computation_state" ] = false;
-
-        }
+        return run_app;
     }
     
     bool run_thread_test(){
         if(thread_exists){
             //thread state
+            model_set_state(model);
             bool thread_is_runing = thread->isRunning();
             bool thread_is_finished = thread->isFinished();
 //             qDebug() << "thread_is_runing : " << thread_is_runing << "  thread_is_finished : " << thread_is_finished;
@@ -145,18 +171,10 @@ class Job : public QObject {
         }
     }
     
-    void run_state(){
-        //update current state
-        run             = false;
-        processing      = false;
-        stop            = false;
-        finish          = false;
-      
+    void run_state(){        
         // model state
         run = run_model_test(model);
         run_thread_test();
-        //set_model_computation_state_to_false();
-        
     }
     
     void putLauncherInAThread(MP mp){
@@ -179,11 +197,18 @@ class Job : public QObject {
         qDebug() << "launcher_exists : " << launcher_exists << ", thread_exists : " << thread_exists << ", run : " << run << ", stop : " << stop;
         if(launcher_exists and thread_exists and run){
             qDebug() << "job lance model------------------------- : " << model_id;
+            mp[ "_ready_state" ]        = false;
+            mp[ "_computation_state" ]  = true;
+            mp[ "_pending_state" ]      = true;
+            mp[ "_processing_state" ]   = false;
+            mp[ "_finish_state" ]       = false;
+            mp[ "_stop_state" ]         = false;
+            mp.flush();
             launcher->sc = sc;
             launcher->mp.reassign(model);
             connect(thread, SIGNAL(started()), launcher, SLOT(launch()));
-            connect(launcher, SIGNAL(finished()), thread, SLOT(quit()));
-            //connect(launcher, SIGNAL(finished()), thread, SIGNAL(finished()));
+            //connect(launcher, SIGNAL(finished()), thread, SLOT(quit()));
+            connect(launcher, SIGNAL(finished()), thread, SIGNAL(finished()));
             connect(launcher, SIGNAL(finished()), launcher, SLOT(deleteLater()));
             //connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
             connect(thread, SIGNAL(finished()), this, SLOT(finish_thread()));
@@ -191,13 +216,17 @@ class Job : public QObject {
 
             // Starts an event loop, and emits thread->started()
             thread->start();
-            mp[ "_processing_state" ] = true;
-            stop = false;
-            mp.flush();
-            //SodaClient::Event event = sc->event();
         }
-        if(launcher_exists and thread_exists and stop){
+        if(launcher_exists and thread_exists and finish){
             qDebug() << "job quit thread------------------------- : " << model_id;
+            sleep(3);
+            mp[ "_ready_state" ]        = false;
+            mp[ "_computation_state" ]  = false;
+            mp[ "_pending_state" ]      = false;
+            mp[ "_processing_state" ]   = false;
+            mp[ "_finish_state" ]       = false;
+            mp[ "_stop_state" ]         = true;
+            mp.flush();
             //thread->quit();
             //as_been_killed = true;
         }
@@ -205,9 +234,14 @@ class Job : public QObject {
     }
   public slots: 
     void finish_thread(){
-        model[ "_processing_state" ] = false;
+        model[ "_ready_state" ]        = true;
+        model[ "_computation_state" ]  = false;
+        model[ "_pending_state" ]      = false;
+        model[ "_processing_state" ]   = false;
+        model[ "_finish_state" ]       = false;
+        model[ "_stop_state" ]         = false;
         model.flush();
-        //SodaClient::Event event = sc->event();
+        thread->quit();
     };
 };  
 
