@@ -87,15 +87,18 @@ class Launcher : public QObject {
           mp[ "_stop_state" ]         = false;
           mp.flush();
           run_app_2();
-          mp[ "_computation_mode" ]   = false;
-          mp[ "_ready_state" ]        = true;
-          mp[ "_computation_state" ]  = false;
-          mp[ "_pending_state" ]      = false;
-          mp[ "_processing_state" ]   = false;
-          mp[ "_finish_state" ]       = false;
-          mp[ "_stop_state" ]         = false;
-          mp.flush();
+//           mp[ "_computation_mode" ]   = false;
+//           mp[ "_ready_state" ]        = true;
+//           mp[ "_computation_state" ]  = false;
+//           mp[ "_pending_state" ]      = false;
+//           mp[ "_processing_state" ]   = false;
+//           mp[ "_finish_state" ]       = false;
+//           mp[ "_stop_state" ]         = false;
+//           mp.flush();
           log_tool();
+          
+          
+          
           emit finished();
           qDebug() << "###############   finish tool ###############" ;
       };

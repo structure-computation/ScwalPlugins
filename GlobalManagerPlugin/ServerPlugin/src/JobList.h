@@ -76,7 +76,7 @@ class Job : public QObject {
     bool job_to_kill(){
         bool find = false;
         if(thread->isFinished())          { find = true;}
-        //else if(not thread)   { find = true;}
+        else if(not thread)               { find = true;}
         //else if(as_been_killed)         { find = true;}
         return find;
     }
@@ -107,6 +107,13 @@ class Job : public QObject {
         model_finish_state              = model_test[ "_finish_state" ];
         model_stop_state                = model_test[ "_stop_state" ];
         
+//         qDebug() << "--------------------------------------------------------------- ";
+//         qDebug() << "model_ready_state : " << model_ready_state;
+//         qDebug() << "model_computation_state : " << model_computation_state;
+//         qDebug() << "model_pending_state : " << model_pending_state;
+//         qDebug() << "model_processing_state : " << model_processing_state;
+//         qDebug() << "model_finish_state : " << model_finish_state;
+//         qDebug() << "model_stop_state : " << model_stop_state;
         
         //thread state
         run             = false;
@@ -219,7 +226,6 @@ class Job : public QObject {
         }
         if(launcher_exists and thread_exists and finish){
             qDebug() << "job quit thread------------------------- : " << model_id;
-            sleep(3);
             mp[ "_ready_state" ]        = false;
             mp[ "_computation_state" ]  = false;
             mp[ "_pending_state" ]      = false;
@@ -227,20 +233,20 @@ class Job : public QObject {
             mp[ "_finish_state" ]       = false;
             mp[ "_stop_state" ]         = true;
             mp.flush();
-            //thread->quit();
+            thread->quit();
             //as_been_killed = true;
         }
         
     }
   public slots: 
     void finish_thread(){
-        model[ "_ready_state" ]        = true;
-        model[ "_computation_state" ]  = false;
-        model[ "_pending_state" ]      = false;
-        model[ "_processing_state" ]   = false;
-        model[ "_finish_state" ]       = false;
-        model[ "_stop_state" ]         = false;
-        model.flush();
+//         model[ "_ready_state" ]        = true;
+//         model[ "_computation_state" ]  = false;
+//         model[ "_pending_state" ]      = false;
+//         model[ "_processing_state" ]   = false;
+//         model[ "_finish_state" ]       = false;
+//         model[ "_stop_state" ]         = false;
+//         model.flush();
         thread->quit();
     };
 };  
@@ -250,6 +256,7 @@ class JobList : public QObject{
   
 public slots: 
     void kill_jobs(){
+//         qDebug() << "kill_jobs " ;
         bool find_kill = true;
         while(find_kill){
             find_kill = false;
@@ -268,10 +275,12 @@ public slots:
                 //qDebug() << "delete job : " << index_to_kill;
             }
         } 
+        
     }
 public:
     QList<Job*> jobs;
     int find_job_index( MP mp_test, SodaClient &sc ){
+//         qDebug() << "find_job_index " ;
 //         qDebug() << "model : " << mp_test;
         for (int i = 0; i < jobs.size(); ++i) {
             if (jobs[i]->find_job_model(mp_test)){

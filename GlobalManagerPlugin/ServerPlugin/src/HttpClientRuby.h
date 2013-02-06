@@ -81,15 +81,19 @@ public slots:
  
     void recuperationResultat(int id, bool error)
     {
-        if ( error )
+        qDebug() << "error in request" ;
+        if ( error ){
             // Il y a eu une erreur pendant la requête
+            qDebug() << "error in request" ;
             return;
+        }
  
         // Nous vérifions si la requête est celle que nous voulons (dans le cas où plusieurs requêtes sont en cours)
-        if ( id == idRequete )
+        if ( id == idRequete ){
             // Ici on peut mettre un code pour récupérer les données renvoyées par le serveur dans un QByteArray
+            qDebug() << "request id ok : " << idRequete ;
             this->readAll();
-        
+        }
         loop.exit();
     }
  
@@ -98,7 +102,7 @@ public:
     //Client(const QString& urlSite)
     Client()
     {
-        url = QUrl("http://0.0.0.0"); // On enregistre l'url du sire
+        url = QUrl("localhost"); // On enregistre l'url du sire
         idRequete = 0;
  
         // Connexion du signal de fin de requête avec notre analyseur de résultat
@@ -118,12 +122,14 @@ public:
         QString searchString = QString("username=") + QString("toto") + QString("&password=") + QString("tata");
  
         // Ici nous créons l'en-tête pour notre requête
-        QHttpRequestHeader postRequest("POST", "http://0.0.0.0");
-        postRequest.setValue("Host", "http://0.0.0.0");
+        QHttpRequestHeader postRequest("POST", "/log_tools/use_scwal_tool");
+        postRequest.setValue("Host", "localhost:3000");
  
         // Requête avec le passage des identifiants
         
+        
         idRequete = this->request(postRequest,searchString.toUtf8());
+        qDebug() << "idRequete : " << idRequete;
         loop.exec();
         
         qDebug() << "loop finish log_tool-----------" ;
