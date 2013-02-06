@@ -25,11 +25,11 @@ int main( int argc, char **argv ) {
     
 //id du model à traiter
     quint64 model_id = atoi(argv[1]);   
-    sc.reg_type( "Scult2DUpdater" );
+    sc.reg_type( "Scult2DItem" );
     // attente
     while ( SodaClient::Event event = sc.event() ) {
         MP mp = event.mp();
-        if ( mp.type() == "Scult2DUpdater" and mp.get_server_id() == model_id ) {
+        if ( mp.type() == "Scult2DItem" and mp.get_server_id() == model_id ) {
             quint64 model_stop_state = mp[ "_stop_state" ];  
             if( model_stop_state == true ){
                 qDebug() << "###############   finish Scult2DUpdater ###############" ;
