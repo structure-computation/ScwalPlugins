@@ -1,4 +1,4 @@
-class TreeAppApplication_Scills3D extends TreeAppApplication
+class TreeAppApplication_Scult3D extends TreeAppApplication
     constructor: ->
         super()
          
@@ -7,14 +7,14 @@ class TreeAppApplication_Scills3D extends TreeAppApplication
         _ina = ( app ) =>
             app.data.focus.get() != app.selected_canvas_inst()?[ 0 ]?.cm.view_id
         
-        #scills application 3D
+        #scult application 3D
         @actions.push
-            ico: "img/scills3D.png"
-            txt: "Scills3D"
-            ina: _ina
+            ico: "img/scult3D.png"
             siz: 1
+            txt: "Scult 3d"
+            ina: _ina
             fun: ( evt, app ) =>
                 app.undo_manager.snapshot()
-                #@add_ass app.data
-                scills3D = @add_item_depending_selected_tree app.data, Scills3DItem
+                scult3D = @add_item_depending_selected_tree app.data, Scult3DItem
+                
         
