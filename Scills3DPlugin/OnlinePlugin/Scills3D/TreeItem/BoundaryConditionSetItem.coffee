@@ -10,13 +10,33 @@ class BoundaryConditionSetItem extends TreeItem
         
         # attributes
         @add_attr
-            nb_bcs:0
+            _nb_bcs:0
             _incr_id_bc:0
             _incr_id_group_edge:0
             _dim: dim
-            
+        
+        @add_context_actions
+            txt: "add boundary condition"
+            ico: "img/add.png"
+            fun: ( evt, app ) =>
+                #alert "add material"
+                items = app.data.selected_tree_items
+                for path_item in items
+                    item = path_item[ path_item.length - 1 ]
+                    item._nb_bcs.set(item._nb_bcs.get() + 1)
+                    
+        @add_context_actions
+            txt: "remove boundary condition"
+            ico: "img/remove.png"
+            fun: ( evt, app ) =>
+                #alert "remove material"
+                items = app.data.selected_tree_items
+                for path_item in items
+                    item = path_item[ path_item.length - 1 ]
+                    item._nb_bcs.set(item._nb_bcs.get() - 1) if item._nb_bcs.get() > 0
+        
         @bind =>
-            if  @nb_bcs.has_been_modified()
+            if  @_nb_bcs.has_been_modified()
                 @change_collection()
                 
     accept_child: ( ch ) ->
@@ -41,15 +61,15 @@ class BoundaryConditionSetItem extends TreeItem
     change_collection: ->
         #modification du nombre de chargements
         size_splice = 0
-        if @_children.length > @nb_bcs
-            size_splice = @_children.length - @nb_bcs
-            for num_c in [ @nb_bcs ... @_children.length ]
+        if @_children.length > @_nb_bcs
+            size_splice = @_children.length - @_nb_bcs
+            for num_c in [ @_nb_bcs ... @_children.length ]
                 @_children[num_c].clear()
-            @_children.splice @nb_bcs, size_splice
+            @_children.splice @_nb_bcs, size_splice
             
         else 
             size_child0_child = @_children.length
-            for num_c in [ size_child0_child ... @nb_bcs ]
+            for num_c in [ size_child0_child ... @_nb_bcs ]
                 id_bc = @ask_for_id_bc()
                 name_temp = "BC_" + id_bc.toString()
                 @add_child  (new BoundaryConditionItem name_temp, id_bc, @_dim)

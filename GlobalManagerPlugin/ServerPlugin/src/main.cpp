@@ -1,5 +1,8 @@
 #include <Soca/Com/SodaClient.h>
 #include "JobList.h"
+#include "ServerAssistedVisualizationUpdater.h"
+#include "FileUpdater.h"
+#include "ImgUpdater.h"
 
 int main( int argc, char **argv ) {
     // connection
@@ -27,17 +30,31 @@ int main( int argc, char **argv ) {
         MP mp = event.mp();
         //test : verification de l'existance d'un job, ou création du job si necessaire
 //         qDebug() << "model : " << mp;
-        job_list.kill_jobs();
-        int i_job = job_list.find_job_index(mp, sc);
+        if ( mp.type() == "ServerAssistedVisualization" ) {
+            ServerAssistedVisualizationUpdater mu;
+            mu.sc = &sc;
+            mu.exec( mp );
+        } else if ( mp.type() == "File" ) {
+            FileUpdater fu;
+            fu.sc = &sc;
+            fu.exec( mp );
+        } else if ( mp.type() == "Img" ) {
+            ImgUpdater iu;
+            iu.sc = &sc;
+            iu.exec( mp );
+        }else{
         
-        if(i_job != -1){
-            qDebug() << "job_list.jobs.size() : " << job_list.jobs.size();
-            Job *current_job;
-            current_job = job_list.jobs[i_job];
-            current_job->putLauncherInAThread(mp);
+            job_list.kill_jobs();
+            int i_job = job_list.find_job_index(mp, sc);
             
-//             mp[ "_computation_mode" ] = false;
-            
+            if(i_job != -1){
+                qDebug() << "job_list.jobs.size() : " << job_list.jobs.size();
+                Job *current_job;
+                current_job = job_list.jobs[i_job];
+                current_job->putLauncherInAThread(mp);
+                
+    //             mp[ "_computation_mode" ] = false;
+            }            
         }
     }
 }

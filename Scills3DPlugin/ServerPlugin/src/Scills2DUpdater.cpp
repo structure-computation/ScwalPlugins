@@ -919,6 +919,7 @@ bool Scills2DUpdater::run( MP mp ) {
         process.preparation_calcul();
         PRINT("fin préparation calcul");
         process.boucle_multi_resolution();
+        PRINT("fin calcul");
 // 
 //         process.finalisation_MPI();
         

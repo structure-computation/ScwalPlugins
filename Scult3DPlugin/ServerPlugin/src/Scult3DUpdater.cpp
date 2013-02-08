@@ -101,7 +101,6 @@ bool Scult3DUpdater::run( MP mp ) {
         }
         oec[ "_children" ].clear() ; 
         
-        
         //qDebug() << oec[ "_edge_profile" ]; 
         
         int nb_parts = 0;

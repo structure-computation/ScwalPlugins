@@ -10,7 +10,7 @@ class BoundaryConditionItem extends TreeItem
 
         # attributes
         @add_attr
-            nb_edge_filters: 1
+            _nb_edge_filters: 1
             alias: name
             _id: id_bc
             _info_ok: parseInt(0)
@@ -35,12 +35,32 @@ class BoundaryConditionItem extends TreeItem
         @type.lst.push stress_density_bc
         @type.lst.push normal_stress_density_bc
         
+        @add_context_actions
+            txt: "add edge filter"
+            ico: "img/add.png"
+            fun: ( evt, app ) =>
+                #alert "add material"
+                items = app.data.selected_tree_items
+                for path_item in items
+                    item = path_item[ path_item.length - 1 ]
+                    item._nb_edge_filters.set(item._nb_edge_filters.get() + 1)
+                    
+        @add_context_actions
+            txt: "remove edge filter"
+            ico: "img/remove.png"
+            fun: ( evt, app ) =>
+                #alert "remove material"
+                items = app.data.selected_tree_items
+                for path_item in items
+                    item = path_item[ path_item.length - 1 ]
+                    item._nb_edge_filters.set(item._nb_edge_filters.get() - 1) if item._nb_edge_filters.get() > 0
             
+        
         @bind =>
             if  @alias.has_been_modified()
                 @_name.set @alias
                 
-            if  @nb_edge_filters.has_been_modified()
+            if  @_nb_edge_filters.has_been_modified()
                 @change_collection()
     
     get_model_editor_parameters: ( res ) ->
@@ -64,21 +84,21 @@ class BoundaryConditionItem extends TreeItem
     change_collection: ->
         #modification du nombre de chargements
         size_splice = 0
-        if @_children.length > @nb_edge_filters
-            size_splice = @_children.length - @nb_edge_filters
-            for num_c in [ @nb_edge_filters ... @_children.length ]
+        if @_children.length > @_nb_edge_filters
+            size_splice = @_children.length - @_nb_edge_filters
+            for num_c in [ @_nb_edge_filters ... @_children.length ]
                 @_children[num_c].clear()
-            @_children.splice @nb_edge_filters, size_splice
+            @_children.splice @_nb_edge_filters, size_splice
             
         else 
             size_child0_child = @_children.length
-            for num_c in [ size_child0_child ... @nb_edge_filters ]
+            for num_c in [ size_child0_child ... @_nb_edge_filters ]
                 id_group = @ask_for_id_group()
                 name_temp = "Edge_Group_" + id_group.toString()
                 @add_child  (new ScillsEdgeFilterItem name_temp, id_group)
     
     clear: ->
-        @nb_edge_filters.set 0
+        @_nb_edge_filters.set 0
     
     
     information: ( div ) ->
