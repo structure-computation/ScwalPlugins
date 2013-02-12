@@ -50,15 +50,15 @@ bool Scult2DUpdater::run( MP mp ) {
             geometry_user.initialisation( mesh_user, file );
             geometry_user.write_hdf5( file_output_hdf5 );
             
-            MP path_obj_hdf = assembly[ "_path" ];
-            int int_project_id = mp[ "_model_id" ];
-            QString project_id ;
-            project_id.setNum(int_project_id);
-            QString name_project_folder = "/home/projet_" + project_id;
-            qDebug() << name_project_folder;
-            MP project_folder = sc->load( name_project_folder );
-            QString name_output = mp[ "hdf_output_name" ];
-            project_folder << MP::new_file( name_output, path_obj_hdf );
+//             MP path_obj_hdf = assembly[ "_path" ];
+//             int int_project_id = mp[ "_model_id" ];
+//             QString project_id ;
+//             project_id.setNum(int_project_id);
+//             QString name_project_folder = "/home/projet_" + project_id;
+//             qDebug() << name_project_folder;
+//             MP project_folder = sc->load( name_project_folder );
+//             QString name_output = mp[ "hdf_output_name" ];
+//             project_folder << MP::new_file( name_output, path_obj_hdf );
             
             
             assembly[ "_path_loaded" ] = true;    

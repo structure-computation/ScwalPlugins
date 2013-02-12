@@ -29,7 +29,6 @@ class BoundaryConditionSetItem extends TreeItem
             txt: "remove boundary condition"
             ico: "img/remove.png"
             fun: ( evt, app ) =>
-                #alert "remove material"
                 items = app.data.selected_tree_items
                 for path_item in items
                     item = path_item[ path_item.length - 1 ]

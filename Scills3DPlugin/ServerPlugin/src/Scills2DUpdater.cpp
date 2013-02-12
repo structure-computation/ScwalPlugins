@@ -305,7 +305,7 @@ void add_MP_computation_parameters_to_data_user(MP computation_parameters, DataU
 // traitement des matériaux du calculs
 void add_MP_materials_to_data_user(MP material_set, DataUser &data_user){
     //traitement des matériaux---------------------
-    int nb_materials = convert_MP_to_int(material_set[ "nb_materials" ]);
+    int nb_materials = convert_MP_to_int(material_set[ "_nb_materials" ]);
     data_user.materials_vec.resize(nb_materials);
     for(int i_mat = 0;i_mat < nb_materials; ++i_mat){
         MP material_i = material_set[ "_children" ][ i_mat ];
@@ -453,7 +453,7 @@ void add_MP_materials_to_data_user(MP material_set, DataUser &data_user){
 // traitement des liaisons du calculs
 void add_MP_links_to_data_user(MP link_set, DataUser &data_user){
     //traitement des liaisons---------------------
-    int nb_links = convert_MP_to_int(link_set[ "nb_links" ]);
+    int nb_links = convert_MP_to_int(link_set[ "_nb_links" ]);
     data_user.links_vec.resize(nb_links);
     for(int i_link = 0;i_link < nb_links; ++i_link){
         MP link_i = link_set[ "_children" ][ i_link ];
@@ -565,7 +565,7 @@ void add_MP_links_to_data_user(MP link_set, DataUser &data_user){
 // traitement des liaisons du calculs
 void add_MP_bcs_to_data_user(MP boundary_condition_set, DataUser &data_user){
     //traitement des liaisons---------------------
-    int nb_bcs = convert_MP_to_int(boundary_condition_set[ "nb_bcs" ]);
+    int nb_bcs = convert_MP_to_int(boundary_condition_set[ "_nb_bcs" ]);
     data_user.boundary_conditions_vec.resize(nb_bcs);
     for(int i_bc = 0;i_bc < nb_bcs; ++i_bc){
         MP bc_i = boundary_condition_set[ "_children" ][ i_bc ];
@@ -632,7 +632,7 @@ void add_MP_thermal_loads_to_data_user(MP thermal_load, DataUser &data_user){
 }
 
 void add_MP_volumic_loads_to_data_user(MP volumic_load_set, DataUser &data_user){
-    int nb_loads = convert_MP_to_int(volumic_load_set[ "nb_loads" ]);
+    int nb_loads = convert_MP_to_int(volumic_load_set[ "_nb_loads" ]);
     data_user.volumic_forces_vec.resize(nb_loads);
     for(int i_load = 0;i_load < nb_loads; ++i_load){
         MP vload_i = volumic_load_set[ "_children" ][ i_load ];
@@ -839,11 +839,13 @@ bool Scills2DUpdater::run( MP mp ) {
     MP  assembly = structure[ "_children[ 0 ]" ];
     MP  oec = assembly[ "_children[ 2 ]" ];
     
+    DataUser data_user;
+    GeometryUser geometry_user;
+    Process process;
+    
     // visualisation des bords demandés -------------------------------------------------------------------------
     if (assembly.ok() and compute_edges){
         // see if the hdf5 file of the assembly as allready been load
-        DataUser data_user;
-        GeometryUser geometry_user;
         QString path_hdf = assembly[ "_path" ];
         qDebug() << path_hdf;
         
@@ -861,8 +863,7 @@ bool Scills2DUpdater::run( MP mp ) {
     // mise en données de Data_User et vérification des données --------------------------------------------------------------
     }else if(assembly.ok() and compute_scills){
         // see if the hdf5 file of the assembly as allready been load
-        DataUser data_user;
-        GeometryUser geometry_user;
+        
         QString path_hdf = assembly[ "_path" ];
         qDebug() << path_hdf;
         
@@ -910,7 +911,6 @@ bool Scills2DUpdater::run( MP mp ) {
         
         
         
-        Process process;
         process.initialisation_MPI_for_scwal();
         process.data_user = &data_user;
         process.geometry_user = &geometry_user;
@@ -919,10 +919,9 @@ bool Scills2DUpdater::run( MP mp ) {
         process.preparation_calcul();
         PRINT("fin préparation calcul");
         process.boucle_multi_resolution();
-        PRINT("fin calcul");
-// 
-//         process.finalisation_MPI();
         
+        process.finalisation_MPI();
+        PRINT("fin calcul");
     }
 
     mp[ "_compute_edges" ] = false;
