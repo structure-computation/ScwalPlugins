@@ -11,9 +11,9 @@ class GmshItem extends TreeItem_Computable
             base_size    : 100
             p_mesher     : new Lst
 
-        @add_action_modules  new TreeAppModule_Mesher   
-        @add_action_modules  new TreeAppModule_Sketch
-        @add_action_modules  new TreeAppModule_Transform
+        @add_context_modules  new TreeAppModule_Mesher   
+        @add_context_modules  new TreeAppModule_Sketch
+        @add_context_modules  new TreeAppModule_Transform
             
         @_name.set name
         @_ico.set "img/mesher.png"
