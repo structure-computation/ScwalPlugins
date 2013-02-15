@@ -520,27 +520,26 @@ void add_MP_links_to_data_user(MP link_set, DataUser &data_user){
         data_user.links_vec[i_link].n                           = "0";
         
         
-        if(name_i == "perfect"){
-            data_user.links_vec[i_link].Ep_n                    = convert_MP_to_Sc2String(type_link_i[ "thickness" ]);
+        data_user.links_vec[i_link].Ep_n                    = convert_MP_to_Sc2String(type_link_i[ "thickness" ]);
+        data_user.links_vec[i_link].Preload_n               = convert_MP_to_Sc2String(type_link_i[ "thickness" ]);
+        
+        if(name_i == "perfect"){           
+            
         } 
         else if(name_i == "elastic"){
-            data_user.links_vec[i_link].Ep_n                    = convert_MP_to_Sc2String(type_link_i[ "thickness" ]);
             data_user.links_vec[i_link].Kn                      = convert_MP_to_Sc2String(type_link_i[ "normal_rigidity" ]);
             data_user.links_vec[i_link].Kt                      = convert_MP_to_Sc2String(type_link_i[ "tangent_rigidity" ]);
             data_user.links_vec[i_link].Knc                     = convert_MP_to_Sc2String(type_link_i[ "compression_rigidity" ]);
         }
         else if(name_i == "contact"){
-            data_user.links_vec[i_link].Ep_n                    = convert_MP_to_Sc2String(type_link_i[ "thickness" ]);
             data_user.links_vec[i_link].f                       = convert_MP_to_Sc2String(type_link_i[ "friction" ]);
         }
         else if(name_i == "perfect breakable"){
-            data_user.links_vec[i_link].Ep_n                    = convert_MP_to_Sc2String(type_link_i[ "thickness" ]);
             data_user.links_vec[i_link].Fcr_n                   = convert_MP_to_Sc2String(type_link_i[ "Fc_n" ]);
             data_user.links_vec[i_link].Fcr_t                   = convert_MP_to_Sc2String(type_link_i[ "Fc_t" ]);    
             data_user.links_vec[i_link].f                       = convert_MP_to_Sc2String(type_link_i[ "friction" ]);
         }
         else if(name_i == "elastic breakable"){
-            data_user.links_vec[i_link].Ep_n                    = convert_MP_to_Sc2String(type_link_i[ "thickness" ]);
             data_user.links_vec[i_link].Kn                      = convert_MP_to_Sc2String(type_link_i[ "normal_rigidity" ]);
             data_user.links_vec[i_link].Kt                      = convert_MP_to_Sc2String(type_link_i[ "tangent_rigidity" ]);
             data_user.links_vec[i_link].Knc                     = convert_MP_to_Sc2String(type_link_i[ "compression_rigidity" ]);
@@ -549,7 +548,6 @@ void add_MP_links_to_data_user(MP link_set, DataUser &data_user){
             data_user.links_vec[i_link].f                       = convert_MP_to_Sc2String(type_link_i[ "friction" ]);
         }
         else if(name_i == "cohesiv"){
-            data_user.links_vec[i_link].Ep_n                    = convert_MP_to_Sc2String(type_link_i[ "thickness" ]);
             data_user.links_vec[i_link].Kn                      = convert_MP_to_Sc2String(type_link_i[ "normal_rigidity" ]);
             data_user.links_vec[i_link].Kt                      = convert_MP_to_Sc2String(type_link_i[ "tangent_rigidity" ]);
             data_user.links_vec[i_link].Knc                     = convert_MP_to_Sc2String(type_link_i[ "compression_rigidity" ]);

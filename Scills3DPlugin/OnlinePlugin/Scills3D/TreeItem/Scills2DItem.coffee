@@ -18,7 +18,7 @@ class Scills2DItem extends TreeItem_Computable
             _dim: 2
             path_result: " "
         
-        @add_output new FieldItem
+        #@add_output new FieldItem
         
         @add_child new ScillsStructureItem
         @add_child new ComputationParametersItem

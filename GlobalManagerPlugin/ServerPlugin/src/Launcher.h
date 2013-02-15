@@ -85,8 +85,27 @@ class Launcher : public QObject {
       
       void log_tool(){
           qDebug() << "requette log_tool-----------" ;
-          Client http_client;
-          http_client.connexion();
+//           Client http_client;
+//           http_client.connexion();
+          int sc_model_id = mp[ "_computation_mode" ];
+          QString  mp_type = mp.type(); 
+          QByteArray byteArray = mp_type.toUtf8();
+          const char* c_string = byteArray.constData();
+          
+          
+          std::stringstream strs;
+          strs << 200;                          // sc_model_id
+          strs << " " << c_string;       // app_type
+          strs << " " << 10;                    // app_time
+          strs << " " << 2;                     // app_cpu
+          
+          std::string temp_str = strs.str();
+          std::string commande;
+          int output;
+          commande = "python ./ServerPlugin/src/log_tool.py " + temp_str;
+          output = std::system(commande.c_str());
+          
+          qDebug() << "----------------- log output : " << output;
       };
               
       void launch(){ 
