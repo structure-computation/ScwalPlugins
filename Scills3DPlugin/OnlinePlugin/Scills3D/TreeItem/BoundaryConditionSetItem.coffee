@@ -15,24 +15,9 @@ class BoundaryConditionSetItem extends TreeItem
             _incr_id_group_edge:0
             _dim: dim
         
-        @add_context_actions
-            txt: "add boundary condition"
-            ico: "img/add.png"
-            fun: ( evt, app ) =>
-                #alert "add material"
-                items = app.data.selected_tree_items
-                for path_item in items
-                    item = path_item[ path_item.length - 1 ]
-                    item._nb_bcs.set(item._nb_bcs.get() + 1)
-                    
-        @add_context_actions
-            txt: "remove boundary condition"
-            ico: "img/remove.png"
-            fun: ( evt, app ) =>
-                items = app.data.selected_tree_items
-                for path_item in items
-                    item = path_item[ path_item.length - 1 ]
-                    item._nb_bcs.set(item._nb_bcs.get() - 1) if item._nb_bcs.get() > 0
+        
+        @add_context_actions new TreeAppModule_Collection @_nb_bcs
+        
         
         @bind =>
             if  @_nb_bcs.has_been_modified()
