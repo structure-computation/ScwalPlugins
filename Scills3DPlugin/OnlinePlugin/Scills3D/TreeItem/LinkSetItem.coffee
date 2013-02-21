@@ -10,12 +10,32 @@ class LinkSetItem extends TreeItem
         
         # attributes
         @add_attr
-            nb_links:0
+            _nb_links:0
             _incr_id_link:0
             _incr_id_group_inter:0
-            
+        
+        @add_context_actions
+            txt: "add link"
+            ico: "img/add.png"
+            fun: ( evt, app ) =>
+                #alert "add material"
+                items = app.data.selected_tree_items
+                for path_item in items
+                    item = path_item[ path_item.length - 1 ]
+                    item._nb_links.set(item._nb_links.get() + 1)
+                    
+        @add_context_actions
+            txt: "remove link"
+            ico: "img/remove.png"
+            fun: ( evt, app ) =>
+                #alert "remove material"
+                items = app.data.selected_tree_items
+                for path_item in items
+                    item = path_item[ path_item.length - 1 ]
+                    item._nb_links.set(item._nb_links.get() - 1) if item._nb_links.get() > 0
+        
         @bind =>
-            if  @nb_links.has_been_modified()
+            if  @_nb_links.has_been_modified()
                 @change_collection()
                 
     accept_child: ( ch ) ->
@@ -40,13 +60,13 @@ class LinkSetItem extends TreeItem
     change_collection: ->
         #modification du nombre de chargements
         size_splice = 0
-        if @_children.length > @nb_links
-            size_splice = @_children.length - @nb_links
-            @_children.splice @nb_links, size_splice
+        if @_children.length > @_nb_links
+            size_splice = @_children.length - @_nb_links
+            @_children.splice @_nb_links, size_splice
             
         else 
             size_child0_child = @_children.length
-            for num_c in [ size_child0_child ... @nb_links ]
+            for num_c in [ size_child0_child ... @_nb_links ]
                 id_link = @ask_for_id_link()
                 name_temp = "Link_" + id_link.toString()
                 @add_child  (new ScillsLinkItem name_temp, id_link)

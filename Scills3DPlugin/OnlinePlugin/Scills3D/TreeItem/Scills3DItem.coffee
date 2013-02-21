@@ -16,6 +16,9 @@ class Scills3DItem extends TreeItem_Computable
             _compute_edges: false
             _compute_scills: false
             _dim: 3
+            path_result: " "
+        
+        #@add_output new FieldItem
         
         @add_child new ScillsStructureItem
         @add_child new ComputationParametersItem

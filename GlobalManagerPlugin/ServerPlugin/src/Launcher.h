@@ -68,13 +68,44 @@ class Launcher : public QObject {
 //           else if(mp.type() == "CorrelationItem" or mp.type() == "File" or mp.type() == "Img" or mp.type() == "ServerAssistedVisualization" ){
 //               commande = "../CorreliPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main_cpp.exe " + temp_str ;
 //               output = std::system(commande.c_str());
-//           }         
+//           }   
+
+          qDebug() << "----------------- output : " << output;
+          if(output){
+              mp[ "_computation_mode" ]   = false;
+              mp[ "_ready_state" ]        = false;
+              mp[ "_computation_state" ]  = false;
+              mp[ "_pending_state" ]      = false;
+              mp[ "_processing_state" ]   = false;
+              mp[ "_finish_state" ]       = false;
+              mp[ "_stop_state" ]         = true;
+              mp.flush();
+          }
       }; 
       
       void log_tool(){
           qDebug() << "requette log_tool-----------" ;
-          Client http_client;
-          http_client.connexion();
+//           Client http_client;
+//           http_client.connexion();
+          int sc_model_id = mp[ "_computation_mode" ];
+          QString  mp_type = mp.type(); 
+          QByteArray byteArray = mp_type.toUtf8();
+          const char* c_string = byteArray.constData();
+          
+          
+          std::stringstream strs;
+          strs << 200;                          // sc_model_id
+          strs << " " << c_string;       // app_type
+          strs << " " << 10;                    // app_time
+          strs << " " << 2;                     // app_cpu
+          
+          std::string temp_str = strs.str();
+          std::string commande;
+          int output;
+          commande = "python ./ServerPlugin/src/log_tool.py " + temp_str;
+          output = std::system(commande.c_str());
+          
+          qDebug() << "----------------- log output : " << output;
       };
               
       void launch(){ 
@@ -87,14 +118,7 @@ class Launcher : public QObject {
           mp[ "_stop_state" ]         = false;
           mp.flush();
           run_app_2();
-//           mp[ "_computation_mode" ]   = false;
-//           mp[ "_ready_state" ]        = true;
-//           mp[ "_computation_state" ]  = false;
-//           mp[ "_pending_state" ]      = false;
-//           mp[ "_processing_state" ]   = false;
-//           mp[ "_finish_state" ]       = false;
-//           mp[ "_stop_state" ]         = false;
-//           mp.flush();
+
           log_tool();
           
           

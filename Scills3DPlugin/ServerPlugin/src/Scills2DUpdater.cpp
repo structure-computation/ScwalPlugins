@@ -1,3 +1,5 @@
+#include <QtCore/QFileInfo>
+#include <QtCore/QDir>
 #include "Scills2DUpdater.h"
 #include "ScwalScillsFunction.h"
 
@@ -24,6 +26,15 @@
 
 #include "../LMT/include/io/ioexception.h"
 Crout crout;
+
+// convert QString to Sc2String
+Sc2String convert_QString_to_Sc2String(QString q_string){
+    QByteArray byteArray = q_string.toUtf8();
+    const char* c_string = byteArray.constData();
+    Sc2String string_output;
+    string_output << c_string;
+    return string_output;
+}
 
 // convert MP to Sc2String
 Sc2String convert_MP_to_Sc2String(MP mpstring){
@@ -176,15 +187,21 @@ DataUser::Json_edges new_data_user_edge_default(DataUser &data_user){
 
 
 // traitement des paramètres du calculs
-void add_MP_computation_parameters_to_data_user(MP computation_parameters, DataUser &data_user){
+void add_MP_computation_parameters_to_data_user(MP computation_parameters, DataUser &data_user, QString _dir_name){
     //traitement des paramètre LATIN
     MP  latin_parameters = computation_parameters[ "_children[ 0 ]" ];
     
-    data_user.options.mode            = "normal";
-    data_user.result_path             = "/home/jbellec/cas_test/test_scwal/";
-    data_user.calcul_path             = "/home/jbellec/cas_test/test_scwal";
+    Sc2String calcul_path_name = convert_QString_to_Sc2String(_dir_name);
+    Sc2String result_path_name;
+    result_path_name << calcul_path_name << "/" ;
     
-    qDebug() << latin_parameters;
+    data_user.options.mode            = "normal";
+//     data_user.result_path             = "/home/jbellec/cas_test/test_scwal/";
+//     data_user.calcul_path             = "/home/jbellec/cas_test/test_scwal";
+    data_user.result_path             = result_path_name;
+    data_user.calcul_path             = calcul_path_name;
+    
+    //qDebug() << latin_parameters;
     data_user.options.convergence_method_LATIN.max_iteration            = convert_MP_to_int(latin_parameters[ "max_iteration.val" ]);
     data_user.options.convergence_method_LATIN.convergence_rate         = convert_MP_to_reel(latin_parameters[ "convergence_rate.val" ]);
     
@@ -305,7 +322,7 @@ void add_MP_computation_parameters_to_data_user(MP computation_parameters, DataU
 // traitement des matériaux du calculs
 void add_MP_materials_to_data_user(MP material_set, DataUser &data_user){
     //traitement des matériaux---------------------
-    int nb_materials = convert_MP_to_int(material_set[ "nb_materials" ]);
+    int nb_materials = convert_MP_to_int(material_set[ "_nb_materials" ]);
     data_user.materials_vec.resize(nb_materials);
     for(int i_mat = 0;i_mat < nb_materials; ++i_mat){
         MP material_i = material_set[ "_children" ][ i_mat ];
@@ -453,7 +470,7 @@ void add_MP_materials_to_data_user(MP material_set, DataUser &data_user){
 // traitement des liaisons du calculs
 void add_MP_links_to_data_user(MP link_set, DataUser &data_user){
     //traitement des liaisons---------------------
-    int nb_links = convert_MP_to_int(link_set[ "nb_links" ]);
+    int nb_links = convert_MP_to_int(link_set[ "_nb_links" ]);
     data_user.links_vec.resize(nb_links);
     for(int i_link = 0;i_link < nb_links; ++i_link){
         MP link_i = link_set[ "_children" ][ i_link ];
@@ -565,7 +582,7 @@ void add_MP_links_to_data_user(MP link_set, DataUser &data_user){
 // traitement des liaisons du calculs
 void add_MP_bcs_to_data_user(MP boundary_condition_set, DataUser &data_user){
     //traitement des liaisons---------------------
-    int nb_bcs = convert_MP_to_int(boundary_condition_set[ "nb_bcs" ]);
+    int nb_bcs = convert_MP_to_int(boundary_condition_set[ "_nb_bcs" ]);
     data_user.boundary_conditions_vec.resize(nb_bcs);
     for(int i_bc = 0;i_bc < nb_bcs; ++i_bc){
         MP bc_i = boundary_condition_set[ "_children" ][ i_bc ];
@@ -632,7 +649,7 @@ void add_MP_thermal_loads_to_data_user(MP thermal_load, DataUser &data_user){
 }
 
 void add_MP_volumic_loads_to_data_user(MP volumic_load_set, DataUser &data_user){
-    int nb_loads = convert_MP_to_int(volumic_load_set[ "nb_loads" ]);
+    int nb_loads = convert_MP_to_int(volumic_load_set[ "_nb_loads" ]);
     data_user.volumic_forces_vec.resize(nb_loads);
     for(int i_load = 0;i_load < nb_loads; ++i_load){
         MP vload_i = volumic_load_set[ "_children" ][ i_load ];
@@ -830,7 +847,9 @@ void add_edges_to_MP_assembly(MP  oec, MP boundary_condition_set, DataUser &data
 
 bool Scills2DUpdater::run( MP mp ) {
     qDebug() << mp.type();
+    quint64 MP_model_id = mp.get_server_id();
     // does the input file exists ?
+    
     int  compute_edges   = mp[ "_compute_edges" ];
     qDebug() << "compute_edges = " << compute_edges;
     int  compute_scills  = mp[ "_compute_scills" ];
@@ -839,11 +858,13 @@ bool Scills2DUpdater::run( MP mp ) {
     MP  assembly = structure[ "_children[ 0 ]" ];
     MP  oec = assembly[ "_children[ 2 ]" ];
     
+    DataUser data_user;
+    GeometryUser geometry_user;
+    Process process;
+    
     // visualisation des bords demandés -------------------------------------------------------------------------
     if (assembly.ok() and compute_edges){
         // see if the hdf5 file of the assembly as allready been load
-        DataUser data_user;
-        GeometryUser geometry_user;
         QString path_hdf = assembly[ "_path" ];
         qDebug() << path_hdf;
         
@@ -861,10 +882,18 @@ bool Scills2DUpdater::run( MP mp ) {
     // mise en données de Data_User et vérification des données --------------------------------------------------------------
     }else if(assembly.ok() and compute_scills){
         // see if the hdf5 file of the assembly as allready been load
-        DataUser data_user;
-        GeometryUser geometry_user;
+        
         QString path_hdf = assembly[ "_path" ];
         qDebug() << path_hdf;
+        
+        // répertoire des resultat vtu
+        QFileInfo info1(path_hdf);
+        QDir dir(info1.dir());
+        QString dir_name = dir.absolutePath() ; 
+        qDebug() << dir_name ;
+        QString path_result = dir_name + "/result_" + QString::number(MP_model_id);
+        qDebug() << path_result ;
+        mp[ "path_result" ] = path_result;
         
         Sc2String file_output_hdf5 = convert_MP_to_Sc2String(assembly[ "_path" ]);
         qDebug() << "lecture du fichier hdf en mémoire : " << path_hdf;
@@ -879,14 +908,9 @@ bool Scills2DUpdater::run( MP mp ) {
         MP  interface_set = assembly[ "_children[ 1 ]" ];
         add_MP_interfaces_to_data_user(interface_set, data_user);
         
-        // ajout des edges
-        MP  boundary_condition_set = mp[ "_children[ 4 ]" ];
-        MP  boundary_condition_set_children = boundary_condition_set[ "_children" ];
-        add_MP_edges_to_data_user(boundary_condition_set, data_user);
-        
         // ajout des paramètres LATIN
         MP  computation_parameters = mp[ "_children[ 1 ]" ];
-        add_MP_computation_parameters_to_data_user(computation_parameters, data_user);
+        add_MP_computation_parameters_to_data_user(computation_parameters, data_user, path_result);
         
         // ajout des matériaux
         MP  material_set = mp[ "_children[ 2 ]" ];
@@ -896,6 +920,10 @@ bool Scills2DUpdater::run( MP mp ) {
         MP  link_set = mp[ "_children[ 3 ]" ];
         add_MP_links_to_data_user(link_set, data_user);
         
+        // ajout des edges
+        MP  boundary_condition_set = mp[ "_children[ 4 ]" ];
+        MP  boundary_condition_set_children = boundary_condition_set[ "_children" ];
+        add_MP_edges_to_data_user(boundary_condition_set, data_user);
         // ajout des boundary condition et des edges
         //MP  boundary_condition_set = mp[ "_children[ 4 ]" ];
         add_MP_bcs_to_data_user(boundary_condition_set, data_user);
@@ -910,7 +938,6 @@ bool Scills2DUpdater::run( MP mp ) {
         
         
         
-        Process process;
         process.initialisation_MPI_for_scwal();
         process.data_user = &data_user;
         process.geometry_user = &geometry_user;
@@ -919,9 +946,9 @@ bool Scills2DUpdater::run( MP mp ) {
         process.preparation_calcul();
         PRINT("fin préparation calcul");
         process.boucle_multi_resolution();
-// 
-//         process.finalisation_MPI();
         
+        process.finalisation_MPI();
+        PRINT("fin calcul");
     }
 
     mp[ "_compute_edges" ] = false;

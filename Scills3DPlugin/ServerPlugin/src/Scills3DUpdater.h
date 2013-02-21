@@ -13,6 +13,7 @@ protected:
     bool run( MP mp );
     virtual QString type() const { return "Scills3DUpdater"; }
     
+    
 public:
     SodaClient *sc;   
 };

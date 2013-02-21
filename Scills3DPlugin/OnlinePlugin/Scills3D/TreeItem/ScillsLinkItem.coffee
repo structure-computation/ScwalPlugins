@@ -10,7 +10,7 @@ class ScillsLinkItem extends TreeItem
 
         # attributes
         @add_attr
-            nb_link_filters: 1
+            _nb_link_filters: 1
             alias: name
             _id: id_link
             _info_ok: parseInt(0)
@@ -32,12 +32,31 @@ class ScillsLinkItem extends TreeItem
         @type.lst.push elastic_breakable_link
         @type.lst.push cohesive_link
         
+        @add_context_actions
+            txt: "add link filter"
+            ico: "img/add.png"
+            fun: ( evt, app ) =>
+                #alert "add material"
+                items = app.data.selected_tree_items
+                for path_item in items
+                    item = path_item[ path_item.length - 1 ]
+                    item._nb_link_filters.set(item._nb_link_filters.get() + 1)
+                    
+        @add_context_actions
+            txt: "remove link filter"
+            ico: "img/remove.png"
+            fun: ( evt, app ) =>
+                #alert "remove material"
+                items = app.data.selected_tree_items
+                for path_item in items
+                    item = path_item[ path_item.length - 1 ]
+                    item._nb_link_filters.set(item._nb_link_filters.get() - 1) if item._nb_link_filters.get() > 0
             
         @bind =>
             if  @alias.has_been_modified()
                 @_name.set @alias
                 
-            if  @nb_link_filters.has_been_modified()
+            if  @_nb_link_filters.has_been_modified()
                 @change_collection()
     
     get_model_editor_parameters: ( res ) ->
@@ -61,13 +80,13 @@ class ScillsLinkItem extends TreeItem
     change_collection: ->
         #modification du nombre de chargements
         size_splice = 0
-        if @_children.length > @nb_link_filters
-            size_splice = @_children.length - @nb_link_filters
-            @_children.splice @nb_link_filters, size_splice
+        if @_children.length > @_nb_link_filters
+            size_splice = @_children.length - @_nb_link_filters
+            @_children.splice @_nb_link_filters, size_splice
             
         else 
             size_child0_child = @_children.length
-            for num_c in [ size_child0_child ... @nb_link_filters ]
+            for num_c in [ size_child0_child ... @_nb_link_filters ]
                 id_group = @ask_for_id_group()
                 name_temp = "Inter_Group_" + id_group.toString()
                 @add_child  (new ScillsInterFilterItem name_temp, id_group)

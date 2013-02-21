@@ -1,4 +1,4 @@
-#include <correlation/ImgInterp.h>
+#include "ImgInterp.h"
 #include "ImgUpdater.h"
 #include <fstream>
 
