@@ -4,9 +4,26 @@
 #include <QtCore/QProcess>
 #include <sstream>
 #include <string.h>
+#include <sys/mman.h>
+#include <sys/time.h>
+
 #include "HttpClientRuby.h"
 
 class SodaClient;
+
+struct TicToc {
+    TicToc(){}
+    void start() { gettimeofday( &start1,&toto); }
+    void stop() {
+        gettimeofday( &stop1,&toto);
+        res = ((double)stop1.tv_sec-(double)start1.tv_sec)+((double)stop1.tv_usec-(double)start1.tv_usec) / 1e6;
+    }
+    void print() { printf("%f\n",res); }
+    struct timeval start1, stop1;
+    struct timezone toto;
+    double res;
+};
+
 
 class Launcher : public QObject {
  Q_OBJECT
@@ -25,7 +42,7 @@ class Launcher : public QObject {
           output = std::system(commande.c_str());
       }; 
       
-      void run_app_2(){   //fonction à définir dans chaque launcher         
+      int run_app_2(){   //fonction à définir dans chaque launcher         
           int mp_server_id = mp.get_server_id();
           std::stringstream strs;
           strs << mp_server_id;
@@ -50,6 +67,7 @@ class Launcher : public QObject {
               output = std::system(commande.c_str());
           }
           else if(mp.type() == "Scills2DItem" ){
+              //commande = "mpirun.openmpi -np 1 ../Scills3DPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main2D_cpp.exe " + temp_str + " mpi" ;
               commande = "../Scills3DPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main2D_cpp.exe " + temp_str ;
               output = std::system(commande.c_str());
           }
@@ -81,23 +99,29 @@ class Launcher : public QObject {
               mp[ "_stop_state" ]         = true;
               mp.flush();
           }
+          
+          return output;
       }; 
       
-      void log_tool(){
+      void log_tool(TicToc tic, int output_launcher){
           qDebug() << "requette log_tool-----------" ;
 //           Client http_client;
 //           http_client.connexion();
-          int sc_model_id = mp[ "_computation_mode" ];
+          int sc_model_id = mp[ "_sc_model_id" ];
           QString  mp_type = mp.type(); 
           QByteArray byteArray = mp_type.toUtf8();
           const char* c_string = byteArray.constData();
+          int duration =  int(tic.res)+1 ;
+          int nb_processus = mp[ "_sc_nb_proc" ];
+          
+          
           
           
           std::stringstream strs;
-          strs << 200;                          // sc_model_id
-          strs << " " << c_string;       // app_type
-          strs << " " << 10;                    // app_time
-          strs << " " << 2;                     // app_cpu
+          strs << sc_model_id;                  // project_id
+          strs << " " << c_string;              // app_type
+          strs << " " << duration;              // app_time
+          strs << " " << nb_processus;          // app_cpu
           
           std::string temp_str = strs.str();
           std::string commande;
@@ -117,9 +141,13 @@ class Launcher : public QObject {
           mp[ "_finish_state" ]       = false;
           mp[ "_stop_state" ]         = false;
           mp.flush();
-          run_app_2();
+          TicToc tic;
+          tic.start();
+          
+          int output = run_app_2();
 
-          log_tool();
+          tic.stop();
+          log_tool(tic, output);
           
           
           

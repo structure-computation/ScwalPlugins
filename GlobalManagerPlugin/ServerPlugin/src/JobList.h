@@ -1,6 +1,7 @@
 #ifndef JOBLIST_H
 #define JOBLIST_H
 #include <Soca/Com/SodaClient.h>
+#include <Soca/Updater.h>
 #include <QtCore/QThread>
 #include "UnvReader2DLauncher.h"
 
@@ -25,6 +26,10 @@ class Job : public QObject {
     bool finish;
     bool stop;
     bool as_been_killed;
+    
+    bool nothing_to_compute;
+    bool waiting_something_to_compute;
+    
     Launcher *launcher;
     QThread *thread;
     bool launcher_exists;
@@ -39,6 +44,10 @@ class Job : public QObject {
         launcher_exists = false;
         thread_exists   = false;
         as_been_killed  = false;
+        
+        nothing_to_compute= false;
+        waiting_something_to_compute= false;
+        
         model_id = model_.get_server_id();
 //         qDebug() << "model : " << model;
     }
@@ -52,6 +61,10 @@ class Job : public QObject {
     void initialize(MP &model_){
         launcher_exists = false;
         thread_exists   = false;
+        
+        nothing_to_compute= false;
+        waiting_something_to_compute= false;
+        
         model_id = model_.get_server_id();
         model.reassign(model_);
 //         qDebug() << "model_ : " << model_;
@@ -139,6 +152,27 @@ class Job : public QObject {
         }
     }
     
+    bool has_something_to_compute_else_than( Model *m, Model *a ) {
+        if ( m == 0 or m->_op_id == Model::_cur_op_id )
+            return false;
+        m->_op_id = Model::_cur_op_id;
+
+        quint64 req = 0, rep = 0;
+        for( int i = 0; i < m->size(); ++i ) {
+            if ( Model *t = m->attr( i ) ) {
+                if ( m->key( i ) == "_computation_req_date" )
+                    req = t->operator quint64();
+                else if ( m->key( i ) == "_computation_rep_date" )
+                    rep = t->operator quint64();
+                else if ( has_something_to_compute_else_than( t, a ) )
+                    return true;
+            }
+
+        }
+
+        return req > rep and m != a;
+    }
+
     bool run_model_test(MP model_test){
         bool run_app = false;
         model_set_state(model_test);
@@ -153,7 +187,18 @@ class Job : public QObject {
         }
         if ( model_computation_req_date <= model_computation_rep_date ){
             run_app = false;
+            nothing_to_compute= true;
+            
         }
+        // waiting for another computation ?
+        ++Model::_cur_op_id;
+        if ( has_something_to_compute_else_than( model_test.model(), model_test.model() ) ) {
+            qDebug() << "something to compute !";
+            run_app = false;
+            waiting_something_to_compute= true; 
+        }
+        
+        
 //         qDebug() << "run_app : " << run_app;
         
         return run_app;
@@ -302,7 +347,10 @@ public:
             qDebug() << "run_model_test";
             return (jobs.size()-1);
         }
-        return (-1);
+        if(new_job->waiting_something_to_compute){
+            return (-1);
+        }
+        return (-2);
     }
     
 };

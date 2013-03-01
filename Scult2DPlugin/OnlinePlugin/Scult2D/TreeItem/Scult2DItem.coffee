@@ -8,7 +8,7 @@ class Scult2DItem extends TreeItem_Computable
         @_viewable.set true
         @add_attr
             hdf_output_name     : "output2D"
-            _model_id           : model_id
+            _model_id           : SC_MODEL_ID
         
         @add_output new ScillsAssemblyItem
         
