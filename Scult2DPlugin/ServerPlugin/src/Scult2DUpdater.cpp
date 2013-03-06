@@ -127,6 +127,7 @@ bool Scult2DUpdater::run( MP mp ) {
             new_mesh(om);
             part[ "visualization" ] = om[ "visualization" ];
             part[ "id" ] = geometry_user.group_elements[i_group].id;
+            part[ "_name" ] = geometry_user.group_elements[i_group].name_in_mesh.c_str();
             part[ "material_id" ] = -1;
             part[ "group_id" ] = -1;
             

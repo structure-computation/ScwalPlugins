@@ -17,6 +17,8 @@ class Scills3DItem extends TreeItem_Computable
             _compute_scills: false
             _dim: 3
             path_result: " "
+            _path: new Path
+            _path_zip: new Path
         
         #@add_output new FieldItem
         
@@ -28,9 +30,13 @@ class Scills3DItem extends TreeItem_Computable
         @add_child new ThermalLoadItem
         @add_child new VolumicForceSetItem @_dim
         
+        @add_context_actions
+            txt: "load result"
+            ico: "img/upload-icone-4401-48.png"
+            fun: ( evt, app ) =>
+                #alert "add material"
+                @download_result()
         
-        
-    
         @bind =>
             if  @compute_scills.has_been_modified()
                 @set_compute_scills()
@@ -54,7 +60,11 @@ class Scills3DItem extends TreeItem_Computable
         @_compute_scills.set true
         @do_it()
         
-        
+    download_result: ()-> 
+#         window.open "/sceen/_?u=" + "/home/jbellec/code_dev_scwal/EcosystemScience/data.db/result_211037856"
+        myWindow = window.open '',''
+        myWindow.document.write "<a href='/sceen/_?u=" + @_path._server_id + "'> Right click to save as </a>"
+        myWindow.focus()    
         
         
         

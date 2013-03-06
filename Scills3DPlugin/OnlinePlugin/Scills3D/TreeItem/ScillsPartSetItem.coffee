@@ -55,6 +55,23 @@ class ScillsPartSetItem extends TreeItem
                     part.material_id.set parseInt(mat_id)
                     part.group_id.set parseInt(part_filter._id)
    
+        else if part_filter.type.toString() == "by name" 
+            if part_filter.filter.toString().match('[\*]') 
+                filter = part_filter.filter.toString().substring(0, part_filter.filter.toString().length-1)
+                for part in @_children
+                    if part._name.toString().match(filter.toString())
+                        part_filter.add_child  part
+                        part.material_id.set parseInt(mat_id)
+                        part.group_id.set parseInt(part_filter._id)     
+            else
+                filter = part_filter.filter.toString()
+                for part in @_children
+                    if part._name.toString() == filter.toString()
+                        part_filter.add_child  part
+                        part.material_id.set parseInt(mat_id)
+                        part.group_id.set parseInt(part_filter._id)   
+       
+   
         else if part_filter.type.toString() == "by id"  
             group = part_filter.filter.toString().split(",")
             
