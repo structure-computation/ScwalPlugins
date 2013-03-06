@@ -1,4 +1,6 @@
+#include <Soca/Com/SodaClient.h>
 #include <Soca/Model/TypedArray.h>
+#include <QtCore/QFile>
 #include <QtCore/QTemporaryFile>
 #include <QtCore/QDataStream>
 #include <containers/vec.h>
@@ -13,25 +15,53 @@ struct AutoRm {
 };
 
 bool GmshUpdater::run( MP mp ) {
-    MP ch = mp[ "_children[ 0 ].mesh" ];
-//     qDebug() << ch[ "points" ] ;
-//     qDebug() << ch[ "_elements" ] ;
-    
-    // add_message( mp, ET_Info, "Test info msg" );
-    
+    MP ch = mp[ "_children[ 0 ]" ];
     if ( ch.ok() ) {
-//         qDebug() << ch[ "_mesh" ] ;
-        double base_size = mp[ "base_size" ];
-        if ( base_size <= 0 ) {
-            add_message( mp, ET_Error, "Please specify a valid base size" );
-            return false;
+        // check if a .geo file has been provided
+        QString name = ch["_name"];
+        bool test = (ch.type() == "FileItem" and name.endsWith(".geo"));
+        
+        // retrieve or make a .geo file
+        QFile* geo = 0;
+        if(test){
+            MP file_geo = mp["_children[0]"];
+            quint64 ptr = file_geo[ "_ptr" ];
+            PRINT(file_geo.type().toStdString());
+            QString name = file_geo[ "_name" ];
+            MP data = sc->load_ptr( ptr );
+            QString path;
+            if( data.ok() and data.type() == "Path") {
+                path = (QString) data;
+            }
+            else {
+                add_message( mp, ET_Error, "Unable to find .geo path" );
+                return false;
+            }
+            //qDebug() << "Path : " << path_csv;
+            std::string filename(path.toStdString());
+            PRINT(filename);
+            PRINT(name.toStdString());
+            geo = new QFile(filename.c_str());
+            if(!geo->open(QIODevice::ReadOnly)){
+                add_message( mp, ET_Error, "Unable to open .geo file" );
+                return false;
+            }
         }
-
-        // make a .geo file
-        QTemporaryFile geo; geo.open(); QTextStream out( &geo );
-        make_geo( out, ch, base_size );
-        out.flush();
-        geo.flush();
+        else {
+            double base_size = mp[ "base_size" ];
+            if ( base_size <= 0 ) {
+                add_message( mp, ET_Error, "Please specify a valid base size" );
+                return false;
+            }
+            QTemporaryFile* tmp = new QTemporaryFile();
+            geo = tmp;
+            tmp->open();
+            QTextStream out( tmp );
+            MP ch_mesh = ch["mesh"];
+            make_geo( out, ch_mesh, base_size );
+            out.flush();
+            tmp->flush();
+        }
 
         // output mesh
         MP om = mp[ "_mesh" ];
@@ -39,8 +69,8 @@ bool GmshUpdater::run( MP mp ) {
         om[ "_elements" ].clear();
 
         // .geo -> .msh
-        AutoRm arm( geo.fileName() + ".msh" );
-        QString cmd = "cat " + geo.fileName() + "; gmsh -o " + geo.fileName() + ".msh -3 " + geo.fileName() + " > /dev/null";
+        AutoRm arm( geo->fileName() + ".msh" );
+        QString cmd = "cat " + geo->fileName() + "; gmsh -o " + geo->fileName() + ".msh -3 " + geo->fileName() + " > /dev/null";
         if ( system( cmd.toAscii().data() ) ) {
             add_message( mp, ET_Error, "gmsh has crashed" );
             return true;
@@ -56,7 +86,7 @@ bool GmshUpdater::run( MP mp ) {
         QSet<TL> lines;
 
         // read the .msh file
-        QFile msh( geo.fileName() + ".msh" );
+        QFile msh( geo->fileName() + ".msh" );
         msh.open( QFile::ReadOnly );
         QTextStream inp( &msh );
         int mode = 0;

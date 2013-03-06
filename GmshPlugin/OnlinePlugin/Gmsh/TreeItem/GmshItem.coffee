@@ -14,10 +14,10 @@ class GmshItem extends TreeItem_Computable
         #@add_context_modules  new TreeAppModule_Mesher   
         #@add_context_modules  new TreeAppModule_Sketch
         #@add_context_modules  new TreeAppModule_Transform
-            
-        @add_context_actions  new TreeAppModule_Mesher   
+        
+        @add_context_actions  new TreeAppModule_Mesher
         @add_context_actions  new TreeAppModule_Sketch
-        @add_context_actions  new TreeAppModule_Transform    
+        @add_context_actions  new TreeAppModule_Transform
             
             
         @_name.set name
@@ -53,7 +53,8 @@ class GmshItem extends TreeItem_Computable
         ch instanceof MesherItem or 
         ch instanceof SketchItem or 
         ch instanceof ImgItem or
-        ch instanceof TransformItem
+        ch instanceof TransformItem or
+        ch instanceof FileItem
         
     sub_canvas_items: ->
         [ @_mesh ]

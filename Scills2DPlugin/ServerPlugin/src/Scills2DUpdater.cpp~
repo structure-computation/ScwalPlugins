@@ -282,65 +282,41 @@ void add_MP_computation_parameters_to_data_user(MP computation_parameters, DataU
     int num_parametric_type = parametric_parameters[ "type.num" ];
     MP type_parametric = lst_parametric_type[num_parametric_type];
     Sc2String name_parametric_scheme = convert_MP_to_Sc2String(type_parametric);
+    
+    qDebug() << type_parametric[ "type" ];
     PRINT(name_parametric_scheme);
     
     
     if (name_parametric_scheme == "off") { data_user.multiresolution_parameters.multiresolution_type = "off";}
-    else if (name_parametric_scheme == "sequential") { data_user.multiresolution_parameters.multiresolution_type = "sequential";}
-    PRINT(data_user.multiresolution_parameters.multiresolution_type);
+    else if (name_parametric_scheme == "function") { data_user.multiresolution_parameters.multiresolution_type = "function";}
     
-    data_user.multiresolution_parameters.resolution_number = convert_MP_to_int(parametric_parameters[ "nb_resolutions.val" ]);
-    PRINT(data_user.multiresolution_parameters.resolution_number);
-    
-    int nb_parametric_variables = convert_MP_to_int(parametric_parameters[ "nb_parameters" ]);
-    PRINT(nb_parametric_variables);
-    
+    data_user.multiresolution_parameters.resolution_number = convert_MP_to_int(parametric_parameters[ "nb_resolutions" ]);
+    int nb_parametric_variables = convert_MP_to_int(parametric_parameters[ "nb_paramaters" ]);
     data_user.multiresolution_parameters.collection_vec.resize(nb_parametric_variables);
     for(int i_param = 0;i_param < nb_parametric_variables; ++i_param){
-        PRINT("-----------parametric_variables---------------");
-        MP  parametric_item = parametric_parameters[ "_children" ][ i_param ];
-        // valeurs communes
-        // selon le type : ...
-        Sc2String parameter_type = convert_MP_to_Sc2String(parametric_item["_name_class"]);
-        PRINT(parameter_type);
-        if(parameter_type == "Basic1DFunctionItem"){        // ... fonction
-            data_user.multiresolution_parameters.collection_vec[i_param].id_in_calcul               = convert_MP_to_int(parametric_item[ "_id" ]);
-            data_user.multiresolution_parameters.collection_vec[i_param].name                       = convert_MP_to_Sc2String(parametric_item[ "_name" ]);
-            data_user.multiresolution_parameters.collection_vec[i_param].type                       = "function";
-            data_user.multiresolution_parameters.collection_vec[i_param].nb_values                  = 0;    /// Valeur par defaut
-            data_user.multiresolution_parameters.collection_vec[i_param].function                   = convert_MP_to_Sc2String(parametric_item[ "your_function" ]);
-            //* Debug
-            PRINT(data_user.multiresolution_parameters.collection_vec[i_param].id_in_calcul);
-            PRINT(data_user.multiresolution_parameters.collection_vec[i_param].name);
-            PRINT(data_user.multiresolution_parameters.collection_vec[i_param].type);
-            PRINT(data_user.multiresolution_parameters.collection_vec[i_param].nb_values);
-            PRINT(data_user.multiresolution_parameters.collection_vec[i_param].function);
-            //*/
-        }
-        else if(parameter_type == "ParametricListItem"){    // ... liste
-            data_user.multiresolution_parameters.collection_vec[i_param].id_in_calcul               = convert_MP_to_int(parametric_item[ "_id" ]);
-            data_user.multiresolution_parameters.collection_vec[i_param].name                       = convert_MP_to_Sc2String(parametric_item[ "_name" ]);
-            data_user.multiresolution_parameters.collection_vec[i_param].type                       = "list";
-            MP values_list = parametric_item[ "_values" ];
-            int nb_values = convert_MP_to_int(parametric_item[ "_size" ]);
-            data_user.multiresolution_parameters.collection_vec[i_param].nb_values                  = nb_values;
-            data_user.multiresolution_parameters.collection_vec[i_param].values.reserve(nb_values);
-            for(int i_value = 0; i_value < nb_values; i_value++){
-                Sc2String value = convert_MP_to_Sc2String(values_list[ i_value ]);
-                data_user.multiresolution_parameters.collection_vec[i_param].values << value;
-                //PRINT(value);
-            }
-            //* Debug
-            PRINT(data_user.multiresolution_parameters.collection_vec[i_param].id_in_calcul);
-            PRINT(data_user.multiresolution_parameters.collection_vec[i_param].name);
-            PRINT(data_user.multiresolution_parameters.collection_vec[i_param].type);
-            PRINT(data_user.multiresolution_parameters.collection_vec[i_param].nb_values);
-            PRINT(data_user.multiresolution_parameters.collection_vec[i_param].values);
-            //*/
-        }
+        MP  parametric_function_i = parametric_parameters[ "_children" ][ i_param ];
+        data_user.multiresolution_parameters.collection_vec[i_param].id_in_calcul               = convert_MP_to_int(parametric_function_i[ "_id" ]);
+        data_user.multiresolution_parameters.collection_vec[i_param].parametric_function        = convert_MP_to_Sc2String(parametric_function_i[ "your_function" ]);
+        data_user.multiresolution_parameters.collection_vec[i_param].alias_name                 = convert_MP_to_Sc2String(parametric_function_i[ "_name" ]);
+        data_user.multiresolution_parameters.collection_vec[i_param].name                       = convert_MP_to_Sc2String(parametric_function_i[ "_name" ]);
+        data_user.multiresolution_parameters.collection_vec[i_param].max_value                  = convert_MP_to_reel(parametric_function_i[ "bound[1]" ]);
+        data_user.multiresolution_parameters.collection_vec[i_param].min_value                  = convert_MP_to_reel(parametric_function_i[ "bound[0]" ]);
+        data_user.multiresolution_parameters.collection_vec[i_param].nb_value                   = convert_MP_to_int(parametric_parameters[ "nb_resolutions" ]);
     }
     
-    //assert(0);
+    PRINT(data_user.multiresolution_parameters.multiresolution_type);
+    PRINT(data_user.multiresolution_parameters.resolution_number);
+    for(int i_param = 0;i_param < nb_parametric_variables; ++i_param){
+        PRINT("-----------parametric_variables---------------");
+        PRINT(data_user.multiresolution_parameters.collection_vec[i_param].id_in_calcul);
+        PRINT(data_user.multiresolution_parameters.collection_vec[i_param].parametric_function);
+        PRINT(data_user.multiresolution_parameters.collection_vec[i_param].alias_name);
+        PRINT(data_user.multiresolution_parameters.collection_vec[i_param].name);
+        PRINT(data_user.multiresolution_parameters.collection_vec[i_param].max_value);
+        PRINT(data_user.multiresolution_parameters.collection_vec[i_param].nb_value); 
+    }  
+    
+//     assert(0);
 }
 
 // traitement des matériaux du calculs

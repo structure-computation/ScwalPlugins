@@ -12,7 +12,7 @@ int main( int argc, char **argv ) {
     MP mp = sc.load_ptr(model_id);
     qDebug() << "###############   launch GmshItem ###############" ;
     GmshUpdater updater;
-    //updater.sc = &sc;
+    updater.sc = &sc;
     updater.exec( mp );
     qDebug() << "###############   finish stand alone GmshItem ###############" ;
     
