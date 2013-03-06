@@ -9,22 +9,37 @@ int main( int argc, char **argv ) {
     //id du model à traiter
     quint64 model_id = atoi(argv[1]);   
     sc.reg_type( "CorrelationItem" );
-    // attente
-    while ( SodaClient::Event event = sc.event() ) {
-        MP mp = event.mp();
-        if ( mp.type() == "CorrelationItem" and mp.get_server_id() == model_id ) {
-            quint64 model_stop_state = mp[ "_stop_state" ];  
-            if( model_stop_state == true ){
-                qDebug() << "###############   finish CorrelationItem ###############" ;
-                break;
-            }else{
-                qDebug() << "###############   launch CorrelationItem ###############" ;
-                CorreliUpdater updater;
-                //updater.sc = &sc;
-                updater.exec( mp );
-            }
-        }
-    }
+    
+    MP mp = sc.load_ptr(model_id);
+    qDebug() << "###############   launch CorrelationItem ###############" ;
+    CorreliUpdater updater;
+    //updater.sc = &sc;
+    updater.exec( mp );
+    qDebug() << "###############   finish stand alone CorrelationItem ###############" ;
+    
+
+//     // attente
+//     while ( SodaClient::Event event = sc.event() ) {
+//         MP mp = event.mp();
+//         if ( mp.type() == "CorrelationItem" and mp.get_server_id() == model_id ) {
+//             quint64 model_stop_state = mp[ "_stop_state" ];  
+//             if( model_stop_state == true ){
+//                 qDebug() << "###############   finish CorrelationItem ###############" ;
+//                 break;
+//             }else{
+//                 qDebug() << "###############   launch CorrelationItem ###############" ;
+//                 CorreliUpdater updater;
+//                 //updater.sc = &sc;
+//                 updater.exec( mp );
+//                 quint64 model_finish_state = mp[ "_finish_state" ];
+//                 //if computation is finished, if not, there is somthing to compute
+//                 if(model_finish_state == true){
+//                     qDebug() << "###############   finish normal CorrelationItem ###############" ;
+//                     break;
+//                 }
+//             }
+//         }
+//     }
     
     
 

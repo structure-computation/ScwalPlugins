@@ -14,8 +14,8 @@ struct AutoRm {
 
 bool GmshUpdater::run( MP mp ) {
     MP ch = mp[ "_children[ 0 ].mesh" ];
-    qDebug() << ch[ "points" ] ;
-    qDebug() << ch[ "_elements" ] ;
+//     qDebug() << ch[ "points" ] ;
+//     qDebug() << ch[ "_elements" ] ;
     
     // add_message( mp, ET_Info, "Test info msg" );
     
@@ -148,7 +148,7 @@ bool GmshUpdater::run( MP mp ) {
         //            om[ "lines" ] << rs;
         //        }
 
-        qDebug() << om;
+//         qDebug() << om;
     }
     
     add_message( mp, ET_Info, "Mesher -> OK" );
