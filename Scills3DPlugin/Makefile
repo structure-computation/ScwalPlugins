@@ -1,6 +1,6 @@
 #parametres a modifier si necessaire
 #nombre de processeurs pour la compilation
-NB_COMP_PROC = 3
+NB_COMP_PROC = 1
 #dimension du probleme
 DIM = 3
 # emplacement de la libraire MPI
@@ -40,3 +40,4 @@ RELEASE3D:
 RELEASE2D:
 	make -C ../../Soca
 	metil_comp -ne -O3 -DDIM=2 $(GLOB_VAR) $(DIR_SOURCES_LMT) $(DIR_SOURCES_SC) $(DIR_SOURCES_GEOMETRY) $(DIR_SOURCES_MPI) $(CFLAGS) $(LIBS) $(OPT) $(DIR_SOURCES_SOCA) ServerPlugin/src/main2D.cpp
+

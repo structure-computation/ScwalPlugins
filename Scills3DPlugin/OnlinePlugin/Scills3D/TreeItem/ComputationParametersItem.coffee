@@ -9,7 +9,8 @@ class ComputationParametersItem extends TreeItem
         @_viewable.set false
         @add_child new LatinParamItem
         @add_child new TimeParamItem
-        @add_child new ParametricParamItem
+        @add_child new ParametricDataItem
+        #@add_child new ParametricParamItem
 
         # attributes
     

@@ -10,6 +10,7 @@ int main( int argc, char **argv ) {
     if ( not sc.connected() ) return 1;
 
     // type d'item observé
+    sc.reg_type( "CsvReaderItem" );
     sc.reg_type( "UnvReaderItem2D" );
     sc.reg_type( "UnvReaderItem3D" );
     sc.reg_type( "Scult2DItem" );
