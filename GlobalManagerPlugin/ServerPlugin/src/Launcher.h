@@ -32,7 +32,12 @@ class Launcher : public QObject {
           std::string temp_str = strs.str();
           std::string commande;
           int output;
-
+          
+          if(mp.type() == "CsvReaderItem" ){
+              commande = "../CsvReaderPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main_cpp.exe " + temp_str ;
+              output = std::system(commande.c_str());
+          }
+          
           if(mp.type() == "UnvReaderItem2D" ){
               commande = "../UnvReaderPlugin2D/ServerPlugin/src/compilations/ServerPlugin_src_main_cpp.exe " + temp_str ;
               output = std::system(commande.c_str());
