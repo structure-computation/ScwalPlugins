@@ -199,4 +199,76 @@ void new_list_elements_mesh_2D(MP om, GroupElementsUser &group_interface_i, int 
     om[ "_elements" ] << triangles;
 };
 
+// convert QString to Sc2String
+Sc2String convert_QString_to_Sc2String(QString q_string){
+    QByteArray byteArray = q_string.toUtf8();
+    const char* c_string = byteArray.constData();
+    Sc2String string_output;
+    string_output << c_string;
+    return string_output;
+}
+
+// convert MP to Sc2String
+Sc2String convert_MP_to_Sc2String(MP mpstring){
+    QString q_string = mpstring;
+    QByteArray byteArray = q_string.toUtf8();
+    const char* c_string = byteArray.constData();
+    Sc2String string_output;
+    string_output << c_string;
+    return string_output;
+}
+
+// convert MP to int
+int convert_MP_to_int(MP mpstring){
+    int q_int = mpstring;
+    return q_int;
+}
+
+// convert MP to int
+int convert_MP_to_reel(MP mpstring){
+    TYPEREEL q_int = mpstring;
+    return q_int;
+}
+
+void zip_result(MP mp){
+        Sc2String result_path_zip = convert_MP_to_Sc2String(mp[ "_path_zip" ]);
+        Sc2String result_pah = convert_MP_to_Sc2String(mp[ "_path" ]);
+        
+        QString path_test = mp[ "_path" ];
+        QFileInfo info1(path_test);
+        QDir dir(info1.dir());
+        QString dir_name = dir.absolutePath() ; 
+        qDebug() << dir_name ;
+        QString file_name = info1.baseName(); 
+        qDebug() << file_name ;
+        
+        Sc2String command_line_zip;
+        command_line_zip << "cd " << convert_QString_to_Sc2String(dir_name) << "; zip -r " << result_path_zip << "  " << convert_QString_to_Sc2String(file_name);
+        PRINT(command_line_zip);
+        int output;
+        output = std::system(command_line_zip.c_str());
+        PRINT(output);
+        
+        command_line_zip = "";
+        command_line_zip << " mv " << result_path_zip << ".zip  " << result_path_zip;
+        PRINT(command_line_zip);
+        output = std::system(command_line_zip.c_str());
+        PRINT(output);
+        
+        // suppression du répertoire des resultats
+        Sc2String command_line_rm;
+        command_line_rm << " rm -r " << result_pah;
+        PRINT(command_line_rm);
+        output = std::system(command_line_rm.c_str());
+        PRINT(output);
+}
+
+
+
+
+
+
+
+
+
 #endif // SCWALSCILLSFUNCTION_H

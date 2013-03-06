@@ -10,7 +10,7 @@ class ScillsMaterialItem extends TreeItem
 
         # attributes
         @add_attr
-            _nb_part_filters: 0
+            _nb_part_filters: 1
             alias: name
             _id: id_mat
             _info_ok: parseInt(0)

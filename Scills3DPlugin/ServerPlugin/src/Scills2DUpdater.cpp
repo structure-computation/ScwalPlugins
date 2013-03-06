@@ -27,36 +27,6 @@
 #include "../LMT/include/io/ioexception.h"
 Crout crout;
 
-// convert QString to Sc2String
-Sc2String convert_QString_to_Sc2String(QString q_string){
-    QByteArray byteArray = q_string.toUtf8();
-    const char* c_string = byteArray.constData();
-    Sc2String string_output;
-    string_output << c_string;
-    return string_output;
-}
-
-// convert MP to Sc2String
-Sc2String convert_MP_to_Sc2String(MP mpstring){
-    QString q_string = mpstring;
-    QByteArray byteArray = q_string.toUtf8();
-    const char* c_string = byteArray.constData();
-    Sc2String string_output;
-    string_output << c_string;
-    return string_output;
-}
-
-// convert MP to int
-int convert_MP_to_int(MP mpstring){
-    int q_int = mpstring;
-    return q_int;
-}
-
-// convert MP to int
-int convert_MP_to_reel(MP mpstring){
-    TYPEREEL q_int = mpstring;
-    return q_int;
-}
 
 // convert MP_filter_edges to data_user_edges definition
 DataUser::Json_edges new_data_user_edge_from_edge_filter(DataUser &data_user, MP edge_filter, int id_boundary_condition){
@@ -867,8 +837,6 @@ void add_edges_to_MP_assembly(MP  oec, MP boundary_condition_set, DataUser &data
 
 
 
-
-
 bool Scills2DUpdater::run( MP mp ) {
     qDebug() << mp.type();
     quint64 MP_model_id = mp.get_server_id();
@@ -911,11 +879,13 @@ bool Scills2DUpdater::run( MP mp ) {
         qDebug() << path_hdf;
         
         // répertoire des resultat vtu
-        QFileInfo info1(path_hdf);
-        QDir dir(info1.dir());
-        QString dir_name = dir.absolutePath() ; 
-        qDebug() << dir_name ;
-        QString path_result = dir_name + "/result_" + QString::number(MP_model_id);
+//         QFileInfo info1(path_hdf);
+//         QDir dir(info1.dir());
+//         QString dir_name = dir.absolutePath() ; 
+//         qDebug() << dir_name ;
+//         QString path_result = dir_name + "/result_" + QString::number(MP_model_id);
+        
+        QString path_result = mp[ "_path" ];
         qDebug() << path_result ;
         mp[ "path_result" ] = path_result;
         
@@ -960,8 +930,7 @@ bool Scills2DUpdater::run( MP mp ) {
         MP  volumic_load_set = mp[ "_children[ 6 ]" ];
         add_MP_volumic_loads_to_data_user(volumic_load_set, data_user);
         
-        
-        
+        // réalisation du calcul
         process.initialisation_MPI_for_scwal();
         process.data_user = &data_user;
         process.geometry_user = &geometry_user;
@@ -973,6 +942,11 @@ bool Scills2DUpdater::run( MP mp ) {
         
         process.finalisation_MPI();
         PRINT("fin calcul");
+        
+        
+        // zip du fichier de résultat
+        zip_result(mp);
+        
     }
 
     mp[ "_compute_edges" ] = false;
