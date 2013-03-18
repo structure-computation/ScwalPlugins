@@ -16,6 +16,6 @@ class TreeAppApplication_UnvReader3D extends TreeAppApplication
             ina: _ina
             fun: ( evt, app ) =>
                 app.undo_manager.snapshot()
-                alert "unv3D"
+                #alert "unv3D"
                 unv3D = @add_item_depending_selected_tree app.data, UnvReaderItem3D
         

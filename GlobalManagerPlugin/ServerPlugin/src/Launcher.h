@@ -72,12 +72,39 @@ class Launcher : public QObject {
               output = std::system(commande.c_str());
           }
           else if(mp.type() == "Scills2DItem" ){
-              //commande = "mpirun.openmpi -np 1 ../Scills3DPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main2D_cpp.exe " + temp_str + " mpi" ;
-              commande = "../Scills3DPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main2D_cpp.exe " + temp_str ;
+              //* Modification pour lancement MPI (ne devrait pas etre gere ici...)
+              int nb_proc = mp["nb_proc"];
+              qDebug() << "Nb processors : " << nb_proc;
+              if(nb_proc > 1){
+                  qDebug() << "**************************************************************************************************";
+                  qDebug() << "**************************************** LAUNCHING MPI *******************************************";
+                  qDebug() << "**************************************************************************************************";
+                  std::stringstream strs;
+                  strs << nb_proc;
+                  std::string nb_proc_str = strs.str();
+                  commande = "mpirun.openmpi -np " + nb_proc_str + " ../Scills3DPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main2D_cpp.exe " + temp_str + " mpi";
+              }
+              else {
+                  commande = "../Scills3DPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main2D_cpp.exe " + temp_str ;
+              }
               output = std::system(commande.c_str());
           }
           else if(mp.type() == "Scills3DItem" ){
-              commande = "../Scills3DPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main3D_cpp.exe " + temp_str ;
+              //* Modification pour lancement MPI (ne devrait pas etre gere ici...)
+              int nb_proc = mp["nb_proc"];
+              qDebug() << "Nb processors : " << nb_proc;
+              if(nb_proc > 1){
+                  qDebug() << "**************************************************************************************************";
+                  qDebug() << "**************************************** LAUNCHING MPI *******************************************";
+                  qDebug() << "**************************************************************************************************";
+                  std::stringstream strs;
+                  strs << nb_proc;
+                  std::string nb_proc_str = strs.str();
+                  commande = "mpirun.openmpi -np " + nb_proc_str + " ../Scills3DPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main3D_cpp.exe " + temp_str + " mpi";
+              }
+              else {
+                  commande = "../Scills3DPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main3D_cpp.exe " + temp_str ;
+              }
               output = std::system(commande.c_str());
           }
           else if(mp.type() == "GmshItem" ){
