@@ -53,12 +53,12 @@ class Scills3DItem extends TreeItem_Computable
     set_filter_edge: (edge_filter,bc_id)->
         @_compute_scills.set false
         @_compute_edges.set true
-        @do_it()
+        #@do_it()
         
     set_compute_scills: ()->
         @_compute_edges.set false
         @_compute_scills.set true
-        @do_it()
+        #@do_it()
         
     download_result: ()-> 
 #         window.open "/sceen/_?u=" + "/home/jbellec/code_dev_scwal/EcosystemScience/data.db/result_211037856"
