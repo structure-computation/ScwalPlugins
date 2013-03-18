@@ -4,8 +4,9 @@ class TreeAppModule_Animation extends TreeAppModule
         @play_state = false
         @add_attr
             img_per_sec: 2
+            right: true
         
-        @name = 'Time'
+        @name = ''
         @timeline = true
         
         _ina = ( app ) =>
@@ -14,7 +15,7 @@ class TreeAppModule_Animation extends TreeAppModule
             
         @actions.push
             ico: "img/first_24.png"
-            siz: 1
+            siz: 0.9
             ord: false
             ina: _ina
             txt: "Go to First Image"
@@ -26,7 +27,7 @@ class TreeAppModule_Animation extends TreeAppModule
                 
         @actions.push
             ico: "img/rewind_24.png"
-            siz: 1
+            siz: 0.9
             ord: false
             ina: _ina
             txt: "Rewind"
@@ -39,7 +40,7 @@ class TreeAppModule_Animation extends TreeAppModule
                 
         @actions.push
             ico: "img/play_24.png"
-            siz: 1
+            siz: 0.9
             ord: false
             ina: _ina
             txt: "Play"
@@ -55,7 +56,7 @@ class TreeAppModule_Animation extends TreeAppModule
                 
         @actions.push
             ico: "img/pause_24.png"
-            siz: 1
+            siz: 0.9
             ord: false
             ina: _ina
             txt: "Pause"
@@ -67,7 +68,7 @@ class TreeAppModule_Animation extends TreeAppModule
                 
         @actions.push
             ico: "img/forward_24.png"
-            siz: 1
+            siz: 0.9
             ord: false
             ina: _ina
             txt: "Forward"
@@ -82,7 +83,7 @@ class TreeAppModule_Animation extends TreeAppModule
                 
         @actions.push
             ico: "img/last_24.png"
-            siz: 1
+            siz: 0.9
             ina: _ina
             txt: "Go to Last Image"
             fun: ( evt, app ) =>
