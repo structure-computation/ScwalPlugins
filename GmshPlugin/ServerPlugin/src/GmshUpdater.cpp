@@ -19,11 +19,11 @@ bool GmshUpdater::run( MP mp ) {
     if ( ch.ok() ) {
         // check if a .geo file has been provided
         QString name = ch["_name"];
-        bool test = (ch.type() == "FileItem" and name.endsWith(".geo"));
+        bool test_geo = (ch.type() == "FileItem" and name.endsWith(".geo"));
         
         // retrieve or make a .geo file
         QFile* geo = 0;
-        if(test){
+        if(test_geo){
             MP file_geo = mp["_children[0]"];
             quint64 ptr = file_geo[ "_ptr" ];
             PRINT(file_geo.type().toStdString());
@@ -72,13 +72,12 @@ bool GmshUpdater::run( MP mp ) {
         AutoRm arm( geo->fileName() + ".msh" );
         QString cmd = "cat " + geo->fileName() + "; gmsh -o " + geo->fileName() + ".msh -3 " + geo->fileName() + " > /dev/null";
         if ( system( cmd.toAscii().data() ) ) {
-            add_message( mp, ET_Error, "gmsh has crashed" );
+            add_message( mp, ET_Error, "gmsh has crashed generating msh file" );
             return true;
         }
-
-        // qDebug() << geo.fileName();
-        // cmd = "cp " + geo.fileName() + ".msh carre.msh";
-        // system( cmd.toAscii().data() );
+        // Debug
+        //cmd = "cp " + geo->fileName() + ".msh ~/test.msh";
+        //system( cmd.toAscii().data() );
 
         TypedArray<int> *triangle_con = new TypedArray<int>;
         TypedArray<int> *tetro_con = new TypedArray<int>;
@@ -169,18 +168,34 @@ bool GmshUpdater::run( MP mp ) {
         MP tetrahedra = MP::new_obj( "Element_TetrahedraList" );
         tetrahedra[ "indices" ] = tetro_con;
         om[ "_elements" ] << tetrahedra;
-
-
+        
+        /* .geo -> .unv (TODO: comment referencer le fichier)
+        int generate_unv = mp["generate_unv"];
+        if(generate_unv) {
+            //QString cmd_unv = "gmsh -o " + geo->fileName() + ".unv -3 " + geo->fileName() + " > /dev/null";
+            QString cmd_unv = "gmsh -o ~/test.unv -3 " + geo->fileName() + " > /dev/null";
+            if ( system( cmd_unv.toAscii().data() ) ) {
+                add_message( mp, ET_Error, "gmsh has crashed generating unv file" );
+                return true;
+            }
+            //MP unv_file = MP::new_file(geo->fileName() + ".unv");
+            //mp["output"] << unv_file;
+            // Debug
+            //cmd_unv = "cp " + geo->fileName() + ".unv ~/test.unv";
+            //system( cmd_unv.toAscii().data() );
+        }//*/
+        
         //mp.flush();
         //        foreach( TL l, lines ) {
         //            MP rs = MP::new_lst();
         //            rs << l.first << l.second;
         //            om[ "lines" ] << rs;
         //        }
-
-//         qDebug() << om;
+        
+        //qDebug() << om;
     }
-    
+    //qDebug() << "GmshItem : ";
+    //qDebug() << mp;
     add_message( mp, ET_Info, "Mesher -> OK" );
     qDebug() << "Mesher just finish";
 }
