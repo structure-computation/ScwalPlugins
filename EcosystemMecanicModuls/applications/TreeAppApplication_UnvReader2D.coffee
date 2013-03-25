@@ -15,6 +15,5 @@ class TreeAppApplication_UnvReader2D extends TreeAppApplication
             ina: _ina
             fun: ( evt, app ) =>
                 app.undo_manager.snapshot()
-                #alert "unv2D"
                 unv2D = @add_item_depending_selected_tree app.data, UnvReaderItem2D
         
