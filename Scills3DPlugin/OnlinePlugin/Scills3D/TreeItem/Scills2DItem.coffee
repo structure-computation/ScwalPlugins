@@ -29,6 +29,8 @@ class Scills2DItem extends TreeItem_Computable
         @add_child new BoundaryConditionSetItem @_dim
         @add_child new ThermalLoadItem
         @add_child new VolumicForceSetItem @_dim
+        @add_child new TestProcess
+        @add_child new TestProcess
         
         @add_context_actions
             txt: "load result"
@@ -36,7 +38,7 @@ class Scills2DItem extends TreeItem_Computable
             fun: ( evt, app ) =>
                 #alert "add material"
                 @download_result()
-    
+        
         @bind =>
             if  @compute_scills.has_been_modified()
                 @set_compute_scills()
@@ -46,26 +48,20 @@ class Scills2DItem extends TreeItem_Computable
     
     set_filter_part: (part_filter, mat_id)->
         @_children[0].set_filter_part(part_filter, mat_id) 
-        
+    
     set_filter_interface: (interface_filter, link_id)->
         @_children[0].set_filter_interface(interface_filter, link_id) 
-        
+    
     set_filter_edge: (edge_filter,bc_id)->
         @_compute_scills.set false
         @_compute_edges.set true
-        
+    
     set_compute_scills: ()->
         @_compute_edges.set false
         @_compute_scills.set true
-        
+    
     download_result: ()-> 
 #         window.open "/sceen/_?u=" + "/home/jbellec/code_dev_scwal/EcosystemScience/data.db/result_211037856"
         myWindow = window.open '',''
         myWindow.document.write "<a href='/sceen/_?u=" + @_path_zip._server_id + "'> Right click to save as </a>"
         myWindow.focus()
-        
-        
-        
-        
-        
-        

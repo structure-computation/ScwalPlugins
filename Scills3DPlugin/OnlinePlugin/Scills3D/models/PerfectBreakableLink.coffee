@@ -1,3 +1,11 @@
+class LinkBreakableAttribute extends Model
+    constructor: () ->
+        super()
+        
+        @add_attr
+            Fc_n: "0"
+            Fc_t: "0"
+
 #
 class PerfectBreakableLink extends Model
     constructor: ( ) ->
@@ -10,6 +18,7 @@ class PerfectBreakableLink extends Model
             thickness: "0"
             Fc_n: "0"
             Fc_t: "0"
+            #breakable: new LinkBreakableAttribute # Test en cours pour factorisation
             friction : "0.3"
      
               
