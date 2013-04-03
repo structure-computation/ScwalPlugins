@@ -39,12 +39,6 @@ class VolumicForceSetItem extends TreeItem
                 
     accept_child: ( ch ) ->
         ch instanceof VolumicForceItem
-
-    z_index: ->
-        #
-         
-    sub_canvas_items: ->
-        [ ]
     
     change_parameters: ->
         #modification du nombre de chargements
