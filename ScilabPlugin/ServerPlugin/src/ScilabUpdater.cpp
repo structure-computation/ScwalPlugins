@@ -1,6 +1,7 @@
 #include <Soca/Com/SodaClient.h>
 #include <Soca/Model/TypedArray.h>
 #include <QtCore/QFile>
+#include <QtGui/QImage>
 #include <QtCore/QTemporaryFile>
 #include <QtCore/QDataStream>
 #include <containers/vec.h>
@@ -15,6 +16,26 @@ extern "C" int SendScilabJob(char *job);
 /*--------------------------------------------------------------------------*/
 
 typedef LMT::Vec<double,3> Pvec;
+
+
+
+
+inline void _save_img( MP outputImage, const QImage &res ) {
+    // -> png
+    QByteArray ba;
+    QBuffer buffer( &ba );
+    buffer.open( QIODevice::WriteOnly );
+    res.save( &buffer, "PNG" );
+
+    // -> base64
+    QByteArray b6;
+    b6.append( "data:image/png;base64," );
+    b6.append( ba.toBase64() );
+
+    outputImage[ "src" ] = QString::fromAscii( b6.data(), b6.size() );
+}
+
+
 
 struct AutoRm {
     AutoRm( QString f ) : f( f ) {}
@@ -98,6 +119,15 @@ bool ScilabUpdater::run( MP mp ) {
 		
 		///execution du script in Scilab
 		SendScilabJob((char*)"exec('script_scilab.sce')");	//put exec('script_scilab.sce',-1) to avoid all message in terminal      
+                
+                
+                // outputImage
+                MP outputImage = mp["_output[0].img"];
+                QString fileName =  name2 + "result.png";
+                QImage Image;
+                bool test = Image.load(fileName,"png");
+                _save_img( outputImage, Image );
+                
 	    } else file.close();
 	      
  	    if ( TerminateScilab(NULL) == FALSE ) printf("Error : TerminateScilab \n");

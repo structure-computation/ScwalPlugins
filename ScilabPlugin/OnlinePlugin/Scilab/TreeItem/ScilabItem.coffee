@@ -2,12 +2,9 @@
 class ScilabItem extends TreeItem_Computable
     constructor: ( name = "Scilab" ) ->
         super()
-        @add_attr
-            _mesh        : new Mesh( not_editable: true )
 
         @add_attr
            cell_type    : new Choice( 0, [ "detectfaces", "filter : sobel" ] )
-           visualization: @_mesh.visualization
            # base_size    : 100
            # p_mesher     : new Lst
 
@@ -16,16 +13,12 @@ class ScilabItem extends TreeItem_Computable
             
         @_name.set name
         @_ico.set "img/scilab.png"
-        @_viewable.set true
-        
-        @visualization.display_style.num.set 1
+        @_viewable.set false
         @_computation_mode.set false
         
         
-        @add_child new ImgSetItem
-        
-        
-      
+        #@add_child new ImgSetItem
+        @add_output new ImgItem
 
         
     accept_child: ( ch ) ->
