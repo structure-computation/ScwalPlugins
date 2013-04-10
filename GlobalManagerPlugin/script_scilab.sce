@@ -1,7 +1,8 @@
-im=imread('/home/ubuntu/Scwal/EcosystemScience/data.db/846930886');
-disp('toto1')
-filtersc = fspecial('sobel');
-disp('toto2');
-imf = imfilter(im, filtersc);
-disp('toto3');
-imwrite(imf,'/home/ubuntu/Scwal/EcosystemScience/data.db/846930886result.png');
+im=imread('/home/ubuntu/Scwal/EcosystemScience/data.db/1681692777');
+faces = detectfaces(im);
+[m,n] = size(faces);
+for i=1:m,
+     im = rectangle(im, faces(i,:), [0,255,0]);
+end;
+imf=im;
+imwrite(imf,'/home/ubuntu/Scwal/EcosystemScience/data.db/1681692777result.png');

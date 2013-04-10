@@ -1,7 +1,23 @@
+#pragma lib_path /home/ubuntu/scilab-5.4.0/lib/scilab
+#pragma lib_path /home/ubuntu/scilab-5.4.0/lib/thirdparty 
+#pragma inc_path /home/ubuntu/scilab-5.4.0/include/scilab
+#pragma lib_name scilab
+#pragma lib_name scicall_scilab 
+#pragma lib_name tk8.5 
+#pragma lib_name tcl8.5 
+#pragma lib_name fftw3 
+#pragma lib_name scigraphic_objects  
+#pragma lib_name scilab-cli 
+// #pragma lib_name  
+
+
+
+
 #include <Soca/Com/SodaClient.h>
 #include <Soca/Model/TypedArray.h>
 #include <QtCore/QFile>
 #include <QtGui/QImage>
+#include <QtCore/QBuffer>
 #include <QtCore/QTemporaryFile>
 #include <QtCore/QDataStream>
 #include <containers/vec.h>
