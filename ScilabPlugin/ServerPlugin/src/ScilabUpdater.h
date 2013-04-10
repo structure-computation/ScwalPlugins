@@ -3,7 +3,7 @@
 
 #include <Soca/Updater.h>
 class SodaClient;
-class QDataStream;
+//class QDataStream;
 
 /**
 */

@@ -8,10 +8,9 @@
 #pragma lib_name fftw3 
 #pragma lib_name scigraphic_objects  
 #pragma lib_name scilab-cli 
-// #pragma lib_name  
+#pragma lib_name QtGui 
 
-
-
+#pragma src_file /usr/include/scilab/api_scilab.h
 
 #include <Soca/Com/SodaClient.h>
 #include <Soca/Model/TypedArray.h>
@@ -23,7 +22,6 @@
 #include <containers/vec.h>
 #include "ScilabUpdater.h"
 
-#include "api_scilab.h"
 /*--------------------------------------------------------------------------*/
 /* See routines/system/call_scilab.h */
 extern "C" int StartScilab(char *SCIpath, char *ScilabStartup, int *Stacksize);
