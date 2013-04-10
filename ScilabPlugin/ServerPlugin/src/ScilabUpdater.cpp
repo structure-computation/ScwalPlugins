@@ -1,13 +1,17 @@
+#ifdef METIL_COMP_DIRECTIVE
+    #pragma src_file /usr/include/scilab/api_scilab.h
+#endif
+
 #include <Soca/Com/SodaClient.h>
 #include <Soca/Model/TypedArray.h>
 #include <QtCore/QFile>
 #include <QtGui/QImage>
+#include <QtCore/QBuffer>
 #include <QtCore/QTemporaryFile>
 #include <QtCore/QDataStream>
 #include <containers/vec.h>
 #include "ScilabUpdater.h"
 
-#include "api_scilab.h"
 /*--------------------------------------------------------------------------*/
 /* See routines/system/call_scilab.h */
 extern "C" int StartScilab(char *SCIpath, char *ScilabStartup, int *Stacksize);
