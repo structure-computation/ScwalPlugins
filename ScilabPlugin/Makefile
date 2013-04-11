@@ -5,7 +5,8 @@ PATH_TO_LIB_SCILAB = $(PATH_SCILAB)/lib/scilab
 PATH_TO_LIB_CALL_SCILAB = $(PATH_SCILAB)/lib/thirdparty 
 
 SCILAB_CFLAGS = -I$(PATH_SCILAB)/include/scilab
-SCILAB_LDFLAGS = -lscilab -lscicall_scilab -ltk8.5 -ltcl8.5 -lfftw3 -lscigraphic_objects  -lscilab-cli 
+SCILAB_LDFLAGS = -lscilab 
+#-lscicall_scilab -ltk8.5 -ltcl8.5 -lfftw3 -lscigraphic_objects  -lscilab-cli 
 
 
 
