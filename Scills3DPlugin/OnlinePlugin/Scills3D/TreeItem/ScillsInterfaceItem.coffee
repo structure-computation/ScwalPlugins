@@ -6,15 +6,20 @@ class ScillsInterfaceItem extends TreeItem
         # attributes
         @add_attr
             _mesh        : new Mesh( not_editable: true )
+            alias        : name
             
         @add_attr
             visualization: @_mesh.visualization
             id: -1
-            
+        
         # default values
         @_name.set name
         @_ico.set "img/interface.png"
         @_viewable.set true
+        
+        @bind =>
+            if  @alias.has_been_modified()
+                @_name.set @alias
     
     accept_child: ( ch ) ->
         #
