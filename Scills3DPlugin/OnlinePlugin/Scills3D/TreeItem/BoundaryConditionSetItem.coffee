@@ -15,6 +15,8 @@ class BoundaryConditionSetItem extends TreeItem
             _incr_id_group_edge:0
             _dim: dim
         
+        @add_attr
+            nb_bcs: @_nb_bcs
         
         @add_context_actions new TreeAppModule_Collection @_nb_bcs
         

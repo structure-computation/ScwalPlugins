@@ -112,7 +112,7 @@ class Launcher : public QObject {
               output = std::system(commande.c_str());
           }
           else if(mp.type() == "ScilabItem" ){
-              commande = "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/ubuntu/scilab-5.4.0/lib/scilab:/home/ubuntu/scilab-5.4.0/lib/thirdparty ; ../ScilabPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main_cpp.exe " + temp_str ;
+              commande = "../ScilabPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main_cpp.exe " + temp_str ;
               output = std::system(commande.c_str());
           }
           else if(mp.type() == "CorrelationItem" ){

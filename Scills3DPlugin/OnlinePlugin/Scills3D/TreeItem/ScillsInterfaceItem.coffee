@@ -10,6 +10,8 @@ class ScillsInterfaceItem extends TreeItem
         @add_attr
             visualization: @_mesh.visualization
             id: -1
+            link_id: -1
+            group_id: -1
             
         # default values
         @_name.set name

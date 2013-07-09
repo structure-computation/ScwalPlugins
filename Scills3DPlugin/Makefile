@@ -1,6 +1,6 @@
 #parametres a modifier si necessaire
 #nombre de processeurs pour la compilation
-NB_COMP_PROC = 1
+NB_COMP_PROC = 3
 #dimension du probleme
 DIM = 3
 # emplacement de la libraire MPI

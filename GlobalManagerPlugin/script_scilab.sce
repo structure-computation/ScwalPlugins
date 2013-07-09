@@ -1,7 +1,4 @@
-im=imread('/home/ubuntu/Scwal/EcosystemScience/data.db/846930886');
-disp('toto1')
+im=imread('/home/jbellec/code_dev_scwal/EcosystemScience/data.db/524872353');
 filtersc = fspecial('sobel');
-disp('toto2');
 imf = imfilter(im, filtersc);
-disp('toto3');
-imwrite(imf,'/home/ubuntu/Scwal/EcosystemScience/data.db/846930886result.png');
+imwrite(imf,'/home/jbellec/code_dev_scwal/EcosystemScience/data.db/524872353result.png');

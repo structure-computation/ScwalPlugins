@@ -11,6 +11,7 @@ class ScillsPartItem extends TreeItem
             visualization: @_mesh.visualization
             id: -1 
             material_id: -1
+            group_id: -1
          
         
         # default values

@@ -18,7 +18,7 @@ class ScillsAssemblyItem extends TreeItem
             nb_interfaces: 0
             nb_edges: 0
             compute_parts: false
-            compute_interfaces: true
+            compute_interfaces: false
             compute_edges: false
             _path: new Path
             _path_loaded: false

@@ -1,6 +1,84 @@
 #include "Scult3DUpdater.h"
 #include "ScwalScillsFunction.h"
 
+
+void visualisation_parts(MP mp){
+    MP assembly = mp[ "_output[ 0 ]" ]; 
+    QString path_hdf = assembly[ "_path" ];
+    int _path_loaded = assembly[ "_path_loaded" ];
+    
+    qDebug() << path_hdf;
+    QByteArray byteArray_hdf = path_hdf.toUtf8();
+    const char* c_path_hdf = byteArray_hdf.constData();
+    Sc2String file_output_hdf5;
+    file_output_hdf5 << c_path_hdf;
+  
+    GeometryUser geometry_user;
+    qDebug() << "lecture du fichier hdf en mémoire : " << path_hdf;
+    geometry_user.initialisation(file_output_hdf5);
+    geometry_user.read_hdf5(false,true,"test");                           /// true si on lit les info micro, true si on lit toutes les infos
+    
+    MP opc = assembly[ "_children[ 0 ]" ];            // output Part collection
+    MP oic = assembly[ "_children[ 1 ]" ];            // output Interface collection
+    MP oec = assembly[ "_children[ 2 ]" ];            // output Edge collection
+    
+    // traitement des éléments ------------------------------------------------------------------------------------------------
+    qDebug() << "traitement des elements"; 
+    for (int i_group=0; i_group < opc[ "_children" ].size(); i_group++) {
+        MP child = opc[ "_children" ][i_group];
+        child[ "_mesh.points" ].clear();
+        child[ "_mesh._elements" ].clear();
+        child[ "_mesh" ].clear();
+    }
+    
+    MP ovp = mp[ "_output[ 1 ]" ];            // output visualisation Part 
+    for (int i_group_f=0; i_group_f < ovp[ "_children" ].size(); i_group_f++) {
+        MP opfc = ovp[ "_children" ][i_group_f];
+        for (int i_group=0; i_group < opfc[ "_children" ].size(); i_group++) {
+            MP part = opfc[ "_children" ][i_group];
+            qDebug() << "id_part_mp : " << part["id"];
+            int id_group = part[ "id" ]; 
+            int index_group = geometry_user.find_index_group_elements(id_group);
+            qDebug() << "index_group : " << index_group;
+            
+            part[ "_mesh" ] = MP::new_obj( "Mesh" );
+            MP om = part[ "_mesh" ];
+            new_mesh(om);
+            new_mesh_part_3D(om, geometry_user, index_group);
+        }
+    }
+    
+    // traitement des interfaces ------------------------------------------------------------------------------------------------
+    qDebug() << "traitement des interfaces"; 
+    for (int i_group=0; i_group < oic[ "_children" ].size(); i_group++) {
+        MP child = oic[ "_children" ][i_group];
+        child[ "_mesh.points" ].clear();
+        child[ "_mesh._elements" ].clear();
+        child[ "_mesh" ].clear();
+    }
+    
+    MP ovi = mp[ "_output[ 2 ]" ];            // output visualisation Interface 
+    for (int i_group_f=0; i_group_f < ovi[ "_children" ].size(); i_group_f++) {
+        MP oifc = ovi[ "_children" ][i_group_f];
+        for (int i_group=0; i_group < oifc[ "_children" ].size(); i_group++) {
+            MP inter = oifc[ "_children" ][i_group];
+            qDebug() << "id_inter_mp : " << inter["id"];
+            int id_group = inter[ "id" ]; 
+            int index_group = geometry_user.find_index_group_interfaces(id_group);
+            qDebug() << "index_group : " << index_group;
+            
+            inter[ "_mesh" ] = MP::new_obj( "Mesh" );
+            MP om = inter[ "_mesh" ];
+            new_mesh(om);
+            new_list_points_mesh_3D(om, geometry_user.group_interfaces[index_group]);
+            new_list_elements_mesh_3D(om, geometry_user.group_interfaces[index_group]);
+        }
+    }
+    mp.flush();
+}
+
+
+
 bool Scult3DUpdater::run( MP mp ) {
     qDebug() << mp.type();
     
@@ -8,7 +86,11 @@ bool Scult3DUpdater::run( MP mp ) {
     MP  file_unv = mp[ "_children[ 0 ]" ];
     qDebug() << file_unv;
     QString file_unv_name = file_unv[ "_name" ];
-    if (file_unv.ok()){
+    
+    int run_type = mp["run_type.num"];
+    
+    
+    if (file_unv.ok() and run_type==0){
         // see if the hdf5 file of the assembly as allready been load
         GeometryUser geometry_user;
         MP assembly = mp[ "_output[ 0 ]" ]; 
@@ -22,34 +104,35 @@ bool Scult3DUpdater::run( MP mp ) {
         file_output_hdf5 << c_path_hdf;
 
         // if not load, build the assembly from the unv mesh
-        if(!_path_loaded){
-            quint64 ptr = file_unv[ "_ptr" ];
-            QString name = file_unv[ "_name" ];
-            MP data = sc->load_ptr( ptr );
-            qDebug() << "on lit le path";
-            QString path_unv;
-            if( data.ok() and data.type() == "Path") {
-                QString path_temp = data;
-                path_unv = path_temp;
-                qDebug() << path_unv; 
-            }   
-            
-            
-            //lecture du maillage utilisateur -------------------------------------------
-            QByteArray byteArray = path_unv.toUtf8();
-            const char* c_path_unv = byteArray.constData();
-            Sc2String file;
-            file << c_path_unv;
-            
-            //lecture du fichier unv et insertion dans le maillage ---------------------- 
-            MeshUser mesh_user( file, "0" );
-            mesh_user.create_mesh_scwal( file, ".unv");
-            qDebug() << "fin de mesh_user";
-            
-            //initialisation de geometryUser et traitement du maillage ------------------
-            geometry_user.initialisation( mesh_user, file );
-            geometry_user.write_hdf5( file_output_hdf5 );
-            
+        quint64 ptr = file_unv[ "_ptr" ];
+        QString name = file_unv[ "_name" ];
+        MP data = sc->load_ptr( ptr );
+        qDebug() << "on lit le path";
+        QString path_unv;
+        if( data.ok() and data.type() == "Path") {
+            QString path_temp = data;
+            path_unv = path_temp;
+            qDebug() << path_unv; 
+        }   
+        
+        
+        //lecture du maillage utilisateur -------------------------------------------
+        QByteArray byteArray = path_unv.toUtf8();
+        const char* c_path_unv = byteArray.constData();
+        Sc2String file;
+        file << c_path_unv;
+        
+        //lecture du fichier unv et insertion dans le maillage ---------------------- 
+        MeshUser mesh_user( file, "0" );
+        mesh_user.create_mesh_scwal( file, ".unv");
+        qDebug() << "fin de mesh_user";
+        
+        //initialisation de geometryUser et traitement du maillage ------------------
+        geometry_user.initialisation( mesh_user, file );
+        geometry_user.write_hdf5( file_output_hdf5 );
+        Sc2String name_geometry_hdf5 = "/Level_0/Geometry";
+        geometry_user.write_xdmf(file_output_hdf5, file_output_hdf5, name_geometry_hdf5,0);
+        
 //             MP path_obj_hdf = assembly[ "_path" ];
 //             int int_project_id = mp[ "_model_id" ];
 //             QString project_id ;
@@ -59,16 +142,10 @@ bool Scult3DUpdater::run( MP mp ) {
 //             MP project_folder = sc->load( name_project_folder );
 //             QString name_output = mp[ "hdf_output_name" ];
 //             project_folder << MP::new_file( name_output, path_obj_hdf );
-            
-            
-            assembly[ "_path_loaded" ] = true;    
-            
-        // if load, build the assembly from the hdf file
-        }else{
-            qDebug() << "lecture du fichier hdf en mémoire : " << path_hdf;
-            geometry_user.initialisation(file_output_hdf5);
-            geometry_user.read_hdf5(false,true,"test");                           /// true si on lit les info micro, true si on lit toutes les infos
-        }
+        
+        
+        assembly[ "_path_loaded" ] = true;    
+        
         qDebug() << "fin de geometry_user";
       
         MP opc = assembly[ "_children[ 0 ]" ];            // output Part collection
@@ -158,6 +235,7 @@ bool Scult3DUpdater::run( MP mp ) {
                 interface[ "visualization" ] = om[ "visualization" ];
                 interface[ "id" ] = geometry_user.group_interfaces[i_group].id;
                 interface[ "link_id" ] = -1;
+                interface[ "group_id" ] = -1;
                 
                 interface[ "group_elements_id" ] = MP::new_lst( "Vec" );
                 interface[ "group_elements_id" ] << geometry_user.group_interfaces[i_group].group_elements_id[0];
@@ -224,7 +302,9 @@ bool Scult3DUpdater::run( MP mp ) {
         assembly[ "nb_parts" ] = nb_parts;
         assembly[ "nb_interfaces" ] = nb_interfaces;
         assembly[ "nb_edges" ] = nb_edges;
-    } 
+    } else if (file_unv.ok() and  run_type==1){
+        visualisation_parts(mp);
+    }
     add_message( mp, ET_Info, "Scult3DUpdater just finish" );
     qDebug() << "Scult3DUpdater just finish";
 }

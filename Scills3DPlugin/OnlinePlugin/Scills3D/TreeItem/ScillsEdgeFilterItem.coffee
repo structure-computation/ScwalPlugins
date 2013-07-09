@@ -12,7 +12,6 @@ class ScillsEdgeFilterItem extends TreeItem
         @add_attr
             _id:id_group
             _dim: dim
-            compute: false
             type: new Choice
            
            
@@ -36,23 +35,9 @@ class ScillsEdgeFilterItem extends TreeItem
         @type.lst.push on_cylinder_filter
         @type.lst.push on_sphere_filter
         
-        
-        
-        @bind =>
-            if  @compute.has_been_modified()
-                #if @compute.get() == true
-                @set_filter_edge()
      
     get_model_editor_parameters: ( res ) ->
        res.model_editor[ "type" ] = ModelEditorItem_ChoiceWithEditableItems
-       
-       
-    set_filter_edge: ()->
-        @_parents[0]._parents[0].set_filter_edge(this) 
-        #alert @type
-        #alert @type.toString()
-        #alert @type.item().filter
-        #alert @type.lst[@type.num].filter
      
     cosmetic_attribute: ( name ) ->
         super( name ) or ( name in [ "filter"] )  

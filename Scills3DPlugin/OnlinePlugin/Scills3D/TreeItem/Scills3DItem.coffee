@@ -9,7 +9,7 @@ class Scills3DItem extends TreeItem_Computable
         
         # attributes
         @add_attr
-            compute_scills: false
+            run_type  : new Choice( 0, [ "compute","check edge","check geometry" ] )
             nb_proc: 1
             estimated_time: 0
             nb_tokens: 0
@@ -36,10 +36,7 @@ class Scills3DItem extends TreeItem_Computable
             fun: ( evt, app ) =>
                 #alert "add material"
                 @download_result()
-        
-        @bind =>
-            if  @compute_scills.has_been_modified()
-                @set_compute_scills()
+
     
     accept_child: ( ch ) ->
         false
@@ -49,14 +46,6 @@ class Scills3DItem extends TreeItem_Computable
         
     set_filter_interface: (interface_filter, link_id)->
         @_children[0].set_filter_interface(interface_filter, link_id) 
-        
-    set_filter_edge: (edge_filter,bc_id)->
-        @_compute_scills.set false
-        @_compute_edges.set true
-        
-    set_compute_scills: ()->
-        @_compute_edges.set false
-        @_compute_scills.set true
         
     download_result: ()-> 
 #         window.open "/sceen/_?u=" + "/home/jbellec/code_dev_scwal/EcosystemScience/data.db/result_211037856"

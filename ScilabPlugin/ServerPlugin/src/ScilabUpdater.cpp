@@ -1,6 +1,16 @@
-#ifdef METIL_COMP_DIRECTIVE
-    #pragma src_file /usr/include/scilab/api_scilab.h
-#endif
+#pragma lib_path ../../../software_library/scilab-5.4.1/lib/scilab 
+#pragma lib_path ../../../software_library/scilab-5.4.1/lib/thirdparty 
+#pragma inc_path ../../../software_library/scilab-5.4.1/include/scilab
+
+#pragma lib_name scilab
+#pragma lib_name scicall_scilab 
+#pragma lib_name tk8.5 
+#pragma lib_name tcl8.5 
+#pragma lib_name fftw3 
+#pragma lib_name scigraphic_objects  
+#pragma lib_name scilab-cli 
+#pragma lib_name QtGui 
+
 
 #include <Soca/Com/SodaClient.h>
 #include <Soca/Model/TypedArray.h>
@@ -11,6 +21,8 @@
 #include <QtCore/QDataStream>
 #include <containers/vec.h>
 #include "ScilabUpdater.h"
+#include <api_scilab.h>
+
 
 /*--------------------------------------------------------------------------*/
 /* See routines/system/call_scilab.h */

@@ -8,6 +8,7 @@ class OnSphereEdgeFilter extends Model
             _name: "on_sphere"
             _dim: dim
             radius: 0
+            epsilon: new ConstrainedVal( 10, { min: 1, max: 100, div: 99 } )
             
         if (parseInt(@_dim) == 3)
             @add_attr 
