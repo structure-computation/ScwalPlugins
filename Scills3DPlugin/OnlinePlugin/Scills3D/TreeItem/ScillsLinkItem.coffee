@@ -11,7 +11,7 @@ class ScillsLinkItem extends TreeItem
         # attributes
         @add_attr
             _nb_link_filters: 1
-            alias: name
+            alias: @_name
             _id: id_link
             _info_ok: parseInt(0)
          
@@ -53,9 +53,6 @@ class ScillsLinkItem extends TreeItem
                     item._nb_link_filters.set(item._nb_link_filters.get() - 1) if item._nb_link_filters.get() > 0
             
         @bind =>
-            if  @alias.has_been_modified()
-                @_name.set @alias
-                
             if  @_nb_link_filters.has_been_modified()
                 @change_collection()
     

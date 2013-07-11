@@ -3,10 +3,15 @@ class ScillsPartItem extends TreeItem
     constructor: (name = "Part" ) ->
         super()
         
+        # default values
+        @_name.set name
+        @_ico.set "img/part.png"
+        @_viewable.set true
+        
         # attributes    
         @add_attr
             _mesh        : new Mesh( not_editable: true )
-            alias        : name
+            name        : @_name
             
         @add_attr
             visualization: @_mesh.visualization
@@ -14,15 +19,6 @@ class ScillsPartItem extends TreeItem
             material_id: -1
             group_id: -1
          
-        
-        # default values
-        @_name.set name
-        @_ico.set "img/part.png"
-        @_viewable.set true
-        
-        @bind =>
-            if  @alias.has_been_modified()
-                @_name.set @alias
     
     cosmetic_attribute: ( name ) ->
         super( name ) or ( name in [ "_mesh", "visualization" ] )    

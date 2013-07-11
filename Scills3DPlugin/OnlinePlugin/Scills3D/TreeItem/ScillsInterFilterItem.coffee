@@ -10,7 +10,7 @@ class ScillsInterFilterItem extends TreeItem
          
         # attributes
         @add_attr
-            name: name_group
+            name: @_name
             type: new Choice( 0, [ "by id", "between materials", "between groups" ] )
             filter: ""
             _id:id_group
@@ -19,9 +19,6 @@ class ScillsInterFilterItem extends TreeItem
         @bind =>
             if  @type.has_been_modified() or @filter.has_been_modified()
                 @set_filter_interface()
-                
-            if  @name.has_been_modified()
-                @_name.set @name
      
     
     set_filter_interface: ()->

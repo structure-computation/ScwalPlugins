@@ -11,7 +11,7 @@ class ScillsMaterialItem extends TreeItem
         # attributes
         @add_attr
             _nb_part_filters: 1
-            alias: name
+            alias: @_name
             _id: id_mat
             _info_ok: parseInt(0)
             _dim: dim
@@ -52,9 +52,6 @@ class ScillsMaterialItem extends TreeItem
                     item._nb_part_filters.set(item._nb_part_filters.get() - 1) if item._nb_part_filters.get() > 0
             
         @bind =>
-            if  @alias.has_been_modified()
-                @_name.set @alias
-                
             if  @_nb_part_filters.has_been_modified()
                 @change_collection()
     
