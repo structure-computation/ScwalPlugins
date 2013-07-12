@@ -13,6 +13,9 @@ class VolumicForceSetItem extends TreeItem
             _nb_loads: 0
             _dim: dim
         
+        @add_attr
+            nb_loads: @_nb_loads
+        
         @add_context_actions
             txt: "add force"
             ico: "img/add.png"

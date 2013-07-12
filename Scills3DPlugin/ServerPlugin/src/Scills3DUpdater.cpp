@@ -3,7 +3,6 @@
 #include "Scills3DUpdater.h"
 #include "ScwalScillsFunction.h"
 
-
 #ifdef METIL_COMP_DIRECTIVE
     #pragma src_file multiscale_geometry_mesh.cpp
     #pragma src_file assignation_material_properties_Sst.cpp
@@ -25,7 +24,12 @@
     #pragma src_file iterate_stat_Qstat.cpp
     #pragma src_file affichage.cpp
 #endif
+//#include "Process.h"
 #include "Process.h"
+
+
+
+
 #ifndef INFO_TIME
 #define INFO_TIME
 #endif 
@@ -62,6 +66,7 @@ DataUser::Json_edges new_data_user_edge_from_edge_filter(DataUser &data_user, MP
     data_edge.point_2_y = 0;
     data_edge.point_2_z = 0;
     data_edge.radius = 0;
+    data_edge.epsilon = 0;
     data_edge.equation = "0";
     //data_edge.equation = convert_MP_to_Sc2String(edge_filter[ "filter" ]);
     
@@ -73,65 +78,75 @@ DataUser::Json_edges new_data_user_edge_from_edge_filter(DataUser &data_user, MP
     }else if (name=="in_box"){
         data_edge.criteria =    "volume";
         data_edge.geometry =    "box";
-        data_edge.point_1_x =   convert_MP_to_int(type_edge_filter[ "point_1[0]" ]);
-        data_edge.point_1_y =   convert_MP_to_int(type_edge_filter[ "point_1[1]" ]);
-        data_edge.point_1_z =   convert_MP_to_int(type_edge_filter[ "point_1[2]" ]);
-        data_edge.point_2_x =   convert_MP_to_int(type_edge_filter[ "point_2[0]" ]);
-        data_edge.point_2_y =   convert_MP_to_int(type_edge_filter[ "point_2[1]" ]);
-        data_edge.point_2_z =   convert_MP_to_int(type_edge_filter[ "point_2[2]" ]);
+        data_edge.point_1_x =   convert_MP_to_reel(type_edge_filter[ "point_1[0]" ]);
+        data_edge.point_1_y =   convert_MP_to_reel(type_edge_filter[ "point_1[1]" ]);
+        data_edge.point_1_z =   convert_MP_to_reel(type_edge_filter[ "point_1[2]" ]);
+        data_edge.point_2_x =   convert_MP_to_reel(type_edge_filter[ "point_2[0]" ]);
+        data_edge.point_2_y =   convert_MP_to_reel(type_edge_filter[ "point_2[1]" ]);
+        data_edge.point_2_z =   convert_MP_to_reel(type_edge_filter[ "point_2[2]" ]);
     }else if (name=="in_cylinder"){
         data_edge.criteria =    "volume";
         data_edge.geometry =    "cylinder";
-        data_edge.point_1_x =   convert_MP_to_int(type_edge_filter[ "point[0]" ]);
-        data_edge.point_1_y =   convert_MP_to_int(type_edge_filter[ "point[1]" ]);
-        data_edge.point_1_z =   convert_MP_to_int(type_edge_filter[ "point[2]" ]);
-        data_edge.direction_x = convert_MP_to_int(type_edge_filter[ "direction[0]" ]);
-        data_edge.direction_y = convert_MP_to_int(type_edge_filter[ "direction[1]" ]);
-        data_edge.direction_z = convert_MP_to_int(type_edge_filter[ "direction[2]" ]);
-        data_edge.radius =      convert_MP_to_int(type_edge_filter[ "radius" ]);
+        data_edge.point_1_x =   convert_MP_to_reel(type_edge_filter[ "point[0]" ]);
+        data_edge.point_1_y =   convert_MP_to_reel(type_edge_filter[ "point[1]" ]);
+        data_edge.point_1_z =   convert_MP_to_reel(type_edge_filter[ "point[2]" ]);
+        data_edge.direction_x = convert_MP_to_reel(type_edge_filter[ "direction[0]" ]);
+        data_edge.direction_y = convert_MP_to_reel(type_edge_filter[ "direction[1]" ]);
+        data_edge.direction_z = convert_MP_to_reel(type_edge_filter[ "direction[2]" ]);
+        data_edge.radius =      convert_MP_to_reel(type_edge_filter[ "radius" ]);
     }else if (name=="in_sphere"){
         data_edge.criteria =    "volume";
         data_edge.geometry =    "sphere";
-        data_edge.point_1_x =   convert_MP_to_int(type_edge_filter[ "point[0]" ]);
-        data_edge.point_1_y =   convert_MP_to_int(type_edge_filter[ "point[1]" ]);
-        data_edge.point_1_z =   convert_MP_to_int(type_edge_filter[ "point[2]" ]);
-        data_edge.radius =      convert_MP_to_int(type_edge_filter[ "radius" ]);
+        data_edge.point_1_x =   convert_MP_to_reel(type_edge_filter[ "point[0]" ]);
+        data_edge.point_1_y =   convert_MP_to_reel(type_edge_filter[ "point[1]" ]);
+        data_edge.point_1_z =   convert_MP_to_reel(type_edge_filter[ "point[2]" ]);
+        data_edge.radius =      convert_MP_to_reel(type_edge_filter[ "radius" ]);
+        qDebug() << type_edge_filter[ "point[0]" ];
+        qDebug() << type_edge_filter[ "point[1]" ];
+        qDebug() << type_edge_filter[ "point[2]" ];
+        PRINT(data_edge.radius);
+        PRINT(data_edge.point_1_x);
+        //assert(0);
     }else if (name=="on_plan"){
         data_edge.criteria =    "surface";
         data_edge.geometry =    "plan";
-        data_edge.point_1_x =   convert_MP_to_int(type_edge_filter[ "point[0]" ]);
-        data_edge.point_1_y =   convert_MP_to_int(type_edge_filter[ "point[1]" ]);
-        data_edge.point_1_z =   convert_MP_to_int(type_edge_filter[ "point[2]" ]);
-        data_edge.direction_x = convert_MP_to_int(type_edge_filter[ "direction[0]" ]);
-        data_edge.direction_y = convert_MP_to_int(type_edge_filter[ "direction[1]" ]);
-        data_edge.direction_z = convert_MP_to_int(type_edge_filter[ "direction[2]" ]);
+        data_edge.point_1_x =   convert_MP_to_reel(type_edge_filter[ "point[0]" ]);
+        data_edge.point_1_y =   convert_MP_to_reel(type_edge_filter[ "point[1]" ]);
+        data_edge.point_1_z =   convert_MP_to_reel(type_edge_filter[ "point[2]" ]);
+        data_edge.direction_x = convert_MP_to_reel(type_edge_filter[ "direction[0]" ]);
+        data_edge.direction_y = convert_MP_to_reel(type_edge_filter[ "direction[1]" ]);
+        data_edge.direction_z = convert_MP_to_reel(type_edge_filter[ "direction[2]" ]);
     }else if (name=="on_disc"){
         data_edge.criteria =    "surface";
         data_edge.geometry =    "disc";
-        data_edge.point_1_x =   convert_MP_to_int(type_edge_filter[ "point[0]" ]);
-        data_edge.point_1_y =   convert_MP_to_int(type_edge_filter[ "point[1]" ]);
-        data_edge.point_1_z =   convert_MP_to_int(type_edge_filter[ "point[2]" ]);
-        data_edge.direction_x = convert_MP_to_int(type_edge_filter[ "direction[0]" ]);
-        data_edge.direction_y = convert_MP_to_int(type_edge_filter[ "direction[1]" ]);
-        data_edge.direction_z = convert_MP_to_int(type_edge_filter[ "direction[2]" ]);
-        data_edge.radius =      convert_MP_to_int(type_edge_filter[ "radius" ]);
+        data_edge.point_1_x =   convert_MP_to_reel(type_edge_filter[ "point[0]" ]);
+        data_edge.point_1_y =   convert_MP_to_reel(type_edge_filter[ "point[1]" ]);
+        data_edge.point_1_z =   convert_MP_to_reel(type_edge_filter[ "point[2]" ]);
+        data_edge.direction_x = convert_MP_to_reel(type_edge_filter[ "direction[0]" ]);
+        data_edge.direction_y = convert_MP_to_reel(type_edge_filter[ "direction[1]" ]);
+        data_edge.direction_z = convert_MP_to_reel(type_edge_filter[ "direction[2]" ]);
+        data_edge.radius =      convert_MP_to_reel(type_edge_filter[ "radius" ]);
     }else if (name=="on_cylinder"){
         data_edge.criteria =    "surface";
         data_edge.geometry =    "cylinder";
-        data_edge.point_1_x =   convert_MP_to_int(type_edge_filter[ "point[0]" ]);
-        data_edge.point_1_y =   convert_MP_to_int(type_edge_filter[ "point[1]" ]);
-        data_edge.point_1_z =   convert_MP_to_int(type_edge_filter[ "point[2]" ]);
-        data_edge.direction_x = convert_MP_to_int(type_edge_filter[ "direction[0]" ]);
-        data_edge.direction_y = convert_MP_to_int(type_edge_filter[ "direction[1]" ]);
-        data_edge.direction_z = convert_MP_to_int(type_edge_filter[ "direction[2]" ]);
-        data_edge.radius =      convert_MP_to_int(type_edge_filter[ "radius" ]);
+        data_edge.point_1_x =   convert_MP_to_reel(type_edge_filter[ "point[0]" ]);
+        data_edge.point_1_y =   convert_MP_to_reel(type_edge_filter[ "point[1]" ]);
+        data_edge.point_1_z =   convert_MP_to_reel(type_edge_filter[ "point[2]" ]);
+        data_edge.direction_x = convert_MP_to_reel(type_edge_filter[ "direction[0]" ]);
+        data_edge.direction_y = convert_MP_to_reel(type_edge_filter[ "direction[1]" ]);
+        data_edge.direction_z = convert_MP_to_reel(type_edge_filter[ "direction[2]" ]);
+        data_edge.radius =      convert_MP_to_reel(type_edge_filter[ "radius" ]);
     }else if (name=="on_sphere"){
         data_edge.criteria =    "surface";
         data_edge.geometry =    "sphere";
-        data_edge.point_1_x =   convert_MP_to_int(type_edge_filter[ "point[0]" ]);
-        data_edge.point_1_y =   convert_MP_to_int(type_edge_filter[ "point[1]" ]);
-        data_edge.point_1_z =   convert_MP_to_int(type_edge_filter[ "point[2]" ]);
-        data_edge.radius =      convert_MP_to_int(type_edge_filter[ "radius" ]);
+        data_edge.point_1_x =   convert_MP_to_reel(type_edge_filter[ "point[0]" ]);
+        data_edge.point_1_y =   convert_MP_to_reel(type_edge_filter[ "point[1]" ]);
+        data_edge.point_1_z =   convert_MP_to_reel(type_edge_filter[ "point[2]" ]);
+        data_edge.radius =      convert_MP_to_reel(type_edge_filter[ "radius" ]);
+        //data_edge.epsilon =     convert_MP_to_reel(type_edge_filter[ "epsilon.val" ]);
+        double epsilon = type_edge_filter[ "epsilon.val" ];
+        data_edge.epsilon = data_edge.radius * epsilon / 100.;
+        
     }
     return data_edge;
 }
@@ -155,6 +170,7 @@ DataUser::Json_edges new_data_user_edge_default(DataUser &data_user){
     data_edge.point_2_y = 0;
     data_edge.point_2_z = 0;
     data_edge.radius = 0;
+    data_edge.epsilon = 0;
     data_edge.equation = "0";
     data_edge.boundary_condition_id = -1;
     PRINT(data_edge.geometry);
@@ -618,7 +634,7 @@ void add_MP_bcs_to_data_user(MP boundary_condition_set, DataUser &data_user){
         else if(name_i == "symetry"){
             data_user.boundary_conditions_vec[i_bc].condition_type = "sym" ;
         }
-        else if(name_i == "stress density"){
+        else if(name_i == "Stress density"){
             data_user.boundary_conditions_vec[i_bc].condition_type = "effort" ;
             data_user.boundary_conditions_vec[i_bc].spatial_function_x       = convert_MP_to_Sc2String(type_bc_i[ "space_function[0]" ]);
             data_user.boundary_conditions_vec[i_bc].spatial_function_y       = convert_MP_to_Sc2String(type_bc_i[ "space_function[1]" ]);
@@ -678,13 +694,14 @@ void add_MP_sst_to_data_user(MP sst_set, DataUser &data_user){
         MP sst_i = sst_set[ "_children" ][i_sst];
         data_user.pieces_vec[i_sst].id_in_calcul        = convert_MP_to_int(sst_i[ "id" ]);
         data_user.pieces_vec[i_sst].material_id         = convert_MP_to_int(sst_i[ "material_id" ]);
+        data_user.pieces_vec[i_sst].group               = convert_MP_to_int(sst_i[ "group_id" ]);
         data_user.pieces_vec[i_sst].name                = convert_MP_to_Sc2String(sst_i[ "_name" ]);
         
         PRINT("-----------sst---------------");
         PRINT(data_user.pieces_vec[i_sst].id_in_calcul);
         PRINT(data_user.pieces_vec[i_sst].material_id);
         PRINT(data_user.pieces_vec[i_sst].name);
-        
+        PRINT(data_user.pieces_vec[i_sst].group); 
     }
     PRINT(data_user.pieces_vec.size());
 }
@@ -699,6 +716,7 @@ void add_MP_interfaces_to_data_user(MP interface_set, DataUser &data_user){
         data_user.interfaces_vec[i_inter].id                    = convert_MP_to_int(inter_i[ "id" ]);
         data_user.interfaces_vec[i_inter].link_id               = convert_MP_to_int(inter_i[ "link_id" ]);
         data_user.interfaces_vec[i_inter].name                  = convert_MP_to_Sc2String(inter_i[ "_name" ]);
+        data_user.interfaces_vec[i_inter].group                 = convert_MP_to_int(inter_i[ "group_id" ]);
         //data_user.interfaces_vec[i_inter].adj_num_group         = convert_MP_to_Sc2String(inter_i[ "group_elements_id[0]" ]) + " " + convert_MP_to_Sc2String(inter_i[ "group_elements_id[1]" ]);
         
         int  test_0 = convert_MP_to_int(inter_i[ "group_elements_id[0]" ]);
@@ -789,13 +807,13 @@ void add_edges_to_MP_assembly(MP  oec, MP boundary_condition_set, DataUser &data
     geometry_user.split_group_edges_within_geometry(data_user);
     MP  boundary_condition_set_children = boundary_condition_set[ "_children" ];
     for (int i_group=0; i_group<geometry_user.group_interfaces.size(); i_group++) {
-        if(geometry_user.group_interfaces[i_group].type == 0){
-          qDebug() << "bord --------------------------------------";
-          qDebug() << geometry_user.group_interfaces[i_group].id ;
-          qDebug() << geometry_user.group_interfaces[i_group].is_splited ;
-          qDebug() << geometry_user.group_interfaces[i_group].edge_id ;
-          qDebug() << geometry_user.group_interfaces[i_group].from_group_id ;
-        }
+//         if(geometry_user.group_interfaces[i_group].type == 0){
+//           qDebug() << "bord --------------------------------------";
+//           qDebug() << geometry_user.group_interfaces[i_group].id ;
+//           qDebug() << geometry_user.group_interfaces[i_group].is_splited ;
+//           qDebug() << geometry_user.group_interfaces[i_group].edge_id ;
+//           qDebug() << geometry_user.group_interfaces[i_group].from_group_id ;
+//         }
       
       
         if(geometry_user.group_interfaces[i_group].type == 0 and geometry_user.group_interfaces[i_group].is_splited == 0 and geometry_user.group_interfaces[i_group].edge_id != -1 and geometry_user.group_interfaces[i_group].edge_id != -2){
@@ -843,15 +861,258 @@ void add_edges_to_MP_assembly(MP  oec, MP boundary_condition_set, DataUser &data
 
 
 
+//  ********************************************************************************************************************************
+//  reprise de process 
+//  ********************************************************************************************************************************
+
+
+#include "MPI/assignation_mpi.h"
+#include "MAILLAGE/multiscale_geometry_mesh.h"
+#include "MATERIAUX/assignation_material_properties_Sst.h"
+#include "OPERATEURS/multiscale_operateurs.h"
+#include "ITERATIONS/prelocalstage.h"
+#include "ITERATIONS/iterate.h"
+#include "POSTTRAITEMENTS/affichage.h"
+#include "POSTTRAITEMENTS/calculs_resultantes.h"
+#include "POSTTRAITEMENTS/save_hdf_data.h"
+
+
+template<>
+void Process::boucle_temporelle(MP mp, Scills3DUpdater &updater){
+    #ifdef INFO_TIME
+    parallelisation->synchronisation();
+    TicTac tic2;
+    if (parallelisation->is_master_cpu()) {tic2.init();tic2.start();}
+    #endif
+    
+    /// Allocations et initialisation des quantites
+    print("Allocations des vecteurs de stockage des resultats");
+    allocate_quantities_Sst_Inter(*SubS,*SubI,*this);
+    allocate_quantities_post(*SubS,*SubI,*this);
+    #ifdef PRINT_ALLOC
+    disp_alloc(to_string(parallelisation->rank)+" : Memoire apres allocations : ",1);
+    #endif
+    print("Repartition des solides");
+    if(parallelisation->is_master_cpu()){
+        for(int i = 0; i < parallelisation->repartition_sst.size(); i++){
+            std::cout << "\t" << i << " :";
+            unsigned nb_nodes = 0;
+            for(int j = 0; j < parallelisation->repartition_sst[i].size(); j++){
+                std::cout << "\t" << parallelisation->repartition_sst[i][j];
+                nb_nodes += (*S)[parallelisation->repartition_sst[i][j]].mesh.elem_list_size;
+            }
+            std::cout << "\t" << nb_nodes << std::endl;
+        }
+    }
+    
+    /// Boucle sur les steps temporels
+    print_title(1,"DEBUT DU CALCUL ITERATIF ");
+    print_data("Nombre de pas de temps total : ",temps->nbpastemps);
+    /// Calcul des operateurs  A DEPLACER VERS LE DEBUT DE LA BOUCLE ITERATIVE
+    print_title(2,"Mise a jour des operateurs");
+    for(int i_sst = 0; i_sst < S->size(); i_sst++){
+        if((*S)[i_sst].update_operator){
+            #ifdef PRINT_ALLOC
+            disp_alloc((to_string(parallelisation->rank)+" : Verifie memoire avant construction : ").c_str(),1);
+            #endif
+            for(int i = 0; i < (*sst_materials).size(); i++){
+                //(*sst_materials)[i].affiche();
+            }
+            multiscale_operateurs(*Stot,*SubS,*Inter,*SubI,*this,*Global, *data_user);
+            Global->allocations(multiscale->sizeM);
+            #ifdef PRINT_ALLOC
+            disp_alloc((to_string(parallelisation->rank)+" : Verifie memoire apres construction : ").c_str(),1);
+            #endif
+            break;  /// multiscale_operateurs a remis a jour les operateurs de tout le monde
+        }
+    }
+    #ifdef INFO_TIME
+    print_duration(tic2);
+    #endif
+    
+    
+    
+    for(temps->init();temps->has_next();temps->next()){
+        if(temps->step_changed()){
+            print_data("****************************** Step : ",temps->step_cur);
+        }
+        print_data("*************** Time : ",temps->t_cur);
+        print_title(2,"Mise a jour des parametres");
+        Sc2String message;
+        message << "Step : " << temps->step_cur << ",  Time : " << temps->t_cur;
+        updater.add_message( mp, updater.ET_Info, message.c_str() );
+        
+        temps->updateParameters();              /// Mise a jour des parametres temporels utilisateur
+        Boundary::updateParameters();           /// Mise a jour des CL (PENSER A ENLEVER PLUS BAS LORSQUE PRET)
+        InterCarac::updateParameters();         /// Mise a jour des parametres materiaux des interfaces
+        
+        print_title(2,"Mise a jour des Conditions d'interface");
+        
+        parallelisation->synchronisation();
+        if(nom_calcul=="incr") {
+            /// Presence d'interface Breakable ?
+            int nb_breakable=0;
+            if (parallelisation->is_master_cpu()){
+                for(unsigned q=0; q <Inter->size();q++){
+                    if ((*Inter)[q].comp =="Breakable"){
+                        nb_breakable++;
+                    }
+                }
+            }
+            if (parallelisation->is_multi_cpu()){
+                MPI_Bcast(&nb_breakable,1, MPI_INT, 0, MPI_COMM_WORLD);
+            }
+            nb_breakable = nb_breakable ;
+            /// Mise a jour des conditions aux limites
+            if(temps->pt_cur == 1 and parallelisation->is_local_cpu()){
+                print_title(2,"    Initialisation des Conditions aux limites :");
+                //for(int i = 0; i < SubI->size(); i++){
+                //    (*SubI)[i].init();
+                //}
+                initialise_CL_values(*SubI, *CL);
+            }
+            parallelisation->synchronisation();
+            if (parallelisation->is_local_cpu()){
+                print_title(2,"    Mise a jour des Caracteristiques des interfaces :");
+                for(int i = 0; i < SubI->size(); i++){
+                    (*SubI)[i].init(temps->pt);
+                }
+                print_title(2,"    Mise a jour des Conditions aux limites :");
+                update_CL_values(*SubI, *CL, *this, *data_user);
+            }
+            
+            /// Calcul sur le pas de temps
+            if (nb_breakable>0) {
+                int nb_change = 0;
+                int sous_iter = 1;
+                while(nb_change != 0 or sous_iter == 1) {
+                    if (parallelisation->is_local_cpu()){
+                        for(unsigned q=0; q < SubI->size();q++){
+                            if ((*SubI)[q].comp == "Breakable") {
+                                (*SubI)[q].convergence = -1;
+                            }
+                        }
+                    }
+                    print_data("          Sous iteration interface cassable : ",sous_iter);
+                    iterate_incr(*this,*SubS,*Inter,*SubI,*Global,*data_user);
+                    if (parallelisation->is_local_cpu()) {
+                        for(unsigned q=0; q < SubI->size();q++) {
+                            if ((*SubI)[q].comp == "Breakable") {
+                                nb_change += (*SubI)[q].convergence ;
+                            }
+                        }
+                    }
+                }
+            }
+            else {
+                iterate_incr(*this,*SubS,*Inter,*SubI,*Global,*data_user);
+            }
+            
+            ///assignation ptcur au ptold
+            parallelisation->synchronisation();
+            print_title(2,"Reactualisation des valeurs pour le pas de temps suivant");
+            assign_quantities_current_to_old(*SubS,*SubI,*this);
+            
+            parallelisation->synchronisation();
+            //if (multiresolution->calcul_cur==0%5){
+            affichage_resultats(*SubS,*this, *data_user);
+            affichage_resultats_inter(*SubI, *S ,*this, *data_user);
+            //}
+            /// Sauvegarde des resultats
+            if(save_data){
+                print_title(2,"Sauvegarde des resultats au format HDF"); 
+                if (parallelisation->is_local_cpu()) {/* A REVOIR APRES MODIFICATION DATAUSER (pour field_structure_user) + MODIFIER format HDF5 pour la multi-resolution
+                    write_hdf_fields_SST_INTER(*SubS, *Inter, *this , *data_user);//  BUG
+                    convert_fields_to_field_structure_user(*SubS, *Inter, *this , *data_user, *field_structure_user, *geometry_user);
+                    Sc2String rank; rank << parallelisation->rank;
+                    Sc2String file_output_hdf5 = affichage->name_hdf + "_" + rank + ".h5";
+                    field_structure_user->write_hdf5_in_parallel(file_output_hdf5, *geometry_user, affichage->name_fields, temps->pt_cur, temps->t_cur, parallelisation->rank);
+                //*/
+                }
+            }
+            
+            /// Modification du comportement des entites
+            //modification_sst_inter_behaviour(S,Inter,temps);  A TESTER
+            
+            print_data("*************** End time : ",temps->t_cur);
+            
+            
+            ///Affichage des energies
+            if (affichage->trac_ener_imp == 1) {
+                affichage->param_ener[0]=1;
+                affichage->param_ener[1]=0;
+                affichage_energie(*SubS,*Inter,*this,*data_user);
+                affichage->param_ener[0]=1;
+                affichage->param_ener[1]=1;
+                affichage_energie(*SubS,*Inter,*this,*data_user);
+            }
+            if (affichage->trac_ener_diss == 1) {
+                affichage->param_ener[0]=0;
+                affichage->param_ener[1]=0;
+                affichage_energie(*SubS,*Inter,*this,*data_user);
+                affichage->param_ener[0]=0;
+                affichage->param_ener[1]=1;
+                affichage_energie(*SubS,*Inter,*this,*data_user);
+            }
+        } else {
+            std::cerr << "Nom de calcul non defini : incremental uniquement" << std::endl;
+            assert(0);
+        }
+    }
+    ///Affichage des résultantes sur les interfaces
+    calcul_resultante(*SubS,*S,*Inter,*this);
+    //if (multiresolution->calcul_cur==0%5){
+    ///creation des fichiers pvd
+    create_pvd_results(*SubS,*S,*Inter,*this);
+    //}
+    
+    #ifdef INFO_TIME
+    print_duration(tic2);
+    #endif
+    
+    ///sortie xdmf à partir du fichier hdf5 cree au fur et à mesure du calcul
+    if(parallelisation->is_master_cpu() and save_data==1){
+        //write_xdmf_file_compute(*this, data_user);
+    }
+    
+    //affichage_resultats(*SubS,*this, *data_user);            ///sortie paraview pour les sst (volumes et peaux)   /// TMP, test sauvegarde a la fin de chaque pas de temps
+    //affichage_resultats_inter(*SubI, *S ,*this, *data_user); ///sortie paraview pour les interfaces               /// TMP, test sauvegarde a la fin de chaque pas de temps
+}
+
+// template<class Updater_, class MP_>
+// void Process::boucle_multi_resolution(Updater_ updater, MP_ mp) {
+template<>
+void Process::boucle_multi_resolution(MP mp, Scills3DUpdater &updater) {
+    /// Lancement des calculs parametriques
+    updater.add_message( mp, updater.ET_Info, "DEBUT DES CALCULS PARAMETRIQUES" );
+    print_title(1,"DEBUT DES CALCULS PARAMETRIQUES ");
+    print_data("Calcul parametrique : ",multiresolution->type);
+    print_data("Nombre de calculs : ",multiresolution->nb_calculs);
+    for(multiresolution->init();multiresolution->has_next();multiresolution->next()){
+        print_data("************************************************************ Calcul : ",multiresolution->calcul_cur);
+        multiresolution->updateParameters();    /// Mise a jour des parametres de multi-resolution
+        SstCarac::updateParameters();           /// Mise a jour des parametres materiaux des sst
+        boucle_temporelle(mp, updater);
+        print_data("******************************************************** Fin Calcul : ",multiresolution->calcul_cur);
+        parallelisation->synchronisation();
+    }
+    //memory_free(*S,*Inter,*CL,*sst_materials,*inter_materials,*this);
+    PRINT("fin de la multiresolution");
+}
+
+
+
+//  ********************************************************************************************************************************
+//  fonction run
+//  ********************************************************************************************************************************
+
+
 
 bool Scills3DUpdater::run( MP mp ) {
     qDebug() << mp.type();
     quint64 MP_model_id = mp.get_server_id();
-    // does the input file exists ?
-    int  compute_edges   = mp[ "_compute_edges" ];
-    qDebug() << "compute_edges = " << compute_edges;
-    int  compute_scills  = mp[ "_compute_scills" ];
-    qDebug() << "compute_scills = " << compute_scills;
+    
+    int run_type = mp["run_type.num"];
     
     MP  structure = mp[ "_children[ 0 ]" ];
     MP  assembly = structure[ "_children[ 0 ]" ];
@@ -862,9 +1123,8 @@ bool Scills3DUpdater::run( MP mp ) {
     Process process;
     
     // visualisation des bords demandés -------------------------------------------------------------------------
-    if (assembly.ok() and compute_edges){
+    if (assembly.ok() and run_type == 1){
         // see if the hdf5 file of the assembly as allready been load
-        
         QString path_hdf = assembly[ "_path" ];
         qDebug() << path_hdf;
         
@@ -880,7 +1140,7 @@ bool Scills3DUpdater::run( MP mp ) {
         add_edges_to_MP_assembly(oec, boundary_condition_set, data_user, geometry_user);
         
     // mise en données de Data_User et vérification des données --------------------------------------------------------------
-    }else if(assembly.ok() and compute_scills){
+    }else if(assembly.ok() and run_type == 0){
         // see if the hdf5 file of the assembly as allready been load
         QString path_hdf = assembly[ "_path" ];
         qDebug() << path_hdf;
@@ -936,14 +1196,15 @@ bool Scills3DUpdater::run( MP mp ) {
         MP  volumic_load_set = mp[ "_children[ 6 ]" ];
         add_MP_volumic_loads_to_data_user(volumic_load_set, data_user);
   
-        process.initialisation_MPI_for_scwal();
+        //process.mp = mp;
+        process.initialisation_MPI_for_scwal(argc,argv);
         process.data_user = &data_user;
         process.geometry_user = &geometry_user;
         
         process.geometry_user->split_group_edges_within_geometry(*process.data_user);
         process.preparation_calcul();
         PRINT("fin préparation calcul");
-        process.boucle_multi_resolution();
+        process.boucle_multi_resolution(mp, *this);
 // 
         process.finalisation_MPI();
         

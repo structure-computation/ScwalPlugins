@@ -14,6 +14,9 @@ class MaterialSetItem extends TreeItem
             _incr_id_material:0
             _incr_id_group_part:0
             _dim: dim
+            
+        @add_attr
+            nb_materials: @_nb_materials
         
         @add_context_actions
             txt: "add material"

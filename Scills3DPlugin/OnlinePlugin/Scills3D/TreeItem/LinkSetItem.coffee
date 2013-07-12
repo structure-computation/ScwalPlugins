@@ -14,6 +14,9 @@ class LinkSetItem extends TreeItem
             _incr_id_link:0
             _incr_id_group_inter:0
         
+        @add_attr
+            nb_links: @_nb_links
+        
         @add_context_actions
             txt: "add link"
             ico: "img/add.png"
@@ -39,7 +42,7 @@ class LinkSetItem extends TreeItem
                 @change_collection()
                 
     accept_child: ( ch ) ->
-        false
+        ch instanceof ScillsLinkItem
 
     z_index: ->
         #

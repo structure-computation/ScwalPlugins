@@ -5,11 +5,11 @@ class Scills2DItem extends TreeItem_Computable
 
         @_name.set name
         @_ico.set "img/scills2D.png"
-        @_viewable.set false
+        @_viewable.set true
         
         # attributes
         @add_attr
-            compute_scills: false
+            run_type  : new Choice( 0, [ "compute","check edge","check geometry" ] )
             nb_proc: 1
             estimated_time: 0
             nb_tokens: 0
@@ -19,6 +19,7 @@ class Scills2DItem extends TreeItem_Computable
             path_result: " "
             _path: new Path
             _path_zip: new Path
+            visualization: new FieldSet
         
         #@add_output new FieldItem
         
@@ -37,10 +38,6 @@ class Scills2DItem extends TreeItem_Computable
                 #alert "add material"
                 @download_result()
     
-        @bind =>
-            if  @compute_scills.has_been_modified()
-                @set_compute_scills()
-    
     accept_child: ( ch ) ->
         false
     
@@ -50,22 +47,17 @@ class Scills2DItem extends TreeItem_Computable
     set_filter_interface: (interface_filter, link_id)->
         @_children[0].set_filter_interface(interface_filter, link_id) 
         
-    set_filter_edge: (edge_filter,bc_id)->
-        @_compute_scills.set false
-        @_compute_edges.set true
-        
-    set_compute_scills: ()->
-        @_compute_edges.set false
-        @_compute_scills.set true
-        
     download_result: ()-> 
 #         window.open "/sceen/_?u=" + "/home/jbellec/code_dev_scwal/EcosystemScience/data.db/result_211037856"
         myWindow = window.open '',''
         myWindow.document.write "<a href='/sceen/_?u=" + @_path_zip._server_id + "'> Right click to save as </a>"
         myWindow.focus()
         
+    sub_canvas_items: ->
+        res = [@visualization]
+        return res    
         
-        
-        
+    cosmetic_attribute: ( name ) ->
+        super( name ) or ( name in [ "visualization" ] )    
         
         

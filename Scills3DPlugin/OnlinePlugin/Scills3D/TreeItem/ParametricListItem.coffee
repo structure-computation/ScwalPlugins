@@ -11,15 +11,13 @@ class ParametricListItem extends TreeItem
         @add_attr
             _values: values
             _size: 0
-            name: name_param
+            name: @_name
             id: id_param
         
         @bind =>
             if  @_values.has_been_modified()
                 @_size.set(@length())
                 #alert(@_size.get())
-            if @name.has_been_modified()
-                @_name.set @name.get()
 
     accept_child: ( ch ) ->
         #

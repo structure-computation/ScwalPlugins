@@ -1,4 +1,5 @@
-DIR_SOURCES_SOCA = -IServerPlugin -IServerPlugin/src  -I../../Soca/src  -IServerPlugin/LMT/include 
+DIR_SOURCES_SOCA = -IServerPlugin -IServerPlugin/src  -I../../Soca/src  -IServerPlugin/LMT/include  -I../../software_library/scilab-5.4.1/include 
+
 
 # PATH_SCILAB = /home/ubuntu/scilab-5.4.0
 # PATH_TO_LIB_SCILAB = $(PATH_SCILAB)/lib/scilab

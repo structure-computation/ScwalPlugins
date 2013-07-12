@@ -1,6 +1,6 @@
 #
-class ScillsLinkItem extends TreeItem
-    constructor: (name = "Link", id_link = 0) ->
+class VisuInterfaceGroupItem extends TreeItem
+    constructor: (name = "Visu_inter_group") ->
         super()
         
         # default values
@@ -11,26 +11,11 @@ class ScillsLinkItem extends TreeItem
         # attributes
         @add_attr
             _nb_link_filters: 1
-            alias: @_name
-            _id: id_link
             _info_ok: parseInt(0)
-         
+            _incr_id_group_inter: 0
+            
         @add_attr
-            type: new Choice
-        
-        perfect_link = new PerfectLink
-        perfect_breakable_link = new PerfectBreakableLink
-        contact_link = new ContactLink
-        elastic_link = new ElasticLink
-        elastic_breakable_link = new ElasticBreakableLink
-        cohesive_link = new CohesivLink
-       
-        @type.lst.push perfect_link
-        @type.lst.push perfect_breakable_link
-        @type.lst.push contact_link
-        @type.lst.push elastic_link
-        @type.lst.push elastic_breakable_link
-        @type.lst.push cohesive_link
+            nb_link_filters: @_nb_link_filters
         
         @add_context_actions
             txt: "add link filter"
@@ -52,12 +37,10 @@ class ScillsLinkItem extends TreeItem
                     item = path_item[ path_item.length - 1 ]
                     item._nb_link_filters.set(item._nb_link_filters.get() - 1) if item._nb_link_filters.get() > 0
             
-        @bind =>
+        @bind =>      
             if  @_nb_link_filters.has_been_modified()
                 @change_collection()
     
-    get_model_editor_parameters: ( res ) ->
-       res.model_editor[ "type" ] = ModelEditorItem_ChoiceWithEditableItems
     
     accept_child: ( ch ) ->
         #
@@ -69,10 +52,13 @@ class ScillsLinkItem extends TreeItem
         [ ]
     
     set_filter_interface: (interface_filter)->
-        @_parents[0]._parents[0].set_filter_interface(interface_filter,@_id)
+        if @_parents[0]? and @_parents[0]._parents[0]?
+            @_parents[0]._parents[0].set_filter_interface(interface_filter,-1)
         
     ask_for_id_group: ->
-        return @_parents[0]._parents[0].ask_for_id_group()
+        id_group = parseInt(@_incr_id_group_inter)
+        @_incr_id_group_inter.set (parseInt(@_incr_id_group_inter) + 1)
+        return id_group
     
     change_collection: ->
         #modification du nombre de chargements
@@ -88,13 +74,5 @@ class ScillsLinkItem extends TreeItem
                 name_temp = "Inter_Group_" + id_group.toString()
                 @add_child  (new ScillsInterFilterItem name_temp, id_group)
                 
-    information: ( div ) ->
-        if @_info_ok < 2
-            @txt = new_dom_element
-                  parentNode: div
-            @txt.innerHTML = "
-                  id : #{@_id} <br>
-              "
-            @_info_ok.set (parseInt(@_info_ok) + 1)
             
             

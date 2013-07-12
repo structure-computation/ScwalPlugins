@@ -10,7 +10,7 @@ class ScillsPartFilterItem extends TreeItem
          
         # attributes
         @add_attr
-            name: name_group
+            name: @_name
             type: new Choice( 0, [ "void","by id", "by name", "all" ] )
             filter: ""
             _id:id_group
@@ -19,10 +19,6 @@ class ScillsPartFilterItem extends TreeItem
         @bind =>
             if  @type.has_been_modified() or @filter.has_been_modified()
                 @set_filter_part()
-                
-            if  @name.has_been_modified()
-                @_name.set @name
-     
     
     set_filter_part: ()->
         @_parents[0]._parents[0].set_filter_part(this)     

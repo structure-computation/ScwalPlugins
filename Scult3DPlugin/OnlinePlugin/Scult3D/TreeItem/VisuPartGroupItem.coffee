@@ -1,6 +1,6 @@
 #
-class ScillsMaterialItem extends TreeItem
-    constructor: (name = "Material", id_mat = 0, dim = 3 ) ->
+class VisuPartGroupItem extends TreeItem
+    constructor: (name = "Visu_part_group" ) ->
         super()
         
         # default values
@@ -11,25 +11,12 @@ class ScillsMaterialItem extends TreeItem
         # attributes
         @add_attr
             _nb_part_filters: 1
-            alias: @_name
-            _id: id_mat
             _info_ok: parseInt(0)
-            _dim: dim
-        
+            _incr_id_group_part:0
+            
         @add_attr
-            type: new Choice
+            nb_part_filters: @_nb_part_filters
         
-        elastic_isotrop_mat = new ElasticIsotropMaterial
-        elastic_orthotrop_mat = new ElasticOrthotropMaterial @_dim
-        plastic_isotrop_mat = new PlasticIsotropMaterial
-        dammage_isotrop_mat = new DammageIsotropMaterial
-        mesomodel_mat = new MesomodelMaterial @_dim
-       
-        @type.lst.push elastic_isotrop_mat
-        @type.lst.push elastic_orthotrop_mat
-        @type.lst.push plastic_isotrop_mat
-        @type.lst.push dammage_isotrop_mat
-        @type.lst.push mesomodel_mat
          
         @add_context_actions
             txt: "add part filter"
@@ -55,8 +42,6 @@ class ScillsMaterialItem extends TreeItem
             if  @_nb_part_filters.has_been_modified()
                 @change_collection()
     
-    get_model_editor_parameters: ( res ) ->
-       res.model_editor[ "type" ] = ModelEditorItem_ChoiceWithEditableItems
     
     accept_child: ( ch ) ->
         ch instanceof ScillsPartFilterItem
@@ -68,11 +53,14 @@ class ScillsMaterialItem extends TreeItem
         [ ]
    
     set_filter_part: (part_filter)->
-        @_parents[0]._parents[0].set_filter_part(part_filter,@_id)
+        if @_parents[0]? and @_parents[0]._parents[0]?
+            @_parents[0]._parents[0].set_filter_part(part_filter,-1)
     
     ask_for_id_group: ->
-        return @_parents[0]._parents[0].ask_for_id_group()
-    
+        id_group = parseInt(@_incr_id_group_part)
+        @_incr_id_group_part.set (parseInt(@_incr_id_group_part) + 1)
+        return id_group
+        
     change_collection: ->
         #modification du nombre de chargements
         size_splice = 0
@@ -87,13 +75,5 @@ class ScillsMaterialItem extends TreeItem
                 name_temp = "Part_Group_" + id_group.toString()
                 @add_child  (new ScillsPartFilterItem name_temp, id_group)
         
-    information: ( div ) ->
-        if @_info_ok < 2
-            @txt = new_dom_element
-                  parentNode: div
-            @txt.innerHTML = "
-                  id : #{@_id} <br>
-              "
-            @_info_ok.set (parseInt(@_info_ok) + 1)
         
     

@@ -11,7 +11,7 @@ class BoundaryConditionItem extends TreeItem
         # attributes
         @add_attr
             _nb_edge_filters: 1
-            alias: name
+            name: @_name
             _id: id_bc
             _info_ok: parseInt(0)
             _dim: dim
@@ -57,9 +57,6 @@ class BoundaryConditionItem extends TreeItem
             
         
         @bind =>
-            if  @alias.has_been_modified()
-                @_name.set @alias
-                
             if  @_nb_edge_filters.has_been_modified()
                 @change_collection()
     

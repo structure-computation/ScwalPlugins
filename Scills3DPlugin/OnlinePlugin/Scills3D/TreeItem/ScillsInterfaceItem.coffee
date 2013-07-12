@@ -3,24 +3,23 @@ class ScillsInterfaceItem extends TreeItem
     constructor: (name = "Interface" ) ->
         super()
         
-        # attributes
-        @add_attr
-            _mesh        : new Mesh( not_editable: true )
-            alias        : name
-            
-        @add_attr
-            visualization: @_mesh.visualization
-            id: -1
-        
         # default values
         @_name.set name
         @_ico.set "img/interface.png"
         @_viewable.set true
         
-        @bind =>
-            if  @alias.has_been_modified()
-                @_name.set @alias
-    
+        # attributes
+        @add_attr
+            _mesh        : new Mesh( not_editable: true )
+            name        : @_name
+            
+        @add_attr
+            visualization: @_mesh.visualization
+            id: -1
+            link_id: -1
+            group_id: -1
+ 
+       
     accept_child: ( ch ) ->
         #
         

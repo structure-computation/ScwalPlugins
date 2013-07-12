@@ -225,7 +225,7 @@ int convert_MP_to_int(MP mpstring){
 }
 
 // convert MP to int
-int convert_MP_to_reel(MP mpstring){
+TYPEREEL convert_MP_to_reel(MP mpstring){
     TYPEREEL q_int = mpstring;
     return q_int;
 }
