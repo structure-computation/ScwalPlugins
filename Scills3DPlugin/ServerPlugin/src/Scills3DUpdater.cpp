@@ -312,7 +312,7 @@ void add_MP_computation_parameters_to_data_user(MP computation_parameters, DataU
             PRINT(data_user.multiresolution_parameters.collection_vec[i_param].name);
             PRINT(data_user.multiresolution_parameters.collection_vec[i_param].type);
             PRINT(data_user.multiresolution_parameters.collection_vec[i_param].nb_values);
-            PRINT(data_user.multiresolution_parameters.collection_vec[i_param].values);
+            //PRINT(data_user.multiresolution_parameters.collection_vec[i_param].values);
             //*/
         }
     }
