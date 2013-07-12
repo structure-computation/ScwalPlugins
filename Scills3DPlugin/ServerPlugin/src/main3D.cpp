@@ -37,6 +37,8 @@ int main( int argc, char **argv ) {
             }else{
                 qDebug() << "###############   launch Scills3DItem ###############" ;
                 Scills3DUpdater updater;
+                updater.argc = argc;
+                updater.argv = argv;
                 updater.sc = &sc;
                 updater.exec( mp );
             }

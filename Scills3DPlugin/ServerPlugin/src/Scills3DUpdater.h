@@ -17,7 +17,9 @@ protected:
     
     
 public:
-    SodaClient *sc;   
+    SodaClient *sc;
+    int argc;
+    char** argv;
 };
 
 #endif // SCILLS3DUPDATER_H

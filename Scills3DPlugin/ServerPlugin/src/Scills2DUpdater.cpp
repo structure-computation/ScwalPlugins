@@ -1184,7 +1184,7 @@ bool Scills2DUpdater::run( MP mp ) {
         
         // réalisation du calcul
         //process.mp = mp;
-        process.initialisation_MPI_for_scwal();
+        process.initialisation_MPI_for_scwal(argc,argv);
         process.data_user = &data_user;
         process.geometry_user = &geometry_user;
         

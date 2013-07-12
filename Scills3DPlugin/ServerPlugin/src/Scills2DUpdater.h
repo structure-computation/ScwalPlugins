@@ -14,7 +14,9 @@ protected:
     virtual QString type() const { return "Scills3DUpdater"; }
     
 public:
-    SodaClient *sc;   
+    SodaClient *sc;
+    int argc;
+    char** argv;
 };
 
 #endif // SCILLS2DUPDATER_H

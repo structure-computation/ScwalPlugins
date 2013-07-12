@@ -105,7 +105,7 @@ struct Process
     
     /// Initialisation de MPI
     void initialisation_MPI(int argc,char **argv);
-    void initialisation_MPI_for_scwal();
+    void initialisation_MPI_for_scwal(int argc,char **argv);
     /// test de synchronisation de MPI
     void test_MPI();
     /// Lecture des fichier JSON et HDF5
@@ -137,6 +137,7 @@ struct Process
     template<typename Data> void print_data(const char* msg,const Data& value){
         if(parallelisation->is_master_cpu()) std::cout << msg << value << std::endl;
     }
+    void system();
 };
 
 

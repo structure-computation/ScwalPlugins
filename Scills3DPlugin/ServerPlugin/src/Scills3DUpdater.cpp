@@ -1197,7 +1197,7 @@ bool Scills3DUpdater::run( MP mp ) {
         add_MP_volumic_loads_to_data_user(volumic_load_set, data_user);
   
         //process.mp = mp;
-        process.initialisation_MPI_for_scwal();
+        process.initialisation_MPI_for_scwal(argc,argv);
         process.data_user = &data_user;
         process.geometry_user = &geometry_user;
         

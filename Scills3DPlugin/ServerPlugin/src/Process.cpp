@@ -93,11 +93,17 @@ void Process::free(){
     if (inter_materials         != NULL) delete inter_materials;
 }
 
-void Process::initialisation_MPI_for_scwal(){
+void Process::initialisation_MPI_for_scwal(int argc,char **argv){
     affichage->name_data= "test";
 
-    parallelisation->rank=0;
-    parallelisation->size=1;
+    /// on fait ce qu il y a faire quand on est en MPI
+    if (argc == 3 and strcmp(argv[2], "mpi")==0 ) {
+        definition_mpi_param(*this,argc,argv);
+        if (parallelisation->is_master_cpu()) std::cout << "Calcul MPI" << std::endl;
+    } else {
+        parallelisation->rank=0;
+        parallelisation->size=1;
+    }
     crout.open(parallelisation->rank);
     #ifdef INFO_TIME
     parallelisation->synchronisation();
@@ -202,17 +208,17 @@ void Process::test_load_data(){
     //field_structure_user->assign_link_properties_to_group_interfaces(data_user,link_prop_temp);
     
     /// Sauvegarde du maillage pour la visualisation des resultats
-    print("Sauvegarde de la geometrie du maillage de peau au format hdf pour la visualisation des resultats");
-    affichage->name_hdf = data_user->result_path;
-    int temp=system(("mkdir -p "+affichage->name_hdf).c_str());//Il faut creer le repertoire results
-    affichage->name_hdf << "geometry_fields";
-    affichage->name_geometry = "/Level_0/Geometry";
-    affichage->name_fields = "/Level_0/Fields";
-    if (parallelisation->is_local_cpu()) {
-        write_hdf_geometry_SST_INTER(*SubS,*Inter,*this, *geometry_user);
-        Sc2String file_output_hdf ; file_output_hdf << affichage->name_hdf <<"_"<< parallelisation->rank<<".h5";
-        geometry_user->write_hdf5_in_parallel(file_output_hdf,parallelisation->rank);
-    }
+//     print("Sauvegarde de la geometrie du maillage de peau au format hdf pour la visualisation des resultats");
+//     affichage->name_hdf = data_user->result_path;
+//     int temp=system(("mkdir -p "+affichage->name_hdf).c_str());//Il faut creer le repertoire results
+//     affichage->name_hdf << "geometry_fields";
+//     affichage->name_geometry = "/Level_0/Geometry";
+//     affichage->name_fields = "/Level_0/Fields";
+//     if (parallelisation->is_local_cpu()) {
+//         write_hdf_geometry_SST_INTER(*SubS,*Inter,*this, *geometry_user);
+//         Sc2String file_output_hdf ; file_output_hdf << affichage->name_hdf <<"_"<< parallelisation->rank<<".h5";
+//         geometry_user->write_hdf5_in_parallel(file_output_hdf,parallelisation->rank);
+//     }
     parallelisation->synchronisation();
     
     /// ecriture du fichier de sortie xdmf
@@ -260,20 +266,20 @@ void Process::preparation_calcul(){
     //field_structure_user->assign_link_properties_to_group_interfaces(data_user,link_prop_temp);
     
     /// Sauvegarde du maillage pour la visualisation des resultats
-    print("Sauvegarde de la geometrie du maillage de peau au format hdf pour la visualisation des resultats");
-    affichage->name_hdf = data_user->result_path;
-    int temp=system(("mkdir -p "+affichage->name_hdf).c_str());//Il faut creer le repertoire results
-    affichage->name_hdf << "geometry_fields";
-    affichage->name_geometry = "/Level_0/Geometry";
-    affichage->name_fields = "/Level_0/Fields";
-    if (parallelisation->is_local_cpu()) {
-        if(save_data==1){
-            write_hdf_geometry_SST_INTER(*SubS,*Inter,*this, *geometry_user);
-            Sc2String file_output_hdf;
-            file_output_hdf << affichage->name_hdf <<"_"<< parallelisation->rank<<".h5";
-            geometry_user->write_hdf5_in_parallel(file_output_hdf,parallelisation->rank);
-        }
-    }
+//     print("Sauvegarde de la geometrie du maillage de peau au format hdf pour la visualisation des resultats");
+//     affichage->name_hdf = data_user->result_path;
+//     int temp=system(("mkdir -p "+affichage->name_hdf).c_str());//Il faut creer le repertoire results
+//     affichage->name_hdf << "geometry_fields";
+//     affichage->name_geometry = "/Level_0/Geometry";
+//     affichage->name_fields = "/Level_0/Fields";
+//     if (parallelisation->is_local_cpu()) {
+//         if(save_data==1){
+//             write_hdf_geometry_SST_INTER(*SubS,*Inter,*this, *geometry_user);
+//             Sc2String file_output_hdf;
+//             file_output_hdf << affichage->name_hdf <<"_"<< parallelisation->rank<<".h5";
+//             geometry_user->write_hdf5_in_parallel(file_output_hdf,parallelisation->rank);
+//         }
+//     }
     parallelisation->synchronisation();
     
     /// ecriture du fichier de sortie xdmf
