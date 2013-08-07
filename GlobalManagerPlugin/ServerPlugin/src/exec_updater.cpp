@@ -21,6 +21,7 @@ int main( int argc, char **argv ) {
     sc.reg_type( "File" );
     sc.reg_type( "Img" );
     sc.reg_type( "ServerAssistedVisualization" );
+    sc.reg_type( "AcquisitionItem" );
     
     //chargement du model
     MP mp = sc.load_ptr(model_id);
@@ -57,6 +58,10 @@ int main( int argc, char **argv ) {
     }
     else if(mp.type() == "CorrelationItem" or mp.type() == "MesherItem" or mp.type() == "File" or mp.type() == "Img" or mp.type() == "ServerAssistedVisualization" ){
         commande = "../CorreliPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main_cpp.exe " + temp_str ;
+        std::system(commande.c_str());
+    }
+    else if(mp.type() == "AcquisitionItem" ){
+        commande = "../AcquisitionPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main_cpp.exe " + temp_str ;
         std::system(commande.c_str());
     }
     
