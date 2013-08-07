@@ -26,9 +26,9 @@ class AcqConfigItem extends TreeItem
 							@_parents[0]._parents[0].update_AcqDataViewItems()
 							
 		
-		@bind =>
-			if  @_nb_AcqData.has_been_modified() or @_children.has_been_modified()
-				@_parents[0]._parents[0].update_AcqDataViewItems()
+# 		@bind =>
+# 			if  @_nb_AcqData.has_been_modified() or @_children.has_been_modified()
+# 				@_parents[0]._parents[0].update_AcqDataViewItems()
     
 	accept_child: ( ch ) ->
 		ch instanceof AcqDataItem

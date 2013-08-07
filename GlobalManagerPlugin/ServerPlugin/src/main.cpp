@@ -32,8 +32,8 @@ int main( int argc, char **argv ) {
     while ( SodaClient::Event event = sc.event() ) {
         MP mp = event.mp();
         //test : verification de l'existance d'un job, ou création du job si necessaire
-//         qDebug() << "model : " << mp;
-//         qDebug() << "recu ";
+        // qDebug() << "model : " << mp;
+        // qDebug() << "recu ";
         if ( mp.type() == "ServerAssistedVisualization" ) {
             ServerAssistedVisualizationUpdater mu;
             mu.sc = &sc;
