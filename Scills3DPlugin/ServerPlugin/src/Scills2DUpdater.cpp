@@ -177,9 +177,10 @@ void add_MP_computation_parameters_to_data_user(MP computation_parameters, DataU
     //qDebug() << latin_parameters;
     data_user.options.convergence_method_LATIN.max_iteration            = convert_MP_to_int(latin_parameters[ "max_iteration.val" ]);
     data_user.options.convergence_method_LATIN.convergence_rate         = convert_MP_to_reel(latin_parameters[ "convergence_rate.val" ]);
+    data_user.options.convergence_method_LATIN.multiscale               = convert_MP_to_int(latin_parameters[ "multiscale" ]);
     
-    PRINT(data_user.options.convergence_method_LATIN.max_iteration);
-    PRINT(data_user.options.convergence_method_LATIN.convergence_rate);
+//     PRINT(data_user.options.convergence_method_LATIN.max_iteration);
+//     PRINT(data_user.options.convergence_method_LATIN.convergence_rate);
     
 //     assert(0);
     
@@ -236,16 +237,16 @@ void add_MP_computation_parameters_to_data_user(MP computation_parameters, DataU
         }
     }
     
-    for(int i_param = 0;i_param < nb_time_parameters; ++i_param){
-        PRINT(data_user.time_steps.parameter_collection_vec[i_param].id_in_calcul);
-        PRINT(data_user.time_steps.parameter_collection_vec[i_param].id_param);
-        PRINT(data_user.time_steps.parameter_collection_vec[i_param].name);
-        PRINT(data_user.time_steps.parameter_collection_vec[i_param].alias_name);
-        for(int i_step = 0;i_step < nb_time_steps; ++i_step){
-            PRINT(data_user.time_steps.parameter_collection_vec[i_param].stepFunctions_vec[i_step].step_id);
-            PRINT(data_user.time_steps.parameter_collection_vec[i_param].stepFunctions_vec[i_step].temporal_function_t);
-        }
-    }
+//     for(int i_param = 0;i_param < nb_time_parameters; ++i_param){
+//         PRINT(data_user.time_steps.parameter_collection_vec[i_param].id_in_calcul);
+//         PRINT(data_user.time_steps.parameter_collection_vec[i_param].id_param);
+//         PRINT(data_user.time_steps.parameter_collection_vec[i_param].name);
+//         PRINT(data_user.time_steps.parameter_collection_vec[i_param].alias_name);
+//         for(int i_step = 0;i_step < nb_time_steps; ++i_step){
+//             PRINT(data_user.time_steps.parameter_collection_vec[i_param].stepFunctions_vec[i_step].step_id);
+//             PRINT(data_user.time_steps.parameter_collection_vec[i_param].stepFunctions_vec[i_step].temporal_function_t);
+//         }
+//     }
     
 //     assert(0);
     
@@ -283,11 +284,11 @@ void add_MP_computation_parameters_to_data_user(MP computation_parameters, DataU
             data_user.multiresolution_parameters.collection_vec[i_param].nb_values                  = 0;    /// Valeur par defaut
             data_user.multiresolution_parameters.collection_vec[i_param].function                   = convert_MP_to_Sc2String(parametric_item[ "your_function" ]);
             //* Debug
-            PRINT(data_user.multiresolution_parameters.collection_vec[i_param].id_in_calcul);
-            PRINT(data_user.multiresolution_parameters.collection_vec[i_param].name);
-            PRINT(data_user.multiresolution_parameters.collection_vec[i_param].type);
-            PRINT(data_user.multiresolution_parameters.collection_vec[i_param].nb_values);
-            PRINT(data_user.multiresolution_parameters.collection_vec[i_param].function);
+//             PRINT(data_user.multiresolution_parameters.collection_vec[i_param].id_in_calcul);
+//             PRINT(data_user.multiresolution_parameters.collection_vec[i_param].name);
+//             PRINT(data_user.multiresolution_parameters.collection_vec[i_param].type);
+//             PRINT(data_user.multiresolution_parameters.collection_vec[i_param].nb_values);
+//             PRINT(data_user.multiresolution_parameters.collection_vec[i_param].function);
             //*/
         }
         else if(parameter_type == "ParametricListItem"){    // ... liste
@@ -304,11 +305,11 @@ void add_MP_computation_parameters_to_data_user(MP computation_parameters, DataU
                 //PRINT(value);
             }
             //* Debug
-            PRINT(data_user.multiresolution_parameters.collection_vec[i_param].id_in_calcul);
-            PRINT(data_user.multiresolution_parameters.collection_vec[i_param].name);
-            PRINT(data_user.multiresolution_parameters.collection_vec[i_param].type);
-            PRINT(data_user.multiresolution_parameters.collection_vec[i_param].nb_values);
-            //PRINT(data_user.multiresolution_parameters.collection_vec[i_param].values);
+//             PRINT(data_user.multiresolution_parameters.collection_vec[i_param].id_in_calcul);
+//             PRINT(data_user.multiresolution_parameters.collection_vec[i_param].name);
+//             PRINT(data_user.multiresolution_parameters.collection_vec[i_param].type);
+//             PRINT(data_user.multiresolution_parameters.collection_vec[i_param].nb_values);
+//             PRINT(data_user.multiresolution_parameters.collection_vec[i_param].values);
             //*/
         }
     }
@@ -447,20 +448,20 @@ void add_MP_materials_to_data_user(MP material_set, DataUser &data_user){
         } 
     }
     
-    for(int i_edge=0; i_edge<data_user.materials_vec.size(); i_edge++){
-        PRINT("-----------materials---------------");
-        PRINT(data_user.materials_vec[i_edge].name);
-        PRINT(data_user.materials_vec[i_edge].id_in_calcul);
-        PRINT(data_user.materials_vec[i_edge].type_plast);
-        PRINT(data_user.materials_vec[i_edge].type_endo);
-        PRINT(data_user.materials_vec[i_edge].E_1);
-        PRINT(data_user.materials_vec[i_edge].E_2);
-        PRINT(data_user.materials_vec[i_edge].E_3);
-        PRINT(data_user.materials_vec[i_edge].nu_12);
-        PRINT(data_user.materials_vec[i_edge].nu_13);
-        PRINT(data_user.materials_vec[i_edge].nu_23);
-    }  
-    PRINT(data_user.materials_vec.size());
+//     for(int i_edge=0; i_edge<data_user.materials_vec.size(); i_edge++){
+//         PRINT("-----------materials---------------");
+//         PRINT(data_user.materials_vec[i_edge].name);
+//         PRINT(data_user.materials_vec[i_edge].id_in_calcul);
+//         PRINT(data_user.materials_vec[i_edge].type_plast);
+//         PRINT(data_user.materials_vec[i_edge].type_endo);
+//         PRINT(data_user.materials_vec[i_edge].E_1);
+//         PRINT(data_user.materials_vec[i_edge].E_2);
+//         PRINT(data_user.materials_vec[i_edge].E_3);
+//         PRINT(data_user.materials_vec[i_edge].nu_12);
+//         PRINT(data_user.materials_vec[i_edge].nu_13);
+//         PRINT(data_user.materials_vec[i_edge].nu_23);
+//     }  
+//     PRINT(data_user.materials_vec.size());
 }
 
 
@@ -554,25 +555,25 @@ void add_MP_links_to_data_user(MP link_set, DataUser &data_user){
         }
     }
     
-    for(int i_edge=0; i_edge<data_user.links_vec.size(); i_edge++){
-        PRINT("-----------links---------------");
-        PRINT(data_user.links_vec[i_edge].name);
-        PRINT(data_user.links_vec[i_edge].id_in_calcul);
-        PRINT(data_user.links_vec[i_edge].type_num);
-        PRINT(data_user.links_vec[i_edge].Ep_type);
-        
-        PRINT(data_user.links_vec[i_edge].Ep_n);
-        PRINT(data_user.links_vec[i_edge].f);
-        PRINT(data_user.links_vec[i_edge].Fcr_t);
-        PRINT(data_user.links_vec[i_edge].Fcr_n);
-        PRINT(data_user.links_vec[i_edge].Rop);
-        PRINT(data_user.links_vec[i_edge].kp);
-        PRINT(data_user.links_vec[i_edge].np);
-        PRINT(data_user.links_vec[i_edge].Kt);
-        PRINT(data_user.links_vec[i_edge].Kn);
-        PRINT(data_user.links_vec[i_edge].Knc);
-    }  
-    PRINT(data_user.links_vec.size());
+//     for(int i_edge=0; i_edge<data_user.links_vec.size(); i_edge++){
+//         PRINT("-----------links---------------");
+//         PRINT(data_user.links_vec[i_edge].name);
+//         PRINT(data_user.links_vec[i_edge].id_in_calcul);
+//         PRINT(data_user.links_vec[i_edge].type_num);
+//         PRINT(data_user.links_vec[i_edge].Ep_type);
+//         
+//         PRINT(data_user.links_vec[i_edge].Ep_n);
+//         PRINT(data_user.links_vec[i_edge].f);
+//         PRINT(data_user.links_vec[i_edge].Fcr_t);
+//         PRINT(data_user.links_vec[i_edge].Fcr_n);
+//         PRINT(data_user.links_vec[i_edge].Rop);
+//         PRINT(data_user.links_vec[i_edge].kp);
+//         PRINT(data_user.links_vec[i_edge].np);
+//         PRINT(data_user.links_vec[i_edge].Kt);
+//         PRINT(data_user.links_vec[i_edge].Kn);
+//         PRINT(data_user.links_vec[i_edge].Knc);
+//     }  
+//     PRINT(data_user.links_vec.size());
     
 }
 
@@ -626,16 +627,54 @@ void add_MP_bcs_to_data_user(MP boundary_condition_set, DataUser &data_user){
             data_user.boundary_conditions_vec[i_bc].condition_type = "effort_normal" ;
             data_user.boundary_conditions_vec[i_bc].spatial_function_x       = convert_MP_to_Sc2String(type_bc_i[ "space_function" ]);
         }
+        else if(name_i == "cinetic torseur"){
+            data_user.boundary_conditions_vec[i_bc].condition_type = "cinetic_torseur" ;
+
+            qDebug() << type_bc_i;
+            data_user.boundary_conditions_vec[i_bc].point_1_x                  = type_bc_i[ "point.pos[0]" ];
+            data_user.boundary_conditions_vec[i_bc].point_1_y                  = type_bc_i[ "point.pos[1]" ];
+            data_user.boundary_conditions_vec[i_bc].point_1_z                  = 0.;
+            
+            data_user.boundary_conditions_vec[i_bc].dir_1_x                  = type_bc_i[ "direction_0[0]" ];
+            data_user.boundary_conditions_vec[i_bc].dir_1_y                  = type_bc_i[ "direction_0[1]" ];
+            data_user.boundary_conditions_vec[i_bc].dir_1_z                  = 0.;
+            data_user.boundary_conditions_vec[i_bc].dir_2_x                  = type_bc_i[ "direction_1[0]" ];
+            data_user.boundary_conditions_vec[i_bc].dir_2_y                  = type_bc_i[ "direction_1[1]" ];
+            data_user.boundary_conditions_vec[i_bc].dir_2_z                  = 0.;
+            data_user.boundary_conditions_vec[i_bc].dir_3_x                  = 0.;
+            data_user.boundary_conditions_vec[i_bc].dir_3_y                  = 0.;
+            data_user.boundary_conditions_vec[i_bc].dir_3_z                  = 1.;
+            
+            data_user.boundary_conditions_vec[i_bc].R_0                         = convert_MP_to_Sc2String(type_bc_i[ "resultante[0]" ]);
+            data_user.boundary_conditions_vec[i_bc].R_1                         = convert_MP_to_Sc2String(type_bc_i[ "resultante[1]" ]);
+            data_user.boundary_conditions_vec[i_bc].R_2                         = "0";
+            data_user.boundary_conditions_vec[i_bc].M_0                         = "0";
+            data_user.boundary_conditions_vec[i_bc].M_1                         = "0";
+            data_user.boundary_conditions_vec[i_bc].M_2                         = convert_MP_to_Sc2String(type_bc_i[ "moment[0]" ]);
+            
+            data_user.boundary_conditions_vec[i_bc].imp_R_0                  = convert_MP_to_int(type_bc_i[ "imp_resultante[0]" ]);
+            data_user.boundary_conditions_vec[i_bc].imp_R_1                  = convert_MP_to_int(type_bc_i[ "imp_resultante[1]" ]);
+            data_user.boundary_conditions_vec[i_bc].imp_R_2                  = false;
+            data_user.boundary_conditions_vec[i_bc].imp_M_0                  = false;
+            data_user.boundary_conditions_vec[i_bc].imp_M_1                  = false;
+            data_user.boundary_conditions_vec[i_bc].imp_M_2                  = convert_MP_to_int(type_bc_i[ "imp_moment[0]" ]);
+           
+        }
     }
     
-    for(int i_edge=0; i_edge<data_user.boundary_conditions_vec.size(); i_edge++){
-        PRINT("-----------boundary_conditions---------------");
-        PRINT(data_user.boundary_conditions_vec[i_edge].name);
-        PRINT(data_user.boundary_conditions_vec[i_edge].condition_type);
-        PRINT(data_user.boundary_conditions_vec[i_edge].spatial_function_x);
-        PRINT(data_user.boundary_conditions_vec[i_edge].spatial_function_y);
-//         PRINT(data_user.boundary_conditions_vec[i_edge].spatial_function_z);
-    }  
+//     for(int i_edge=0; i_edge<data_user.boundary_conditions_vec.size(); i_edge++){
+//         PRINT("-----------boundary_conditions---------------");
+//         PRINT(data_user.boundary_conditions_vec[i_edge].name);
+//         PRINT(data_user.boundary_conditions_vec[i_edge].condition_type);
+//         PRINT(data_user.boundary_conditions_vec[i_edge].spatial_function_x);
+//         PRINT(data_user.boundary_conditions_vec[i_edge].spatial_function_y);
+//         
+//         PRINT(data_user.boundary_conditions_vec[i_edge].point_1_x);
+//         PRINT(data_user.boundary_conditions_vec[i_edge].point_1_y);
+//         PRINT(data_user.boundary_conditions_vec[i_edge].point_1_z);
+// //         PRINT(data_user.boundary_conditions_vec[i_edge].spatial_function_z);
+//     }  
+    
     PRINT(data_user.boundary_conditions_vec.size());
     
 }
@@ -1094,9 +1133,7 @@ bool Scills2DUpdater::run( MP mp ) {
     quint64 MP_model_id = mp.get_server_id();
     // does the input file exists ?
     
-    int  compute_edges   = mp[ "_compute_edges" ];
-    qDebug() << "compute_edges = " << compute_edges;
-    int  compute_scills  = mp[ "_compute_scills" ];
+    int  run_type = mp["run_type.num"];
     
     MP  structure = mp[ "_children[ 0 ]" ];
     MP  assembly = structure[ "_children[ 0 ]" ];
@@ -1107,7 +1144,7 @@ bool Scills2DUpdater::run( MP mp ) {
     Process process;
     
     // visualisation des bords demandés -------------------------------------------------------------------------
-    if (assembly.ok() and compute_edges){
+    if (assembly.ok() and run_type == 1){
         // see if the hdf5 file of the assembly as allready been load
         QString path_hdf = assembly[ "_path" ];
         qDebug() << path_hdf;
@@ -1124,7 +1161,7 @@ bool Scills2DUpdater::run( MP mp ) {
         add_edges_to_MP_assembly(oec, boundary_condition_set, data_user, geometry_user);
         
     // mise en données de Data_User et vérification des données --------------------------------------------------------------
-    }else if(assembly.ok() and compute_scills){
+    }else if(assembly.ok() and run_type == 0){
         // see if the hdf5 file of the assembly as allready been load
         
         QString path_hdf = assembly[ "_path" ];

@@ -46,7 +46,7 @@ int main( int argc, char **argv ) {
             ImgUpdater iu;
             iu.sc = &sc;
             iu.exec( mp );
-        }else{
+        } else{
             job_list.kill_jobs();
             int i_job = job_list.find_job_index(mp, sc);
             

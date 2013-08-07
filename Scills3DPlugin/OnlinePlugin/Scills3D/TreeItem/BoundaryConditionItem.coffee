@@ -26,6 +26,7 @@ class BoundaryConditionItem extends TreeItem
         normal_speed_bc = new NormalSpeedBC
         stress_density_bc = new StressDensityBC @_dim
         normal_stress_density_bc = new NormalStressDensityBC
+        cinetic_bc = new CineticBC @_dim
         
         @type.lst.push displacement_bc
         @type.lst.push normal_displacement_bc
@@ -34,6 +35,7 @@ class BoundaryConditionItem extends TreeItem
         @type.lst.push normal_speed_bc
         @type.lst.push stress_density_bc
         @type.lst.push normal_stress_density_bc
+        @type.lst.push cinetic_bc
         
         @add_context_actions
             txt: "add edge filter"

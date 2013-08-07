@@ -197,6 +197,7 @@ void add_MP_computation_parameters_to_data_user(MP computation_parameters, DataU
     qDebug() << latin_parameters;
     data_user.options.convergence_method_LATIN.max_iteration            = convert_MP_to_int(latin_parameters[ "max_iteration.val" ]);
     data_user.options.convergence_method_LATIN.convergence_rate         = convert_MP_to_reel(latin_parameters[ "convergence_rate.val" ]);
+    data_user.options.convergence_method_LATIN.multiscale               = convert_MP_to_int(latin_parameters[ "multiscale" ]);
     
     PRINT(data_user.options.convergence_method_LATIN.max_iteration);
     PRINT(data_user.options.convergence_method_LATIN.convergence_rate);
@@ -643,6 +644,38 @@ void add_MP_bcs_to_data_user(MP boundary_condition_set, DataUser &data_user){
         else if(name_i == "normal stress density"){
             data_user.boundary_conditions_vec[i_bc].condition_type = "effort_normal" ;
             data_user.boundary_conditions_vec[i_bc].spatial_function_x       = convert_MP_to_Sc2String(type_bc_i[ "space_function" ]);
+        }
+        else if(name_i == "cinetic torseur"){
+            data_user.boundary_conditions_vec[i_bc].condition_type = "cinetic_torseur" ;
+            
+            data_user.boundary_conditions_vec[i_bc].point_1_x                  = type_bc_i[ "point.pos[0]" ];
+            data_user.boundary_conditions_vec[i_bc].point_1_y                  = type_bc_i[ "point.pos[1]" ];
+            data_user.boundary_conditions_vec[i_bc].point_1_z                  = type_bc_i[ "point.pos[2]" ];
+            
+            data_user.boundary_conditions_vec[i_bc].dir_1_x                  = type_bc_i[ "direction_0[0]" ];
+            data_user.boundary_conditions_vec[i_bc].dir_1_y                  = type_bc_i[ "direction_0[1]" ];
+            data_user.boundary_conditions_vec[i_bc].dir_1_z                  = type_bc_i[ "direction_0[2]" ];
+            data_user.boundary_conditions_vec[i_bc].dir_2_x                  = type_bc_i[ "direction_1[0]" ];
+            data_user.boundary_conditions_vec[i_bc].dir_2_y                  = type_bc_i[ "direction_1[1]" ];
+            data_user.boundary_conditions_vec[i_bc].dir_2_z                  = type_bc_i[ "direction_1[2]" ];
+            data_user.boundary_conditions_vec[i_bc].dir_3_x                  = type_bc_i[ "direction_2[0]" ];
+            data_user.boundary_conditions_vec[i_bc].dir_3_y                  = type_bc_i[ "direction_2[1]" ];
+            data_user.boundary_conditions_vec[i_bc].dir_3_z                  = type_bc_i[ "direction_2[2]" ];
+            
+            data_user.boundary_conditions_vec[i_bc].R_0                  = convert_MP_to_Sc2String(type_bc_i[ "resultante[0]" ]);
+            data_user.boundary_conditions_vec[i_bc].R_1                  = convert_MP_to_Sc2String(type_bc_i[ "resultante[1]" ]);
+            data_user.boundary_conditions_vec[i_bc].R_2                  = convert_MP_to_Sc2String(type_bc_i[ "resultante[2]" ]);
+            data_user.boundary_conditions_vec[i_bc].M_0                  = convert_MP_to_Sc2String(type_bc_i[ "moment[0]" ]);
+            data_user.boundary_conditions_vec[i_bc].M_1                  = convert_MP_to_Sc2String(type_bc_i[ "moment[1]" ]);
+            data_user.boundary_conditions_vec[i_bc].M_2                  = convert_MP_to_Sc2String(type_bc_i[ "moment[2]" ]);
+            
+            data_user.boundary_conditions_vec[i_bc].imp_R_0                  = convert_MP_to_int(type_bc_i[ "imp_resultante[0]" ]);
+            data_user.boundary_conditions_vec[i_bc].imp_R_1                  = convert_MP_to_int(type_bc_i[ "imp_resultante[1]" ]);
+            data_user.boundary_conditions_vec[i_bc].imp_R_2                  = convert_MP_to_int(type_bc_i[ "imp_resultante[2]" ]);
+            data_user.boundary_conditions_vec[i_bc].imp_M_0                  = convert_MP_to_int(type_bc_i[ "imp_moment[0]" ]);
+            data_user.boundary_conditions_vec[i_bc].imp_M_1                  = convert_MP_to_int(type_bc_i[ "imp_moment[1]" ]);
+            data_user.boundary_conditions_vec[i_bc].imp_M_2                  = convert_MP_to_int(type_bc_i[ "imp_moment[2]" ]);
+           
         }
     }
     
