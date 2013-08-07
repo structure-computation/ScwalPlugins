@@ -20,7 +20,8 @@ int main( int argc, char **argv ) {
     sc.reg_type( "CorrelationItem" );
     sc.reg_type( "GmshItem" );
     sc.reg_type( "ScilabItem" );
-    sc.reg_type( "File" );
+    sc.reg_type( "AcquisitionItem" );    
+	 sc.reg_type( "File" );
     sc.reg_type( "Img" );
     sc.reg_type( "ServerAssistedVisualization" );
     
@@ -46,12 +47,10 @@ int main( int argc, char **argv ) {
             iu.sc = &sc;
             iu.exec( mp );
         }else{
-        
             job_list.kill_jobs();
             int i_job = job_list.find_job_index(mp, sc);
             
-            
-//             qDebug() << "i_job : " << i_job ;
+             qDebug() << "i_job : " << i_job ;
             if(i_job >= 0){
 //                 qDebug() << "recu 1 ";
                 qDebug() << "job_list.jobs.size() : " << job_list.jobs.size();
@@ -73,5 +72,6 @@ int main( int argc, char **argv ) {
                 mp.flush();
             }
         }
+        
     }
 }
