@@ -187,7 +187,7 @@ class Launcher : public QObject {
           int output = run_app_2();
 
           tic.stop();
-          log_tool(tic, output);
+//           log_tool(tic, output);
           
           
           
