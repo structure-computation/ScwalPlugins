@@ -23,7 +23,7 @@ class TFunctionItem extends TreeItem
             _mesh         : new Mesh( not_editable: true )
             _box          : new Mesh( not_editable: true )
           
-          
+        
         @add_attr  
           visualization : @_mesh.visualization
           

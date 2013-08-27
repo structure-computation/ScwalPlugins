@@ -62,6 +62,7 @@ class BoundaryConditionItem extends TreeItem
             if  @_nb_edge_filters.has_been_modified()
                 @change_collection()
     
+    
     get_model_editor_parameters: ( res ) ->
        res.model_editor[ "type" ] = ModelEditorItem_ChoiceWithEditableItems
     

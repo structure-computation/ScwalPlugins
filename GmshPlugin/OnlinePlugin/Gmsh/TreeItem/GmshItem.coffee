@@ -11,15 +11,6 @@ class GmshItem extends TreeItem_Computable
             base_size    : 100
             p_mesher     : new Lst
 
-        #@add_context_modules  new TreeAppModule_Mesher   
-        #@add_context_modules  new TreeAppModule_Sketch
-        #@add_context_modules  new TreeAppModule_Transform
-        
-        @add_context_actions  new TreeAppModule_Mesher
-        @add_context_actions  new TreeAppModule_Sketch
-        @add_context_actions  new TreeAppModule_Transform
-            
-            
         @_name.set name
         @_ico.set "img/mesher.png"
         @_viewable.set true
@@ -31,7 +22,12 @@ class GmshItem extends TreeItem_Computable
 #             if  @_mesh.has_been_modified()
 #                 #if @compute.get() == true
 #                 alert @_mesh.points.length + " " + @_mesh._elements.length
-        
+    
+    display_suppl_context_actions: ( context_action )  ->
+        context_action.push  new TreeAppModule_Mesher
+        context_action.push  new TreeAppModule_Sketch
+        #context_action.push  new TreeAppModule_Transform
+    
     cosmetic_attribute: ( name ) ->
         super( name ) or ( name in [ "_mesh", "visualization" ] )
         
