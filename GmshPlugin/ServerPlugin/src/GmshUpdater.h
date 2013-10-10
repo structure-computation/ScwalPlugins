@@ -16,6 +16,7 @@ protected:
     
 public:
     SodaClient *sc;
+    const char*& geo();
 };
 
 #endif // MESHUPDATER_H

@@ -20,10 +20,11 @@ bool GmshUpdater::run( MP mp ) {
         // check if a .geo file has been provided
         QString name = ch["_name"];
         bool test_geo = (ch.type() == "FileItem" and name.endsWith(".geo"));
+        bool test_unv = (ch.type() == "FileItem" and name.endsWith(".unv"));
         
         // retrieve or make a .geo file
         QFile* geo = 0;
-        if(test_geo){
+        if(test_geo or test_unv){
             MP file_geo = mp["_children[0]"];
             quint64 ptr = file_geo[ "_ptr" ];
             PRINT(file_geo.type().toStdString());
@@ -69,15 +70,24 @@ bool GmshUpdater::run( MP mp ) {
         om[ "_elements" ].clear();
 
         // .geo -> .msh
-        AutoRm arm( geo->fileName() + ".msh" );
-        QString cmd = "cat " + geo->fileName() + "; gmsh -o " + geo->fileName() + ".msh -3 " + geo->fileName() + " > /dev/null";
+        //AutoRm arm( geo->fileName() + ".msh" );
+        //AutoRm arm2( geo->fileName() + ".unv" );
+        QString cmd;
+        if(test_unv){
+          cmd = "cp " + geo->fileName() + "  " + geo->fileName() + ".unv; gmsh " + geo->fileName() + ".unv -o " + geo->fileName() + ".msh -3 > /dev/null";
+          qDebug() << cmd;
+          PRINT("unv");
+        }else{
+          cmd = "cat " + geo->fileName() + "; gmsh -o " + geo->fileName() + ".msh -3 " + geo->fileName() + " > /dev/null";
+        }
+        qDebug() << cmd;
         if ( system( cmd.toAscii().data() ) ) {
             add_message( mp, ET_Error, "gmsh has crashed generating msh file" );
             return true;
         }
         // Debug
-        //cmd = "cp " + geo->fileName() + ".msh ~/test.msh";
-        //system( cmd.toAscii().data() );
+        cmd = "cp " + geo->fileName() + ".msh ~/test.msh";
+        system( cmd.toAscii().data() );
 
         TypedArray<int> *triangle_con = new TypedArray<int>;
         TypedArray<int> *tetro_con = new TypedArray<int>;
