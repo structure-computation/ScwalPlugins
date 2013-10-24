@@ -7,10 +7,14 @@ bool Scult2DUpdater::run( MP mp ) {
     qDebug() << mp.type();
     
     // does the input file exists ?
-    MP  file_unv = mp[ "_children[ 0 ]" ];
-    qDebug() << file_unv;
-    QString file_unv_name = file_unv[ "_name" ];
-    if (file_unv.ok()){
+    MP  input_mesh = mp[ "_children[ 0 ]" ];
+    //qDebug() << input_mesh;
+    QString input_mesh_name = input_mesh[ "_name" ];
+    
+    bool test_unv = (input_mesh.type() == "FileItem" and input_mesh_name.endsWith(".unv"));
+    bool test_msh = (input_mesh.type() == "MeshItem");
+    
+    if (input_mesh.ok() or test_msh){
         // see if the hdf5 file of the assembly as allready been load
         GeometryUser geometry_user;
         MP assembly = mp[ "_output[ 0 ]" ]; 
@@ -28,9 +32,9 @@ bool Scult2DUpdater::run( MP mp ) {
         file_output_hdf5 << c_path_hdf;
 
         // if not load, build the assembly from the unv mesh
-        if(!_path_loaded){
-            quint64 ptr = file_unv[ "_ptr" ];
-            QString name = file_unv[ "_name" ];
+        if(!_path_loaded and test_unv){
+            quint64 ptr = input_mesh[ "_ptr" ];
+            QString name = input_mesh[ "_name" ];
             MP data = sc->load_ptr( ptr );
             qDebug() << "on lit le path";
             QString path_unv;
@@ -56,20 +60,87 @@ bool Scult2DUpdater::run( MP mp ) {
             geometry_user.initialisation( mesh_user, file );
             geometry_user.write_hdf5( file_output_hdf5 );
             
-//             MP path_obj_hdf = assembly[ "_path" ];
-//             int int_project_id = mp[ "_model_id" ];
-//             QString project_id ;
-//             project_id.setNum(int_project_id);
-//             QString name_project_folder = "/home/projet_" + project_id;
-//             qDebug() << name_project_folder;
-//             MP project_folder = sc->load( name_project_folder );
-//             QString name_output = mp[ "hdf_output_name" ];
-//             project_folder << MP::new_file( name_output, path_obj_hdf );
-            
-            
             assembly[ "_path_loaded" ] = true;    
             
         // if load, build the assembly from the hdf file
+        }else if( test_msh){
+            // création du maillage à partir des du maillage de la plateforme
+            qDebug() << "création du maillage à partir de gmsh";
+            
+            MeshUser mesh_user("test", "0" );
+          
+            MP mesh = input_mesh["_mesh" ]; 
+            for( int i = 0, n = mesh[ "points" ].size(); i < n; ++i ) {
+                mesh_user.mesh_num_nodes.push_back(i);
+                MP pos = mesh[ "points" ][ i ][ "pos" ];
+                BasicVec<TYPE,DIM> vec;
+                for (int di=0;di<DIM;di++) {
+                    vec[di] = pos[ di ];
+                    mesh_user.mesh_pos_nodes[di].push_back(vec[di]);
+                    qDebug() << vec[0] << " " << vec[1];
+                }
+            }
+            
+            qDebug() << mesh_user.mesh_pos_nodes.size();
+            qDebug() << mesh_user.mesh_pos_nodes[0].size();
+            qDebug() << mesh_user.mesh_num_nodes.size();
+            
+
+            for( int nel = 0, mel = mesh[ "_elements" ].size(); nel < mel; ++nel ) {
+                MP el = mesh[ "_elements" ][ nel ]; 
+                if ( el.type() == "Element_TriangleList" ) {
+                    if ( TypedArray<int> *indices = dynamic_cast<TypedArray<int> *>( el[ "indices" ].model() ) ) {
+                        for( int nt = 0, ct = 0; nt < indices->size( 1 ); ++nt ) {
+                            unsigned o[ 3 ];
+                            for( int j = 0; j < 3; ++j ){
+                                o[ j ] = indices->operator[]( ct++ );
+                            }
+                            //qDebug() << o[0] << " " << o[1] << " " << o[2];
+                            int pattern_base_id = 0;
+                            int nb_sides_pattern = mesh_user.patterns.find_type(pattern_base_id).nb_sides;
+                            BasicVec< int > mesh_connectivity;
+                            int n_nodes = 3;
+                            mesh_connectivity.resize(n_nodes);
+
+                            for(int i=0;i<n_nodes;i++){
+                                mesh_connectivity[i] = o[ i ];
+                            }
+                            EntityElementUser current_element(pattern_base_id, nel, 0, mesh_connectivity, nb_sides_pattern); //numero de groupe a assigner plus tard si necessaire
+                            mesh_user.list_elements.push_back(current_element);
+                        }
+                    }
+                }
+            }
+            mesh_user.nb_elements = mesh_user.list_elements.size();
+            mesh_user.map_num_group_name_group[0] = "part_0";
+            for( int i = 0; i < mesh_user.list_elements.size(); ++i ) {
+                mesh_user.list_elements[i].num_piece_in_mesh = 0;
+            }
+            
+            qDebug() << mesh_user.nb_elements;
+            
+            //assert(0);
+            
+            std::cout << "** create interfaces *******************************************************************************************" << std::endl;
+            mesh_user.test_create_list_interfaces();
+            PRINT(mesh_user.nb_interfaces);
+            PRINT(mesh_user.list_interfaces.size());
+            std::cout << "** create interfaces ok" << std::endl;
+            
+            std::cout << "** create elements *********************************************************************************************" << std::endl;
+            for( int i_elem = 0; i_elem < mesh_user.nb_elements; i_elem++ ){
+                std::cout << "\rElements a traiter : " << mesh_user.nb_elements-i_elem << "          ";
+                mesh_user.create_list_elements( i_elem );
+            }
+            std::cout << std::endl << "** create elements ok" << std::endl;
+          
+          
+            //initialisation de geometryUser et traitement du maillage ------------------
+            geometry_user.initialisation( mesh_user, "test" );
+            geometry_user.write_hdf5( file_output_hdf5 );
+            
+            assembly[ "_path_loaded" ] = true;    
+          
         }else{
             qDebug() << "lecture du fichier hdf en mémoire : " << path_hdf;
             geometry_user.initialisation(file_output_hdf5);

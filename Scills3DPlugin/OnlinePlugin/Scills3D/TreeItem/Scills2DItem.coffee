@@ -5,7 +5,7 @@ class Scills2DItem extends TreeItem_Computable
 
         @_name.set name
         @_ico.set "img/scills2D.png"
-        @_viewable.set true
+        @_viewable.set false
         
         # attributes
         @add_attr
@@ -19,9 +19,8 @@ class Scills2DItem extends TreeItem_Computable
             path_result: " "
             _path: new Path
             _path_zip: new Path
-            visualization: new FieldSet
         
-        #@add_output new FieldItem
+        @add_output new FieldSetSetItem
         
         @add_child new ScillsStructureItem
         @add_child new ComputationParametersItem
@@ -37,6 +36,18 @@ class Scills2DItem extends TreeItem_Computable
             fun: ( evt, app ) =>
                 #alert "add material"
                 @download_result()
+                
+        @bind =>
+            if  @_children[0]?.has_been_modified()
+                if @_children[0]?._children[0]?
+                    size_c = 0
+                    for part in @_children[0]._children[0]._children[0]._children
+                        size_c += 1
+                    
+                    #alert @_children[0]._children[0]._children[0]._name
+                    #alert size_c
+                    @_output[0]._collection_size.set(size_c)
+                
     
     accept_child: ( ch ) ->
         false
@@ -52,12 +63,6 @@ class Scills2DItem extends TreeItem_Computable
         myWindow = window.open '',''
         myWindow.document.write "<a href='/sceen/_?u=" + @_path_zip._server_id + "'> Right click to save as </a>"
         myWindow.focus()
-        
-    sub_canvas_items: ->
-        res = [@visualization]
-        return res    
-        
-    cosmetic_attribute: ( name ) ->
-        super( name ) or ( name in [ "visualization" ] )    
+                
         
         

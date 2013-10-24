@@ -65,7 +65,8 @@ bool GmshUpdater::run( MP mp ) {
         }
 
         // output mesh
-        MP om = mp[ "_mesh" ];
+        MP output = mp[ "_output[0]" ];
+        MP om = output[ "_mesh" ];
         om[ "points" ].clear();
         om[ "_elements" ].clear();
 

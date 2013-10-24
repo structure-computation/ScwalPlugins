@@ -2,34 +2,26 @@
 class GmshItem extends TreeItem_Computable
     constructor: ( name = "Gmsh" ) ->
         super()
+        
         @add_attr
-            _mesh        : new Mesh( not_editable: true )
-
-        @add_attr
-            visualization: @_mesh.visualization
             cell_type    : new Choice( 0, [ "Triangle 3", "Triangle 6", "Quad 4",  "Quad 8" ] )
             base_size    : 100
             p_mesher     : new Lst
 
         @_name.set name
         @_ico.set "img/mesher.png"
-        @_viewable.set true
+        @_viewable.set false
         
-        @visualization.display_style.num.set 1
         @_computation_mode.set false
         
-#         @bind =>
-#             if  @_mesh.has_been_modified()
-#                 #if @compute.get() == true
-#                 alert @_mesh.points.length + " " + @_mesh._elements.length
+        @add_output new MeshItem
+        
     
     display_suppl_context_actions: ( context_action )  ->
         context_action.push  new TreeAppModule_Mesher
         context_action.push  new TreeAppModule_Sketch
         #context_action.push  new TreeAppModule_Transform
     
-    cosmetic_attribute: ( name ) ->
-        super( name ) or ( name in [ "_mesh", "visualization" ] )
         
     add_point: ( p = new PointMesher ) ->
         if p instanceof PointMesher
@@ -53,7 +45,7 @@ class GmshItem extends TreeItem_Computable
         ch instanceof FileItem
         
     sub_canvas_items: ->
-        [ @_mesh ]
+        [  ]
 #         if @nothing_to_do()
 #             [ @_mesh ]
 #         else
@@ -66,8 +58,8 @@ class GmshItem extends TreeItem_Computable
                 pm.draw info
         #we may need to add @_mesh.draw info and remove it from sub_canvas_items
     
-    z_index: ->
-        @_mesh.z_index()
+#     z_index: ->
+#         @_mesh.z_index()
         
     disp_only_in_model_editor: ->
 #         @mesh

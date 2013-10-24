@@ -15,6 +15,7 @@ class Scult2DItem extends TreeItem_Computable
        
     accept_child: ( ch ) ->
         ch instanceof FileItem
+        ch instanceof MeshItem
         
     sub_canvas_items: ->
         []

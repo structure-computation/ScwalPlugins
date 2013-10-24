@@ -2,6 +2,7 @@
 #include <QtCore/QDir>
 #include "Scills2DUpdater.h"
 #include "ScwalScillsFunction.h"
+#include "make_fields.h"
 
 
 #ifdef METIL_COMP_DIRECTIVE
@@ -896,6 +897,57 @@ void add_edges_to_MP_assembly(MP  oec, MP boundary_condition_set, DataUser &data
 #include "POSTTRAITEMENTS/save_hdf_data.h"
 
 
+
+template<class TSST>
+void disp_soja_fields(MP mp, Scills2DUpdater &updater, TSST &SubS, int t_cur, Process &process ){
+    MP  structure = mp[ "_children[ 0 ]" ];
+    MP  assembly = structure[ "_children[ 0 ]" ];
+    MP  sst_set = assembly[ "_children[ 0 ]" ];
+    MP  field_set = mp[ "_output[ 0 ]" ];
+    
+    
+    
+    // boucle sur les sst
+    for(unsigned i_sst=0;i_sst<SubS.size();i_sst++) {
+        //SubS[i_sst].mesh->update_skin();
+       
+        QVector<int> s; s << SubS[i_sst].mesh->node_list.size();
+        qDebug() << s;
+        int id = SubS[i_sst].id ;
+        qDebug() << id;
+        
+        MP  sst_id = sst_set[ "_children" ][id];
+        MP  sst_id_mesh = sst_id[ "_mesh" ];
+        
+        //qDebug() << sst_id_mesh;
+        
+        MP  field_result = field_set[ "_children" ][id];
+        QVector<MP> displacements = make_field( field_result, SubS[i_sst].mesh->dim, "Displacement" );
+        
+        
+        
+        for( int d = 0; d < SubS[i_sst].mesh->dim; ++d ) {
+            // data
+            TypedArray<double> *data = new TypedArray<double>( s );
+            //qDebug() << "SubS[i_sst].mesh->node_list[ i ].dep[ d ]";
+            //qDebug() << SubS[i_sst].mesh->node_list.size();
+            rebuild_state(SubS[i_sst],SubS[i_sst].t_post[process.temps->pt_cur], process);
+            for( int i = 0; i < SubS[i_sst].mesh->node_list.size(); ++i ){
+                //qDebug() << SubS[i_sst].mesh->node_list[i].dep[ d ];
+                data->operator[]( i ) = SubS[i_sst].mesh->node_list[ i ].dep[ d ];
+            }
+            SubS[i_sst].mesh.unload();
+
+            // NodalField
+            add_field_in_Interpolated( displacements[ d ], sst_id_mesh, data, t_cur );
+        }
+        
+        field_result.flush();
+        
+    }  
+}
+
+
 template<>
 void Process::boucle_temporelle(MP mp, Scills2DUpdater &updater){
     #ifdef INFO_TIME
@@ -961,9 +1013,19 @@ void Process::boucle_temporelle(MP mp, Scills2DUpdater &updater){
         message << "Step : " << temps->step_cur << ",  Time : " << temps->t_cur;
         updater.add_message( mp, updater.ET_Info, message.c_str() );
         
+        bool has_interface = false;
+        for(unsigned i_inter=0;i_inter<Inter->size();++i_inter) {
+            if ((*Inter)[i_inter].type != Interface::type_ext){
+                has_interface = true;
+                break;
+            }
+        }
+        print_data("*************** has_interface : ",has_interface);
+        
+        
         temps->updateParameters();              /// Mise a jour des parametres temporels utilisateur
-        Boundary::updateParameters();           /// Mise a jour des CL (PENSER A ENLEVER PLUS BAS LORSQUE PRET)
-        InterCarac::updateParameters();         /// Mise a jour des parametres materiaux des interfaces
+        Boundary::updateParameters();           /// Mise a jour des CL (PENSER A ENLEVER PLUS BAS LORSQUE PRET)  
+        if(has_interface) InterCarac::updateParameters();         /// Mise a jour des parametres materiaux des interfaces
         
         print_title(2,"Mise a jour des Conditions d'interface");
         
@@ -1074,6 +1136,12 @@ void Process::boucle_temporelle(MP mp, Scills2DUpdater &updater){
                 affichage->param_ener[1]=1;
                 affichage_energie(*SubS,*Inter,*this,*data_user);
             }
+            
+            ///syncronisation des champs résultats avec l'interface Soja
+            std::cout << "syncronisation des champs résultats avec l'interface Soja : t_cur : " <<  temps->t_cur << std::endl;
+            disp_soja_fields(mp, updater, *SubS, temps->t_cur, *this);
+            mp.flush();
+            
         } else {
             std::cerr << "Nom de calcul non defini : incremental uniquement" << std::endl;
             assert(0);
@@ -1085,6 +1153,11 @@ void Process::boucle_temporelle(MP mp, Scills2DUpdater &updater){
     ///creation des fichiers pvd
     create_pvd_results(*SubS,*S,*Inter,*this);
     //}
+    
+    
+    
+
+    
     
     #ifdef INFO_TIME
     print_duration(tic2);

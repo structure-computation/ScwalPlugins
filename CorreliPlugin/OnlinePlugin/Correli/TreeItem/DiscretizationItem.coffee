@@ -11,6 +11,7 @@ class DiscretizationItem extends TreeItem
     
     accept_child: ( ch ) ->
         ch instanceof GmshItem or 
+        ch instanceof MeshItem or 
         ch instanceof MaskItem or 
         ch instanceof MesherItem or 
         ch instanceof SketchItem or 

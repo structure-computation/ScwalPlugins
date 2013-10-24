@@ -15,7 +15,6 @@ class ScillsEdgeFilterItem extends TreeItem
             type: new Choice
            
            
-           
         undefined_filter = new UndefinedEdgeFilter
         parametrized_filter = new ParametrizedEdgeFilter
         in_box_filter = new InBoxEdgeFilter  @_dim
