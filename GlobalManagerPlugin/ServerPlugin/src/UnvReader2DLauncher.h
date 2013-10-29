@@ -15,7 +15,7 @@ class UnvReader2DLauncher : public Launcher {
               qDebug() << "Time: " << 10-i;    
               int t=1;
               t = t * 1;
-              sleep(t);
+              //sleep(t);
           }
           qDebug() << "Execution done";
       }

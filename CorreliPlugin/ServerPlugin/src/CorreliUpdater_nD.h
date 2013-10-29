@@ -146,6 +146,7 @@ bool correliUpdater_nD( CorreliUpdater *updater, MP mp, LMT::Number<dim> ) {
     Vec<Vec<Pvec,2> > contrained_lines;
     for( int i = 0; i < ch.size(); ++i ) {
         MP c = ch[ i ];
+        qDebug() <<  c.type() ;
         if ( c.type() == "ImgSetItem" ) {
             for( int j = 0; j < c[ "_children" ].size(); ++j ) {
                 MP im = c[ "_children" ][ j ];
@@ -169,8 +170,12 @@ bool correliUpdater_nD( CorreliUpdater *updater, MP mp, LMT::Number<dim> ) {
                     PRINT( S );
 
                     MP volume = im[ "_children" ][ 0 ];
+                    qDebug() << volume;
                     MP data = updater->sc->load_ptr( volume[ "_ptr" ] );
-                    QString name = data;
+                    qDebug() << data;
+
+	            QString name = data;
+                    PRINT( name.toAscii().data() );
 
                     try {
                         typedef unsigned char PI8;
@@ -179,6 +184,7 @@ bool correliUpdater_nD( CorreliUpdater *updater, MP mp, LMT::Number<dim> ) {
                         updater->add_message( mp, Updater::ET_Error, "Img " + name + " does not exist" );
                         return false;
                     }
+		    PRINT( name.toAscii().data() );
                 }
             }
         }

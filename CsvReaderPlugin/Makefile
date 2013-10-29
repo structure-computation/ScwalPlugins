@@ -3,7 +3,7 @@ DIR_SOURCES_COMPUTE = -IServerPlugin/src/GEOMETRY -IServerPlugin/src/UTILS -ISer
 DIM = 3
 CFLAGS=`xml2-config --cflags`
 LIBS=`xml2-config  --libs`
-DIR_SOURCES_LMT =  -I../../LMT -I../../LMT/include -I../../LMT/include/LDL -I../../LMT/include/util -Iusr/include/suitesparse
+DIR_SOURCES_LMT =  -I../../software_library/LMT -I../../software_library/LMT/include -I../../software_library/LMT/include/LDL -I../../software_library/LMT/include/util -Iusr/include/suitesparse
 GLOB_VAR = -D$(MACHINE_TYPE) -DDIM=$(DIM) -DTYPE=float -DTYPEREEL=float -DLDL -DWITH_CHOLMOD -DWITH_UMFPACK
 
 
