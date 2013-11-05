@@ -38,7 +38,8 @@ class GmshItem extends TreeItem_Computable
         
     accept_child: ( ch ) ->
         ch instanceof MaskItem or 
-        ch instanceof MesherItem or 
+        ch instanceof MesherItem or
+        ch instanceof MeshItem or
         ch instanceof SketchItem or 
         ch instanceof ImgItem or
         ch instanceof TransformItem or

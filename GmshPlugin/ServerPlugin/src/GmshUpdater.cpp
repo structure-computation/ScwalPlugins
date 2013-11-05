@@ -21,10 +21,11 @@ bool GmshUpdater::run( MP mp ) {
         QString name = ch["_name"];
         bool test_geo = (ch.type() == "FileItem" and name.endsWith(".geo"));
         bool test_unv = (ch.type() == "FileItem" and name.endsWith(".unv"));
+        bool test_stp = (ch.type() == "FileItem" and name.endsWith(".stp"));
         
         // retrieve or make a .geo file
         QFile* geo = 0;
-        if(test_geo or test_unv){
+        if(test_geo or test_unv or test_stp){
             MP file_geo = mp["_children[0]"];
             quint64 ptr = file_geo[ "_ptr" ];
             PRINT(file_geo.type().toStdString());
@@ -71,13 +72,18 @@ bool GmshUpdater::run( MP mp ) {
         om[ "_elements" ].clear();
 
         // .geo -> .msh
-        //AutoRm arm( geo->fileName() + ".msh" );
-        //AutoRm arm2( geo->fileName() + ".unv" );
+        AutoRm arm( geo->fileName() + ".msh" );
+        AutoRm arm2( geo->fileName() + ".unv" );
+        AutoRm arm3( geo->fileName() + ".stp" );
         QString cmd;
         if(test_unv){
           cmd = "cp " + geo->fileName() + "  " + geo->fileName() + ".unv; gmsh " + geo->fileName() + ".unv -o " + geo->fileName() + ".msh -3 > /dev/null";
           qDebug() << cmd;
           PRINT("unv");
+        }else if(test_stp){
+          cmd = "cp " + geo->fileName() + "  " + geo->fileName() + ".stp; gmsh " + geo->fileName() + ".stp -o " + geo->fileName() + ".msh -3 -clcurv -optimize > /dev/null";
+          qDebug() << cmd;
+          PRINT("stp");
         }else{
           cmd = "cat " + geo->fileName() + "; gmsh -o " + geo->fileName() + ".msh -3 " + geo->fileName() + " > /dev/null";
         }

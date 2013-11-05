@@ -5,7 +5,7 @@ class Scult3DItem extends TreeItem_Computable
 
         @_name.set name
         @_ico.set "img/scult3D.png"
-        @_viewable.set true
+        @_viewable.set false
         @add_attr
             run_type            : new Choice( 0, [ "load unv","visualize group" ] )
             hdf_output_name     : "output3D"
@@ -17,7 +17,8 @@ class Scult3DItem extends TreeItem_Computable
         @add_output new VisuInterfaceGroupItem
         
     accept_child: ( ch ) ->
-        ch instanceof FileItem
+        ch instanceof FileItem or
+        ch instanceof MeshItem
         
     sub_canvas_items: ->
         []

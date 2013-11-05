@@ -2,6 +2,8 @@
 #include <QtCore/QDir>
 #include "Scills3DUpdater.h"
 #include "ScwalScillsFunction.h"
+#include "make_fields.h"
+
 
 #ifdef METIL_COMP_DIRECTIVE
     #pragma src_file multiscale_geometry_mesh.cpp
@@ -942,9 +944,158 @@ void add_edges_to_MP_assembly(MP  oec, MP boundary_condition_set, DataUser &data
 #include "OPERATEURS/multiscale_operateurs.h"
 #include "ITERATIONS/prelocalstage.h"
 #include "ITERATIONS/iterate.h"
+
+// #include "affichage_mesh_SST.h"
+// #include "affichage_mesh_INTER.h"
+//#include "POSTTRAITEMENTS/affichage_resultats_time.h"
 #include "POSTTRAITEMENTS/affichage.h"
 #include "POSTTRAITEMENTS/calculs_resultantes.h"
 #include "POSTTRAITEMENTS/save_hdf_data.h"
+
+
+
+
+
+template<class TSST>
+void disp_soja_fields(MP mp, Scills3DUpdater &updater, TSST &SubS, int t_cur, Process &process ){
+    MP  structure = mp[ "_children[ 0 ]" ];
+    MP  assembly = structure[ "_children[ 0 ]" ];
+    MP  sst_set = assembly[ "_children[ 0 ]" ];
+    MP  field_set = mp[ "_output[ 0 ]" ];
+    
+    
+    
+    // boucle sur les sst
+    for(unsigned i_sst=0;i_sst<SubS.size();i_sst++) {
+        //SubS[i_sst].mesh->update_skin();
+       
+        
+        int id = SubS[i_sst].id ;
+        qDebug() << id;
+        
+        MP  sst_id = sst_set[ "_children" ][id];
+        MP  sst_id_mesh = sst_id[ "_mesh" ];
+        
+        //qDebug() << sst_id_mesh;
+        qDebug() << "export du maillage" ;
+        MP  field_result = field_set[ "_children" ][id];
+        SubS[i_sst].mesh->update_skin();
+        
+//         sst_id_mesh.reassign( soda_mesh_from_lmtpp_mesh( *(SubS[i_sst].mesh.m), sst_id_mesh ));
+        MP mesh_test = soda_mesh_from_lmtpp_mesh( *(SubS[i_sst].mesh.m), sst_id_mesh );
+//         MP mesh_test = soda_mesh_from_lmtpp_mesh( SubS[i_sst].mesh.m->sub_mesh( LMT::Number<1>() ), sst_id_mesh );
+        sst_id_mesh.flush();
+
+        qDebug() << "export du champs" ;
+        QVector<MP> displacements = make_field( field_result, SubS[i_sst].mesh->dim, "Displacement" );
+
+        rebuild_state(SubS[i_sst],SubS[i_sst].t_post[process.temps->pt_cur], process);
+        QVector<int> s; s << SubS[i_sst].mesh->node_list.size();
+//         QVector<int> s; s << SubS[i_sst].mesh.m->sub_mesh( LMT::Number<1>() ).node_list.size()
+        qDebug() << s;
+        for( int d = 0; d < DIM; ++d ) {
+            // data
+            TypedArray<double> *data = new TypedArray<double>( s ); 
+            for( int i = 0; i < SubS[i_sst].mesh->node_list.size(); ++i ){
+                qDebug() << SubS[i_sst].mesh->node_list[i].dep[ d ];
+                data->operator[]( i ) = SubS[i_sst].mesh->node_list[ i ].dep[ d ];
+            }
+//             for( int i = 0; i < SubS[i_sst].mesh.m->sub_mesh( LMT::Number<1>() ).node_list.size(); ++i ){
+//                 data->operator[]( i ) = SubS[i_sst].mesh.m->sub_mesh( LMT::Number<1>() ).node_list[ i ].dep[ d ];
+//             }
+            // NodalField
+            add_field_in_Interpolated( displacements[ d ], sst_id_mesh, data, t_cur );
+        }
+        
+        SubS[i_sst].mesh.unload();
+        field_result.flush();
+        mp.flush();
+        
+    }  
+}
+
+
+// #include "../MAILLAGE/mesh_data_accessors_inter.h"
+// 
+// template<class TINTER, class TSST>
+// void disp_soja_fields_interfaces(MP mp, Scills3DUpdater &updater, TINTER &SubI, TSST &S, int t_cur, Process &process ){
+//     MP  structure = mp[ "_children[ 0 ]" ];
+//     MP  assembly = structure[ "_children[ 0 ]" ];
+//     MP  sst_set = assembly[ "_children[ 0 ]" ];
+//     MP  interface_set = assembly[ "_children[ 1 ]" ];
+//     MP  field_set = mp[ "_output[ 1 ]" ];
+// 
+//     unsigned pt=1;
+//     unsigned data = 0 ;
+//     
+//     // boucle sur les interface
+//     for(unsigned i_inter=0;i_inter<SubI.size();i_inter++) {
+//         //SubI[i_sst].mesh->update_skin();
+//         unsigned side = 0 ;
+//         if (S[SubI[i_inter].vois[0]].num_proc==process.parallelisation->rank){
+//             /// Chargement des resultats sur le cote 'side' de l'interface
+//             //assignation_INTER_F_W_incr(SubI[i_inter],S,side,pt,process.temps->dt);
+// 
+//             int id = SubI[i_inter].id ;
+//             qDebug() << id;
+//             
+//             MP  interface_id_mesh;
+//             int num_interface_soja;
+//             for(unsigned i_inter_soja=0;i_inter_soja<interface_set[ "_children" ].size();i_inter_soja++){
+//                 MP interface_set_i = interface_set[ "_children" ][i_inter_soja];
+//                 if( convert_MP_to_int(interface_set_i[ "id" ]) == id ){
+//                     interface_id_mesh = interface_set_i[ "_mesh" ];
+//                     num_interface_soja = i_inter_soja;
+//                     break;
+//                 }
+//             }
+//             MP  field_result = field_set[ "_children" ][num_interface_soja];
+//             
+//             //reassignation du maillage
+//             qDebug() << "export du maillage des interfaces" ;
+//             interface_id_mesh.reassign( soda_mesh_from_lmtpp_mesh( *(SubI[i_inter].side[0].mesh), interface_id_mesh ));
+// 
+//             // assignation du champs résultat
+//             qDebug() << "export du champs" ;
+//             QVector<MP> displacements_W = make_field( field_result, SubI[i_inter].side[0].mesh->dim, "displacements_W" );     
+//             
+//             
+//             Point normale = SubI[i_inter].G-S[SubI[i_inter].vois[data*2]].G;
+//             Scalar sign = +1.0;
+//             if (dot(SubI[i_inter].side[data].neq[range(0,(int)DIM)],normale)<=0.00001){
+//                 sign = -1.0;
+//             }
+//             
+//             /// Assignation des deplacements et contraintes
+//             //std::cout << "\tAssignation de F : " << std::endl;
+//             Vector F = sign*SubI[i_inter].side[data].t[pt].Fchap;
+//             //std::cout << "\tAssignation de W : " << std::endl;
+//             Vector inter_W = sign*SubI[i_inter].side[data].t[0].W;
+//             
+// //             Vector inter_W;
+// //             download_W(SubI[i_inter].side[side],inter_W);
+//             std::cout << inter_W << endl;
+// 
+//             for( int d = 0; d < SubI[i_inter].side[0].mesh->dim; ++d ) {
+//                 // data
+//                 QVector<int> s; s << SubI[i_inter].side[0].mesh->elem_list.size();
+//                 TypedArray<double> *data = new TypedArray<double>( s );
+//                 for( int i = 0; i < SubI[i_inter].side[0].mesh->elem_list.size(); ++i ){
+//                     //data->operator[]( i ) = SubI[i_inter].side[0].mesh->elem_list[ i ].W[ d ];
+//                     qDebug() << "elem i = " << i << " ; dim d = " << d << " ; W = " <<  inter_W[ i*DIM+d ];
+//                     data->operator[]( i ) = inter_W[ i*DIM+d ];
+//                 }
+//                 
+//                 // NodalField
+//                 add_field_in_Interpolated( displacements_W[ d ], interface_id_mesh, data, t_cur, "ElementaryField" );
+//             }
+//             
+//             //qDebug() << sst_id_mesh[ "_elements" ] ;
+//             interface_id_mesh.flush();
+//             field_result.flush();
+//         }
+//     }  
+// }
 
 
 template<>
@@ -1124,6 +1275,16 @@ void Process::boucle_temporelle(MP mp, Scills3DUpdater &updater){
                 affichage->param_ener[1]=1;
                 affichage_energie(*SubS,*Inter,*this,*data_user);
             }
+            
+            ///syncronisation des champs résultats avec l'interface Soja
+            std::cout << "syncronisation des champs résultats avec l'interface Soja : t_cur : " <<  temps->t_cur << std::endl;
+            disp_soja_fields(mp, updater, *SubS, temps->t_cur, *this);
+            //disp_soja_fields_interfaces(mp, updater, *SubI, *S, temps->t_cur, *this );
+            
+            
+            mp.flush();
+            
+            
         } else {
             std::cerr << "Nom de calcul non defini : incremental uniquement" << std::endl;
             assert(0);

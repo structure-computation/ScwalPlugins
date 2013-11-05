@@ -5,7 +5,7 @@ class Scult2DItem extends TreeItem_Computable
         
         @_name.set name
         @_ico.set "img/scult2D.png"
-        @_viewable.set true
+        @_viewable.set false
         @add_attr
             hdf_output_name     : "output2D"
             _model_id           : SC_MODEL_ID
@@ -14,7 +14,7 @@ class Scult2DItem extends TreeItem_Computable
         
        
     accept_child: ( ch ) ->
-        ch instanceof FileItem
+        ch instanceof FileItem or
         ch instanceof MeshItem
         
     sub_canvas_items: ->

@@ -27,8 +27,7 @@ class ScillsAssemblyItem extends TreeItem
         #false
         ch instanceof ScillsPartSetItem or 
         ch instanceof ScillsInterfaceSetItem or
-        ch instanceof ScillsEdgeSetItem or
-        ch instanceof FileItem
+        ch instanceof ScillsEdgeSetItem
     
     #cosmetic_attribute: ( name ) ->
     #    super( name ) or ( name in [ "_mesh", "visualization" ] )    

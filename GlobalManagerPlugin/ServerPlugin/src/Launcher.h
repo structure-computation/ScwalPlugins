@@ -111,6 +111,10 @@ class Launcher : public QObject {
               commande = "../GmshPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main_cpp.exe " + temp_str ;
               output = std::system(commande.c_str());
           }
+          else if(mp.type() == "StepReaderItem" ){
+              commande = "../StepReaderPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main_cpp.exe " + temp_str ;
+              output = std::system(commande.c_str());
+          }
           else if(mp.type() == "ScilabItem" ){
               commande = "../ScilabPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main_cpp.exe " + temp_str ;
               output = std::system(commande.c_str());

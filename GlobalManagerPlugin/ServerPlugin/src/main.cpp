@@ -19,6 +19,7 @@ int main( int argc, char **argv ) {
     sc.reg_type( "Scills3DItem" );
     sc.reg_type( "CorrelationItem" );
     sc.reg_type( "GmshItem" );
+    sc.reg_type( "StepReaderItem" );
     sc.reg_type( "ScilabItem" );
     sc.reg_type( "AcquisitionItem" );    
     sc.reg_type( "File" );

@@ -1152,12 +1152,7 @@ void Process::boucle_temporelle(MP mp, Scills2DUpdater &updater){
     //if (multiresolution->calcul_cur==0%5){
     ///creation des fichiers pvd
     create_pvd_results(*SubS,*S,*Inter,*this);
-    //}
-    
-    
-    
-
-    
+    //}    
     
     #ifdef INFO_TIME
     print_duration(tic2);
@@ -1204,9 +1199,8 @@ void Process::boucle_multi_resolution(MP mp, Scills2DUpdater &updater) {
 bool Scills2DUpdater::run( MP mp ) {
     qDebug() << mp.type();
     quint64 MP_model_id = mp.get_server_id();
-    // does the input file exists ?
     
-    int  run_type = mp["run_type.num"];
+    int run_type = mp["run_type.num"];
     
     MP  structure = mp[ "_children[ 0 ]" ];
     MP  assembly = structure[ "_children[ 0 ]" ];
@@ -1235,8 +1229,7 @@ bool Scills2DUpdater::run( MP mp ) {
         
     // mise en données de Data_User et vérification des données --------------------------------------------------------------
     }else if(assembly.ok() and run_type == 0){
-        // see if the hdf5 file of the assembly as allready been load
-        
+        // see if the hdf5 file of the assembly as allready been load 
         QString path_hdf = assembly[ "_path" ];
         qDebug() << path_hdf;
         

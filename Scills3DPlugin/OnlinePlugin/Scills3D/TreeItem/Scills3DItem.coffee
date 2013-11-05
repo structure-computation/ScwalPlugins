@@ -20,7 +20,8 @@ class Scills3DItem extends TreeItem_Computable
             _path: new Path
             _path_zip: new Path
         
-        #@add_output new FieldItem
+        @add_output new FieldSetSetItem "Part field collection"
+        #@add_output new FieldSetSetItem "Interface field collection"
         
         @add_child new ScillsStructureItem
         @add_child new ComputationParametersItem
@@ -36,7 +37,19 @@ class Scills3DItem extends TreeItem_Computable
             fun: ( evt, app ) =>
                 #alert "add material"
                 @download_result()
-
+        
+        @bind =>
+            if  @_children[0]?.has_been_modified()
+                if @_children[0]?._children[0]?
+                    size_parts = 0
+                    for part in @_children[0]._children[0]._children[0]._children
+                        size_parts += 1
+                    @_output[0]._collection_size.set(size_parts)
+                    
+                    #size_interfaces = 0
+                    #for interface in @_children[0]._children[0]._children[1]._children
+                    #    size_interfaces += 1
+                    #@_output[1]._collection_size.set(size_interfaces)
     
     accept_child: ( ch ) ->
         false

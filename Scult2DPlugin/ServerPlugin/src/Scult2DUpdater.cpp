@@ -21,10 +21,10 @@ bool Scult2DUpdater::run( MP mp ) {
         QString path_hdf = assembly[ "_path" ];
         int _path_loaded = assembly[ "_path_loaded" ];
         
-        qDebug() << path_hdf;
-        QFileInfo info1(path_hdf);
-        QDir direct(info1.dir());
-        qDebug() << direct.absolutePath() ; 
+//         qDebug() << path_hdf;
+//         QFileInfo info1(path_hdf);
+//         QDir direct(info1.dir());
+//         qDebug() << direct.absolutePath() ; 
         
         QByteArray byteArray_hdf = path_hdf.toUtf8();
         const char* c_path_hdf = byteArray_hdf.constData();
