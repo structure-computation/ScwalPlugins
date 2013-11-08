@@ -897,6 +897,13 @@ void add_edges_to_MP_assembly(MP  oec, MP boundary_condition_set, DataUser &data
 #include "POSTTRAITEMENTS/save_hdf_data.h"
 
 
+struct GetSigma {
+    template<class TE,class TD>
+    void operator()( const TE &e, int i, TD *data, int d ) const {
+        data->operator[]( i ) = e.sigma[ 0 ][ d ];
+    }
+};
+
 
 template<class TSST>
 void disp_soja_fields(MP mp, Scills2DUpdater &updater, TSST &SubS, int t_cur, Process &process ){
@@ -921,27 +928,37 @@ void disp_soja_fields(MP mp, Scills2DUpdater &updater, TSST &SubS, int t_cur, Pr
         
         //qDebug() << sst_id_mesh;
         
+        // champs de déplacement
         MP  field_result = field_set[ "_children" ][id];
         QVector<MP> displacements = make_field( field_result, SubS[i_sst].mesh->dim, "Displacement" );
-        
-        
-        
+
+        rebuild_state(SubS[i_sst],SubS[i_sst].t_post[process.temps->pt_cur], process);
         for( int d = 0; d < SubS[i_sst].mesh->dim; ++d ) {
             // data
             TypedArray<double> *data = new TypedArray<double>( s );
-            //qDebug() << "SubS[i_sst].mesh->node_list[ i ].dep[ d ]";
-            //qDebug() << SubS[i_sst].mesh->node_list.size();
-            rebuild_state(SubS[i_sst],SubS[i_sst].t_post[process.temps->pt_cur], process);
             for( int i = 0; i < SubS[i_sst].mesh->node_list.size(); ++i ){
                 //qDebug() << SubS[i_sst].mesh->node_list[i].dep[ d ];
                 data->operator[]( i ) = SubS[i_sst].mesh->node_list[ i ].dep[ d ];
             }
-            SubS[i_sst].mesh.unload();
 
             // NodalField
             add_field_in_Interpolated( displacements[ d ], sst_id_mesh, data, t_cur );
         }
+
+        // champs de contraintes
+//         QVector<QString> l;
+//         l << "xx" << "yy" << "xy";
+//         QVector<MP> stress = make_field( field_result, SubS[i_sst].mesh->dim, "Sigma", l );
+//         for( int d = 0; d < SubS[i_sst].mesh->dim; ++d ) {
+//             // data
+//             TypedArray<double> *data = new TypedArray<double>( s );
+//             apply_wi(SubS[i_sst].mesh->elem_list, GetSigma(), data, d );
+//             
+//             // NodalField
+//             add_field_in_Interpolated( stress[ d ], sst_id_mesh, data, t_cur, "ElementaryField" );
+//         }
         
+        SubS[i_sst].mesh.unload();
         field_result.flush();
         
     }  

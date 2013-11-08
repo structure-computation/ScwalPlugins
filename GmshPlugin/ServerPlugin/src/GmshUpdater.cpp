@@ -85,7 +85,7 @@ bool GmshUpdater::run( MP mp ) {
           qDebug() << cmd;
           PRINT("stp");
         }else{
-          cmd = "cat " + geo->fileName() + "; gmsh -o " + geo->fileName() + ".msh -3 " + geo->fileName() + " > /dev/null";
+          cmd = "cat " + geo->fileName() + "; gmsh -o " + geo->fileName() + ".msh -3 -clcurv -optimize " + geo->fileName() + " > /dev/null";
         }
         qDebug() << cmd;
         if ( system( cmd.toAscii().data() ) ) {
