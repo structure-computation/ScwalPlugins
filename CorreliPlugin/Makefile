@@ -1,4 +1,4 @@
-DIR_SOURCES_SOCA = -IServerPlugin -IServerPlugin/src  -I../../Soca/src  -IServerPlugin/LMT/include -IServerPlugin/dic
+DIR_SOURCES_SOCA = -IServerPlugin -IServerPlugin/src `xml2-config --cflags` -I../../Soca/src  -IServerPlugin/LMT/include -IServerPlugin/dic
 
 all:
 	make -C ../../Soca
