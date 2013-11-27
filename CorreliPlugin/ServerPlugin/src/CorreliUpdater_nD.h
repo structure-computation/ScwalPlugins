@@ -245,21 +245,6 @@ bool correliUpdater_nD( CorreliUpdater *updater, MP mp, LMT::Number<dim> ) {
             }
         }
     }
-    // dic_mesh.remove_unused_nodes();
-
-    // declaration of disp fields
-    //    mp[ "visualization.color_by.lst" ].clear();
-    //    if ( mp[ "visualization.color_by.lst" ].size() ) {
-    //        MP pd = MP::new_obj( "NamedParametrizedDrawable" );
-    //        pd[ "warp_factor" ] = mp[ "visualization.warp_factor" ];
-    //        pd[ "gradient" ] = mp[ "visualization.gradient" ];
-    //        mp[ "visualization.color_by.lst" ] << pd;
-    //    }
-    //     if ( int( mp[ "parameters.clear_lst" ] ) ) {
-    //         qDebug() << "Clear list";
-    //         mp[ "visualization.color_by.lst" ].clear();
-    //         mp[ "visualization.warp_by.lst"  ].clear();
-    //     }
 
 
     // regularization
@@ -277,19 +262,21 @@ bool correliUpdater_nD( CorreliUpdater *updater, MP mp, LMT::Number<dim> ) {
     PRINT( rb_guess );
 
 
-    //
-    QVector<MP> displacements = make_field( mp, dic_mesh.dim, "Displacement" );
-    MP uncertainty = make_field( mp, "Uncertainty" );
+    // output
+    MP output_field = mp[ "_output[ 0 ]" ];
+    
+    QVector<MP> displacements = make_field( output_field, dic_mesh.dim, "Displacement" );
+    MP uncertainty = make_field( output_field, "Uncertainty" );
 
     QVector<QString> l;
     l << "xx" << "yy" << "xy";
-    QVector<MP> epsilon = make_field( mp, 3, "Strain", l );
+    QVector<MP> epsilon = make_field( output_field, 3, "Strain", l );
 
     // residual_adv
-    check_image_field( mp, "_residual_adv"    , "Residual adv"     );
-    check_image_field( mp, "_residual"        , "Residual"         );
-    check_image_field( mp, "_residual_int_adv", "Residual int adv" );
-    check_image_field( mp, "_residual_int"    , "Residual int"     );
+    check_image_field( output_field, "_residual_adv"    , "Residual adv"     );
+    check_image_field( output_field, "_residual"        , "Residual"         );
+    check_image_field( output_field, "_residual_int_adv", "Residual int adv" );
+    check_image_field( output_field, "_residual_int"    , "Residual int"     );
 
     // execution
     dic.min_norm_inf_dU  = mp[ "parameters.norm_inf"    ].ok() ? mp[ "parameters.norm_inf"    ] : 0.0;
@@ -393,8 +380,8 @@ bool correliUpdater_nD( CorreliUpdater *updater, MP mp, LMT::Number<dim> ) {
 
         // residual
         if ( dim == 2 ) {
-            _save_img( mp[ "_residual_adv" ], residual_adv_img.to_QImage( true ), j );
-            _save_img( mp[ "_residual"     ], residual_img    .to_QImage( true ), j );
+            _save_img( output_field[ "_residual_adv" ], residual_adv_img.to_QImage( true ), j );
+            _save_img( output_field[ "_residual"     ], residual_img    .to_QImage( true ), j );
         }
 
 
@@ -414,12 +401,12 @@ bool correliUpdater_nD( CorreliUpdater *updater, MP mp, LMT::Number<dim> ) {
     updater->add_message( mp, Updater::ET_Success, "Correlation of " + num_pic + " pictures computed in " + global_time + "s" );
 
     // save history curves
-    mp[ "_norm_i_history"   ].clear();
-    mp[ "_norm_2_history"   ].clear();
-    mp[ "_residual_history" ].clear();
-    for( int i = 0; i < dic.history_norm_inf_dU           .size(); ++i ) mp[ "_norm_i_history"   ] << dic.history_norm_inf_dU           [ i ];
-    for( int i = 0; i < dic.history_norm_2_dU             .size(); ++i ) mp[ "_norm_2_history"   ] << dic.history_norm_2_dU             [ i ];
-    for( int i = 0; i < dic.history_dimensionless_residual.size(); ++i ) mp[ "_residual_history" ] << dic.history_dimensionless_residual[ i ];
+    output_field[ "_norm_i_history"   ].clear();
+    output_field[ "_norm_2_history"   ].clear();
+    output_field[ "_residual_history" ].clear();
+    for( int i = 0; i < dic.history_norm_inf_dU           .size(); ++i ) output_field[ "_norm_i_history"   ] << dic.history_norm_inf_dU           [ i ];
+    for( int i = 0; i < dic.history_norm_2_dU             .size(); ++i ) output_field[ "_norm_2_history"   ] << dic.history_norm_2_dU             [ i ];
+    for( int i = 0; i < dic.history_dimensionless_residual.size(); ++i ) output_field[ "_residual_history" ] << dic.history_dimensionless_residual[ i ];
 
     //    display( mesh_vec[ 0 ] );
 

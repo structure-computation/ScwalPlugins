@@ -273,7 +273,7 @@ bool StepReaderUpdater::run( MP mp ) {
     if ( ch.ok() ) {
         // check if a .geo file has been provided
         QString name = ch["_name"];
-        bool test_stp = (ch.type() == "FileItem" and (name.endsWith(".stp") or name.endsWith(".step")) );
+        bool test_stp = (ch.type() == "FileItem" and (name.endsWith(".stp") or name.endsWith(".step") or name.endsWith(".STEP")) );
         bool test_iges = (ch.type() == "FileItem" and (name.endsWith(".iges") or name.endsWith(".igs") or name.endsWith(".IGS") ))  ;
         
         // retrieve or make a .geo file
