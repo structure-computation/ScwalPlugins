@@ -11,6 +11,14 @@ class ScillsPartSetItem extends TreeItem
         # attributes
         @add_attr
             _part_profile: new ScillsPartItem 
+            _mesh_profile: new Mesh
+            
+        @add_attr
+            visualization: @_mesh_profile.visualization
+        
+        @bind =>
+           if  @visualization.has_been_modified()
+               @visualisation_part_set()
            
         #@add_output new ScillsSetFilterItem
         #@_output[0].add_child new ScillsSetItem @_name, @_ico
@@ -27,6 +35,10 @@ class ScillsPartSetItem extends TreeItem
          
     sub_canvas_items: ->
         [ ]
+    
+    visualisation_part_set: ()->
+        for part in @_children
+            part.visualization.display_style.num.set @visualization.display_style.num.get()
     
     get_part: (id_part)->
         for part in @_children

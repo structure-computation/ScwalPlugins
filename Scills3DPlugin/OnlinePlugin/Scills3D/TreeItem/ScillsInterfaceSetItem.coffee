@@ -12,6 +12,14 @@ class ScillsInterfaceSetItem extends TreeItem
         # attributes
         @add_attr
             _interface_profile: new ScillsInterfaceItem 
+            _mesh_profile: new Mesh
+            
+        @add_attr
+            visualization: @_mesh_profile.visualization
+        
+        @bind =>
+           if  @visualization.has_been_modified()
+               @visualisation_interface_set()
                 
     accept_child: ( ch ) ->
         ch instanceof ScillsInterfaceItem
@@ -21,6 +29,10 @@ class ScillsInterfaceSetItem extends TreeItem
         
     sub_canvas_items: ->
         [ ]
+    
+    visualisation_interface_set: ()->
+        for interface in @_children
+            interface.visualization.display_style.num.set @visualization.display_style.num.get()
     
     get_interface: (id_inter)->
         for inter in @_children
