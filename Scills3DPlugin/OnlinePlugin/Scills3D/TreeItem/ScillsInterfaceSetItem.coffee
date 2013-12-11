@@ -31,8 +31,8 @@ class ScillsInterfaceSetItem extends TreeItem
         [ ]
     
     visualisation_interface_set: ()->
-        for interface in @_children
-            interface.visualization.display_style.num.set @visualization.display_style.num.get()
+        for interfece in @_children
+            interfece.visualization.display_style.num.set @visualization.display_style.num.get()
     
     get_interface: (id_inter)->
         for inter in @_children
