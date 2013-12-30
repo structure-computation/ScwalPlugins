@@ -968,7 +968,7 @@ void disp_soja_fields(MP mp, Scills3DUpdater &updater, TSST &SubS, int t_cur, Pr
     // boucle sur les sst
     for(unsigned i_sst=0;i_sst<SubS.size();i_sst++) {
         //SubS[i_sst].mesh->update_skin();
-       
+        
         
         int id = SubS[i_sst].id ;
         qDebug() << id;
@@ -997,7 +997,7 @@ void disp_soja_fields(MP mp, Scills3DUpdater &updater, TSST &SubS, int t_cur, Pr
             // data
             TypedArray<double> *data = new TypedArray<double>( s ); 
             for( int i = 0; i < SubS[i_sst].mesh->node_list.size(); ++i ){
-                qDebug() << SubS[i_sst].mesh->node_list[i].dep[ d ];
+                //qDebug() << SubS[i_sst].mesh->node_list[i].dep[ d ];
                 data->operator[]( i ) = SubS[i_sst].mesh->node_list[ i ].dep[ d ];
             }
 //             for( int i = 0; i < SubS[i_sst].mesh.m->sub_mesh( LMT::Number<1>() ).node_list.size(); ++i ){
@@ -1011,7 +1011,7 @@ void disp_soja_fields(MP mp, Scills3DUpdater &updater, TSST &SubS, int t_cur, Pr
         field_result.flush();
         mp.flush();
         
-    }  
+    }
 }
 
 
@@ -1442,7 +1442,6 @@ bool Scills3DUpdater::run( MP mp ) {
         // zip du fichier de résultat
         zip_result(mp);
        
-        
     }
 
     mp[ "_compute_edges" ] = false;

@@ -17,6 +17,7 @@ int main( int argc, char **argv ) {
     sc.reg_type( "Scult3DItem" );
     sc.reg_type( "Scills2DItem" );
     sc.reg_type( "Scills3DItem" );
+    sc.reg_type( "FieldsComparatorItem" );
     sc.reg_type( "CorrelationItem" );
     sc.reg_type( "GmshItem" );
     sc.reg_type( "StepReaderItem" );

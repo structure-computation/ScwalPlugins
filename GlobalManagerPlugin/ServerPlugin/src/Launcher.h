@@ -63,6 +63,10 @@ class Launcher : public QObject {
               commande = "../UnvReaderPlugin3D/ServerPlugin/src/compilations/ServerPlugin_src_main_cpp.exe " + temp_str ;
               output = std::system(commande.c_str());
           }
+          else if(mp.type() == "FieldsComparatorItem" ){
+              commande = "../FieldsComparatorPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main_cpp.exe " + temp_str ;
+              output = std::system(commande.c_str());
+          }
           else if(mp.type() == "Scult2DItem" ){
               commande = "../Scult2DPlugin/ServerPlugin/src/compilations/ServerPlugin_src_main_cpp.exe " + temp_str ;
               output = std::system(commande.c_str());

@@ -86,7 +86,7 @@ MP soda_mesh_from_lmtpp_mesh( const TM &m, MP om ) {
         om[ "points" ] << pnt;
     }
 
-    qDebug() << om[ "points" ];
+    //qDebug() << om[ "points" ];
     
     // elements
     TypedArray<int> *tr_con = new TypedArray<int>;
