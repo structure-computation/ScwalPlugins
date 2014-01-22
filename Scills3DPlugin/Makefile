@@ -18,7 +18,7 @@ DIR_SOURCES_GEOMETRY = -IServerPlugin/src_scills -IServerPlugin/src_scills/GEOME
 # options communes
 #GLOB_VAR = -DDIM=$(DIM) -D$(ARCHITECTURE)  -DTYPE=double -DTYPEREEL=double  -DLDL -Dcrout_alain
 GLOB_VAR = -D$(ARCHITECTURE)  -DTYPE=double -DTYPEREEL=double  -DLDL -Dcrout_alain
-CFLAGS= -LServerPlugin/UTIL_scills/metis -lmetis -L$(MPI_LIB)/lib -lmpi -lmpi_cxx
+CFLAGS= -LServerPlugin/metis -lmetis -L$(MPI_LIB)/lib -lmpi -lmpi_cxx
 DIR_SOURCES_LMT =  -IServerPlugin/LMT -IServerPlugin/LMT/include -Iusr/include/suitesparse
 DIR_SOURCES_CUDA = -Iusr/local/cuda/include -Ihome/ubuntu/driver_toolkit/NVIDIA_GPU_Computing_SDK/C/common/inc 
 

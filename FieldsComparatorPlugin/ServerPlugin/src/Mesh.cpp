@@ -9,8 +9,9 @@ void Mesh::operator=(MP mesh_data)
 void Mesh::load(MP mesh)
 {
     /// Recuperation des noeuds
+    PRINT("Recuperation des noeuds");
     const unsigned nb_nodes = mesh["points"].size();
-    //qDebug() << nb_nodes;
+    qDebug() << nb_nodes;
     nodes.reserve(nb_nodes);
     for(int n = 0; n < nb_nodes; n++)
     {
@@ -24,10 +25,13 @@ void Mesh::load(MP mesh)
     }
     
     /// Recuperation des elements
-    TypedArray<int> *indices_elem = dynamic_cast<TypedArray<int> *>( mesh[ "_elements[1].indices" ].model() );
+    PRINT("Recuperation des elements");
+//     qDebug() << mesh[ "_elements[0].indices" ];
+//     qDebug() << mesh[ "_elements[1].indices" ];
+    TypedArray<int> *indices_elem = dynamic_cast<TypedArray<int> *>( mesh[ "_elements[0].indices" ].model() );
     const int nodes_by_elem = indices_elem->size(0);
     const unsigned nb_elems = indices_elem->size(1);
-    //qDebug() << nodes_by_elem << "," << nb_elems;
+    qDebug() << nodes_by_elem << "," << nb_elems;
     elements.resize(nb_elems);
     for(unsigned e = 0, cpt = 0; e < nb_elems; e++)
     {
@@ -37,19 +41,20 @@ void Mesh::load(MP mesh)
         }
     }
     
-    /// Recuperation de la peau
-    TypedArray<int> *indices_skin = dynamic_cast<TypedArray<int> *>( mesh[ "_elements[0].indices" ].model() );
-    const int nodes_by_skin = indices_skin->size(0);
-    const unsigned nb_skins = indices_skin->size(1);
-    //qDebug() << nodes_by_skin << "," << nb_skins;
-    skin_elements.resize(nb_skins);
-    for(unsigned s = 0, cpt = 0; s < nb_skins; s++)
-    {
-        for(int n = 0; n < nodes_by_skin; n++, cpt++)
-        {
-            skin_elements[s].push_back( indices_skin->operator[](cpt) );
-        }
-    }
+//     /// Recuperation de la peau
+//     PRINT("Recuperation de la peau");
+//     TypedArray<int> *indices_skin = dynamic_cast<TypedArray<int> *>( mesh[ "_elements[0].indices" ].model() );
+//     const int nodes_by_skin = indices_skin->size(0);
+//     const unsigned nb_skins = indices_skin->size(1);
+//     qDebug() << nodes_by_skin << "," << nb_skins;
+//     skin_elements.resize(nb_skins);
+//     for(unsigned s = 0, cpt = 0; s < nb_skins; s++)
+//     {
+//         for(int n = 0; n < nodes_by_skin; n++, cpt++)
+//         {
+//             skin_elements[s].push_back( indices_skin->operator[](cpt) );
+//         }
+//     }
 }
 
 MP Mesh::save() const

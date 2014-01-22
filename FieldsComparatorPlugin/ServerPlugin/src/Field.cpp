@@ -3,10 +3,16 @@
 #include <Soca/Model/TypedArray.h>
 
 
+Field::Field()
+{
+    current_time_step = 0;
+}
+
 Field::Field(MP fielditem, Mesh* mesh):
     mesh(mesh)
 {
     load(fielditem);
+    current_time_step = 0;
 }
 
 void Field::load(MP fielditem)
@@ -106,14 +112,23 @@ Field Field::operator+(const Field& other) const
     result.name = name;
     result.type = type;
     result.order = order;
-    result.values.resize( values.size() );
-    for(int v = 0; v < values.size(); v++)
-    {
-        result.values[v].time = values[v].time;
-        result.values[v].data.resize(values[v].data.size());
-        for(unsigned n = 0; n < values[v].data.size(); n++)
-            result.values[v].data[n] = values[v].data[n] + other.values[v].data[n];
-    }
+//     // pour tous les pas de temps
+//     result.values.resize( values.size() );
+//     for(int v = 0; v < values.size(); v++)
+//     {
+//         result.values[v].time = values[v].time;
+//         result.values[v].data.resize(values[v].data.size());
+//         for(unsigned n = 0; n < values[v].data.size(); n++)
+//             result.values[v].data[n] = values[v].data[n] + other.values[v].data[n];
+//     }
+//     return result;
+    
+    //pour le pas de temps considéré
+    result.values.resize( 1 );
+    result.values[0].time = values[current_time_step].time;
+    result.values[0].data.resize(values[current_time_step].data.size());
+    for(unsigned n = 0; n < values[current_time_step].data.size(); n++)
+        result.values[0].data[n] = values[current_time_step].data[n] + other.values[other.current_time_step].data[n];
     return result;
 }
 
@@ -123,13 +138,27 @@ Field Field::operator-(const Field& other) const
     result.name = name;
     result.type = type;
     result.order = order;
-    result.values.resize( values.size() );
-    for(int v = 0; v < values.size(); v++)
-    {
-        result.values[v].time = values[v].time;
-        result.values[v].data.resize(values[v].data.size());
-        for(unsigned n = 0; n < values[v].data.size(); n++)
-            result.values[v].data[n] = values[v].data[n] - other.values[v].data[n];
+    
+    qDebug() << "input_0 : " << values.size() << "  " << current_time_step;
+    qDebug() << "input_1 : " << other.values.size() << "  " << other.current_time_step;
+//     // pour tous les pas de temps
+//     result.values.resize( values.size() );
+//     for(int v = 0; v < values.size(); v++)
+//     {
+//         result.values[v].time = values[v].time;
+//         result.values[v].data.resize(values[v].data.size());
+//         for(unsigned n = 0; n < values[v].data.size(); n++)
+//             result.values[v].data[n] = values[v].data[n] - other.values[v].data[n];
+//     }
+//     return result;
+    
+    //pour le pas de temps considéré
+    result.values.resize( 1 );
+    result.values[0].time = values[current_time_step].time;
+    result.values[0].data.resize(values[current_time_step].data.size());
+    for(unsigned n = 0; n < values[current_time_step].data.size(); n++){
+        qDebug() << values[current_time_step].data[n] << " , " << other.values[other.current_time_step].data[n];
+        result.values[0].data[n] = values[current_time_step].data[n] - other.values[other.current_time_step].data[n];
     }
     return result;
 }
@@ -140,14 +169,24 @@ Field Field::operator*(const Field& other) const
     result.name = name;
     result.type = type;
     result.order = order;
-    result.values.resize( values.size() );
-    for(int v = 0; v < values.size(); v++)
-    {
-        result.values[v].time = values[v].time;
-        result.values[v].data.resize(values[v].data.size());
-        for(unsigned n = 0; n < values[v].data.size(); n++)
-            result.values[v].data[n] = values[v].data[n] * other.values[v].data[n];
-    }
+    
+//     // pour tous les pas de temps
+//     result.values.resize( values.size() );
+//     for(int v = 0; v < values.size(); v++)
+//     {
+//         result.values[v].time = values[v].time;
+//         result.values[v].data.resize(values[v].data.size());
+//         for(unsigned n = 0; n < values[v].data.size(); n++)
+//             result.values[v].data[n] = values[v].data[n] * other.values[v].data[n];
+//     }
+//     return result;
+    
+    //pour le pas de temps considéré
+    result.values.resize( 1 );
+    result.values[0].time = values[current_time_step].time;
+    result.values[0].data.resize(values[current_time_step].data.size());
+    for(unsigned n = 0; n < values[current_time_step].data.size(); n++)
+        result.values[0].data[n] = values[current_time_step].data[n] * other.values[other.current_time_step].data[n];
     return result;
 }
 
@@ -157,14 +196,24 @@ Field Field::operator/(const Field& other) const
     result.name = name;
     result.type = type;
     result.order = order;
-    result.values.resize( values.size() );
-    for(int v = 0; v < values.size(); v++)
-    {
-        result.values[v].time = values[v].time;
-        result.values[v].data.resize(values[v].data.size());
-        for(unsigned n = 0; n < values[v].data.size(); n++)
-            result.values[v].data[n] = values[v].data[n] / other.values[v].data[n];
-    }
+    
+//     // pour tous les pas de temps
+//     result.values.resize( values.size() );
+//     for(int v = 0; v < values.size(); v++)
+//     {
+//         result.values[v].time = values[v].time;
+//         result.values[v].data.resize(values[v].data.size());
+//         for(unsigned n = 0; n < values[v].data.size(); n++)
+//             result.values[v].data[n] = values[v].data[n] / other.values[v].data[n];
+//     }
+//     return result;
+    
+    //pour le pas de temps considéré
+   result.values.resize( 1 );
+    result.values[0].time = values[current_time_step].time;
+    result.values[0].data.resize(values[current_time_step].data.size());
+    for(unsigned n = 0; n < values[current_time_step].data.size(); n++)
+        result.values[0].data[n] = values[current_time_step].data[n] / other.values[other.current_time_step].data[n];
     return result;
 }
 
@@ -196,4 +245,18 @@ Field Field::operator/(double value) const
         result.values[v].data = values[v].data / value;
     }
     return result;
+}
+
+
+void Field::change_connectivity(const LMT::Vec< int > correspondance){
+    QVector<FieldValue> changed_values;
+    changed_values = values;
+    for(int v = 0; v < values.size(); v++)
+    {
+        for(unsigned n = 0; n < values[v].data.size(); n++){
+            changed_values[v].data[n] = values[v].data[correspondance[n]];
+        }
+    }
+    values = changed_values;
+  
 }
