@@ -5,7 +5,7 @@ class LinkSetItem extends TreeItem
         
         # default values
         @_name.set "Link collection"
-        @_ico.set "img/link_collection.png"
+#         @_ico.set "img/link_collection.png"
         @_viewable.set false
         
         # attributes

@@ -4,11 +4,10 @@ class Scult2DItem extends TreeItem_Computable
         super()
         
         @_name.set name
-        @_ico.set "img/scult2D.png"
+#         @_ico.set "img/scult2D.png"
         @_viewable.set false
         @add_attr
             hdf_output_name     : "output2D"
-            _model_id           : SC_MODEL_ID
         
         @add_output new ScillsAssemblyItem
         

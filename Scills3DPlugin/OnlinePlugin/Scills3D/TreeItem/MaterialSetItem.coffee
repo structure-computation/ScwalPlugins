@@ -5,7 +5,7 @@ class MaterialSetItem extends TreeItem
         
         # default values
         @_name.set "Material collection"
-        @_ico.set "img/material_collection.png"
+#         @_ico.set "img/material_collection.png"
         @_viewable.set false
         
         # attributes

@@ -5,7 +5,7 @@ class LatinParamItem extends TreeItem
         
         # default values
         @_name.set name
-        @_ico.set "img/latin_parameters.png"
+#         @_ico.set "img/latin_parameters.png"
         @_viewable.set false
         #@add_child new VariableParameterSetItem
         #@add_child new TemporalStepSetItem

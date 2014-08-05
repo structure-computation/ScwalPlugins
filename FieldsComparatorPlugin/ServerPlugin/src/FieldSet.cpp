@@ -168,9 +168,18 @@ FieldSet FieldSet::operator/(double value) const
     return result;
 }
 
+template<int static_size_>
+double norm_2(LMT::Vec<double,static_size_,void> &v) {
+    double res;
+    res=std::sqrt(dot(v,v));
+    return res;
+}
+
+
 void FieldSet::other_field_mesh_correspondance(const FieldSet& other)
 {
   
+    double err = 10e-4;
     if(!correspondance_computed){
         LMT::Vec< LMT::Vec<double> >   nodes_0;
         LMT::Vec< LMT::Vec<double> >   nodes_1;
@@ -184,7 +193,7 @@ void FieldSet::other_field_mesh_correspondance(const FieldSet& other)
         
         for(int i = 0; i < nodes_0.size(); i++){
             for(int j = 0; j < nodes_1.size(); j++){
-                if(nodes_0[i][0] == nodes_1[j][0]){
+                if( abs(nodes_0[i][0]-nodes_1[j][0]) <= err ){
                     ht[i].push_back(j);
                 }
             } 
@@ -193,7 +202,7 @@ void FieldSet::other_field_mesh_correspondance(const FieldSet& other)
         correspondance.resize(nodes_0.size(),-1);
         for(int i = 0; i < ht.size(); i++){
             for(int j = 0; j < ht[i].size(); j++){
-                if(nodes_0[i] == nodes_1[ht[i][j]]){
+                if( norm_2(nodes_0[i] - nodes_1[ht[i][j]]) <= err ){
                     correspondance[i] = ht[i][j];
                     break;
                 }

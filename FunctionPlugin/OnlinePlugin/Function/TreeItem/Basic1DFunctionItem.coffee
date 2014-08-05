@@ -4,7 +4,7 @@ class Basic1DFunctionItem extends TreeItem
         super()
 
         @_name.set name
-        @_ico.set "img/plot2D.png"
+#         @_ico.set "img/plot2D.png"
         @_viewable.set true
         
         @add_attr

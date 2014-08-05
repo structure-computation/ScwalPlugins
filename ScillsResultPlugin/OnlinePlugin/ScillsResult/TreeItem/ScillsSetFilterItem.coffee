@@ -5,7 +5,7 @@ class ScillsSetFilterItem extends TreeItem
         
         # default values
         @_name.set "filter"
-        @_ico.set "img/fleche_output.png"
+#         @_ico.set "img/fleche_output.png"
         @_viewable.set false
          
         # attributes

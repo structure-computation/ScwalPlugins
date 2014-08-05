@@ -5,7 +5,7 @@ class ScillsInterFilterItem extends TreeItem
         
         # default values
         @_name.set name_group
-        @_ico.set "img/fleche_output.png"
+#         @_ico.set "img/fleche_output.png"
         @_viewable.set false
          
         # attributes

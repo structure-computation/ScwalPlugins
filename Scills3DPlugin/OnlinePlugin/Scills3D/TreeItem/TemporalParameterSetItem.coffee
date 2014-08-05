@@ -5,7 +5,7 @@ class TemporalParameterSetItem extends TreeItem
         
         # default values
         @_name.set "Temporal parameter collection"
-        @_ico.set "img/temporal_step_collection.png"
+#         @_ico.set "img/temporal_step_collection.png"
         @_viewable.set false
         
         # attributes

@@ -4,12 +4,11 @@ class Scult3DItem extends TreeItem_Computable
         super()
 
         @_name.set name
-        @_ico.set "img/scult3D.png"
+#         @_ico.set "img/scult3D.png"
         @_viewable.set false
         @add_attr
             run_type            : new Choice( 0, [ "load unv","visualize group" ] )
             hdf_output_name     : "output3D"
-            _model_id           : SC_MODEL_ID
           
         @add_output new ScillsAssemblyItem
         #@_computation_mode.set true

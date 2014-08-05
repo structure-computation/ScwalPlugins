@@ -5,7 +5,7 @@ class VariableParameterItem extends TreeItem
         
         # default values
         @_name.set name
-        @_ico.set "img/variable_parameter.png"
+#         @_ico.set "img/variable_parameter.png"
         @_viewable.set false
 
         # attributes

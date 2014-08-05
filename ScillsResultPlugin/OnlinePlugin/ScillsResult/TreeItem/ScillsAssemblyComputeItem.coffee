@@ -10,7 +10,7 @@ class ScillsAssemblyComputeItem extends TreeItem_Computable
             
         # default values
         @_name.set name
-        @_ico.set "img/assembly_15.png"
+#         @_ico.set "img/assembly_15.png"
         @_viewable.set true
         @add_child new ScillsPartSetItem
         @add_child new ScillsInterfaceSetItem

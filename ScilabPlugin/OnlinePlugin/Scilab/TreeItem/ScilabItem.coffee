@@ -12,7 +12,7 @@ class ScilabItem extends TreeItem_Computable
             
             
         @_name.set name
-        @_ico.set "img/scilab.png"
+#         @_ico.set "img/scilab.png"
         @_viewable.set false
         @_computation_mode.set false
         

@@ -12,7 +12,7 @@ class ViewDataAcq extends TreeItem
             
         # default values
         @_name.set "Grandeurs visualisables"
-        @_ico.set "img/view-presentation.png"
+#         @_ico.set "img/view-presentation.png"
         
         
     accept_child: ( ch ) ->

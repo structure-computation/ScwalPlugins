@@ -5,7 +5,7 @@ class MaskItem extends TreeItem
         
         # default values
         @_name.set "Mask"
-        @_ico.set "img/mask_16.png"
+#         @_ico.set "img/mask_16.png"
         @_viewable.set false
 #         @add_child new SketchItem
 

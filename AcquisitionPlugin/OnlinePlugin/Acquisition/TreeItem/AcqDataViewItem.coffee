@@ -5,7 +5,7 @@ class AcqDataViewItem extends TreeItem
 
 		# default values
 		@_name.set name
-		@_ico.set "img/results_16.png"
+# 		@_ico.set "img/results_16.png"
 		@_viewable.set true
 				
 		@add_attr

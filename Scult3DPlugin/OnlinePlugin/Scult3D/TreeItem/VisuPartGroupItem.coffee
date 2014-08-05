@@ -5,7 +5,7 @@ class VisuPartGroupItem extends TreeItem
         
         # default values
         @_name.set name
-        @_ico.set "img/material.png"
+#         @_ico.set "img/material.png"
         @_viewable.set false
 
         # attributes

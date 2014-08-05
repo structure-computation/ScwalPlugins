@@ -5,7 +5,7 @@ class ScillsPartItem extends TreeItem
         
         # default values
         @_name.set name
-        @_ico.set "img/part.png"
+#         @_ico.set "img/part.png"
         @_viewable.set true
         
         # attributes    

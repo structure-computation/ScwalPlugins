@@ -5,7 +5,7 @@ class LatinComputationItem extends TreeItem
         
         # default values
         @_name.set name
-        @_ico.set "img/latin_computation.png"
+#         @_ico.set "img/latin_computation.png"
         @_viewable.set false
         @add_child new LatinParametersItem "Computation parameters"
         @add_child new MaterialAssignationItem

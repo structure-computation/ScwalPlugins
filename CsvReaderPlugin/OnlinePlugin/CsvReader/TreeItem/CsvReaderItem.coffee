@@ -4,7 +4,7 @@ class CsvReaderItem extends TreeItem_Computable
         # TreeItem_Computable initialization
         super()
         @_name.set name
-        @_ico.set "img/csvReader.png"
+#         @_ico.set "img/csvReader.png"
         @_viewable.set false
 
         # attributes

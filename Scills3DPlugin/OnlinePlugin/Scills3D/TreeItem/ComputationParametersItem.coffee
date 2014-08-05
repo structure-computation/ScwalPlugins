@@ -5,7 +5,7 @@ class ComputationParametersItem extends TreeItem
         
         # default values
         @_name.set name
-        @_ico.set "img/computation_parameters.png"
+#         @_ico.set "img/computation_parameters.png"
         @_viewable.set false
         @add_child new LatinParamItem
         @add_child new TimeParamItem

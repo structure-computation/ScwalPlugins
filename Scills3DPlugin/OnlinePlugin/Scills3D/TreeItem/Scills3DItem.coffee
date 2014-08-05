@@ -4,7 +4,7 @@ class Scills3DItem extends TreeItem_Computable
         super()
 
         @_name.set name
-        @_ico.set "img/scills3D.png"
+#         @_ico.set "img/scills3D.png"
         @_viewable.set false
         
         # attributes

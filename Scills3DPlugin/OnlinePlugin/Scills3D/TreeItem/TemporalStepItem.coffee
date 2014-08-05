@@ -5,7 +5,7 @@ class TemporalStepItem extends TreeItem
         
         # default values
         @_name.set name
-        @_ico.set "img/temporal_step.png"
+#         @_ico.set "img/temporal_step.png"
         @_viewable.set false
 
         # attributes

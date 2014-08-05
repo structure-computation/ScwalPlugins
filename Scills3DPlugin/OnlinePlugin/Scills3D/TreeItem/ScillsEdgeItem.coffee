@@ -13,7 +13,7 @@ class ScillsEdgeItem extends TreeItem
         
         # default values
         @_name.set name
-        @_ico.set "img/edge.png"
+#         @_ico.set "img/edge.png"
         @_viewable.set true
     
     cosmetic_attribute: ( name ) ->
