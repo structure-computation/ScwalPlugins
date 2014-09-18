@@ -1,6 +1,6 @@
 #
 class ListParameterItem extends TreeItem
-constructor: (name = "ListParameter", values = [] ) ->
+    constructor: (name = "ListParameter", values = [] ) ->
         # TreeItem initialization
         super()
         @_name.set name
