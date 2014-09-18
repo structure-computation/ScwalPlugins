@@ -5,7 +5,7 @@ class ScillsInterfaceItem extends TreeItem
         
         # default values
         @_name.set name
-        @_ico.set "img/interface.png"
+#         @_ico.set "img/interface.png"
         @_viewable.set true
         
         # attributes

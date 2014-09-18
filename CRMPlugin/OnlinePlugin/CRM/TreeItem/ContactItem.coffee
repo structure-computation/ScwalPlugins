@@ -4,7 +4,7 @@ class ContactItem extends TreeItem
         super()
 
         @_name.set name
-        @_ico.set "img/plot3D.png"
+#         @_ico.set "img/plot3D.png"
         @_viewable.set false
         
         @add_attr

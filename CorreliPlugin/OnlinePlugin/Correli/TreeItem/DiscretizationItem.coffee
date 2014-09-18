@@ -5,7 +5,7 @@ class DiscretizationItem extends TreeItem
         
         # default values
         @_name.set "Discretization"
-        @_ico.set "img/discretization_16.png"
+#         @_ico.set "img/discretization_16.png"
         @_viewable.set false
 #         @add_child new SketchItem
     

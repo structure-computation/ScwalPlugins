@@ -4,7 +4,7 @@ class ScillsStructureItem extends TreeItem
         super()
 
         @_name.set name
-        @_ico.set "img/scills3D.png"
+#         @_ico.set "img/scills3D.png"
         @_viewable.set false
         #@add_child new ScultMeshItem "Assembly"
     

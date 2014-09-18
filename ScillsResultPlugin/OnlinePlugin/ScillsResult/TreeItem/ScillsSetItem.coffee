@@ -5,7 +5,7 @@ class ScillsSetItem extends TreeItem
         
         # default values
         @_name.set name
-        @_ico.set ico
+#         @_ico.set ico
         @_viewable.set true
         
         @add_attr

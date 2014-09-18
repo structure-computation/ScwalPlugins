@@ -6,7 +6,7 @@ class CorrelationItem extends TreeItem_Computable
         
         # default values
         @_name.set "Correlation"
-        @_ico.set "img/correlation_19.png"
+#         @_ico.set "img/correlation_19.png"
         @_viewable.set false
         @add_child new PhysicsItem
         @add_child new ImgSetItem

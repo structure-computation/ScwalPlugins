@@ -155,7 +155,7 @@ class Launcher : public QObject {
           qDebug() << "requette log_tool-----------" ;
 //           Client http_client;
 //           http_client.connexion();
-          int sc_model_id = mp[ "_sc_model_id" ];
+          int sc_model_id = -1;
           QString  mp_type = mp.type(); 
           QByteArray byteArray = mp_type.toUtf8();
           const char* c_string = byteArray.constData();

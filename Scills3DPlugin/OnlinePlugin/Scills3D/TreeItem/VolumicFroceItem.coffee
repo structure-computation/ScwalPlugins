@@ -5,7 +5,7 @@ class VolumicForceItem extends TreeItem
         
         # default values 
         @_name.set name
-        @_ico.set "img/volumic_force.png"
+#         @_ico.set "img/volumic_force.png"
         @_viewable.set false
 
         # attributes

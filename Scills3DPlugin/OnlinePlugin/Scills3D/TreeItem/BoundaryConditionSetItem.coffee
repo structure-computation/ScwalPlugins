@@ -5,7 +5,7 @@ class BoundaryConditionSetItem extends TreeItem
         
         # default values
         @_name.set "BoundaryCondition collection"
-        @_ico.set "img/boundary_condition_collection.png"
+#         @_ico.set "img/boundary_condition_collection.png"
         @_viewable.set false
         
         # attributes

@@ -10,7 +10,7 @@ class ResultItem extends TreeItem
             
         # default values
         @_name.set "Results"
-        @_ico.set "img/results_16.png"
+#         @_ico.set "img/results_16.png"
         @_viewable.set true
         
                 

@@ -5,7 +5,7 @@ class ThermalLoadItem extends TreeItem
         
         # default values
         @_name.set name
-        @_ico.set "img/thermal_load.png"
+#         @_ico.set "img/thermal_load.png"
         @_viewable.set false
 
         # attributes

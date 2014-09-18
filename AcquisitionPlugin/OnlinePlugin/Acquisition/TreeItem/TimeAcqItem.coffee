@@ -12,7 +12,7 @@ class TimeAcqItem extends TreeItem
         
         # default values
         @_name.set "Time"
-        @_ico.set "img/view-presentation.png"
+#         @_ico.set "img/view-presentation.png"
         
         
     accept_child: ( ch ) ->

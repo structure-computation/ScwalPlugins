@@ -4,19 +4,19 @@ class SurfaceFunctionItem extends TreeItem
         super()
 
         @_name.set name
-        @_ico.set "img/plot3D.png"
+#         @_ico.set "img/plot3D.png"
         @_viewable.set true
         
         @add_attr
             f_z           : "x*y"
             x_bound       : [ -10, 10 ]
             y_bound       : [ -10, 10 ]
-            nb_values     : new ConstrainedVal( 2, { min: 2, max: 50, div: 48 } )
+            nb_values     : new ConstrainedVal( 20, { min: 2, max: 50, div: 48 } )
             x_axe_bound   : [ -10, 10 ]
             y_axe_bound   : [ -10, 10 ]
             z_axe_bound   : [ -10, 10 ]
-            x_axe_scale   : new ConstrainedVal( 1, { min: 1, max: 100, div: 99 } )
-            y_axe_scale   : new ConstrainedVal( 1, { min: 1, max: 100, div: 99 } )
+            x_axe_scale   : new ConstrainedVal( 30, { min: 1, max: 100, div: 99 } )
+            y_axe_scale   : new ConstrainedVal( 30, { min: 1, max: 100, div: 99 } )
             z_axe_scale   : new ConstrainedVal( 1, { min: 1, max: 100, div: 99 } )
             
             _v1           : new Vec

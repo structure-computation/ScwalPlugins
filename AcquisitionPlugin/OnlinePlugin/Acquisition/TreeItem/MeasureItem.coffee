@@ -5,7 +5,7 @@ class MeasureItem extends TreeItem
 
 		# default values
 		@_name.set name+@gethms()
-		@_ico.set "img/results_16.png"
+# 		@_ico.set "img/results_16.png"
 		@_viewable.set true
 				
 		@add_attr

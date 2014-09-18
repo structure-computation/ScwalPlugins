@@ -5,7 +5,7 @@ class VisuInterfaceGroupItem extends TreeItem
         
         # default values
         @_name.set name
-        @_ico.set "img/link.png"
+#         @_ico.set "img/link.png"
         @_viewable.set false
 
         # attributes

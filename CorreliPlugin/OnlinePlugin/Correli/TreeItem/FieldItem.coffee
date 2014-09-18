@@ -9,7 +9,7 @@ class FieldItem extends TreeItem
         
         # default values
         @_name.set name
-        @_ico.set "img/mesh_24.png"
+#         @_ico.set "img/mesh_24.png"
         @_viewable.set true
     
     sub_canvas_items: ->

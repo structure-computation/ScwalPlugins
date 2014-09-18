@@ -5,7 +5,7 @@ class ParametricParamItem extends TreeItem
         
         # default values
         @_name.set name
-        @_ico.set "img/time.png"
+#         @_ico.set "img/time.png"
         @_viewable.set false
 
         # attributes

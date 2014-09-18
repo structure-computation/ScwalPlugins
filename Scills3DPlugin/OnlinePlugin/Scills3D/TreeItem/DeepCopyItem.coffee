@@ -4,7 +4,7 @@ class DeepCopyItem extends TreeItem
         super()
 
         @_name.set name
-        @_ico.set "img/deepCopy.png"
+#         @_ico.set "img/deepCopy.png"
         @_viewable.set false
         
         
