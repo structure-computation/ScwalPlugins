@@ -173,15 +173,16 @@ class Job : public QObject {
         return req > rep and m != a;
     }
 
-    bool run_model_test(MP model_test){
+    bool run_model_test( MP model_test ){
         bool run_app = false;
-        model_set_state(model_test);
+        model_set_state( model_test );
 
         quint64 model_computation_mode          = model_test[ "_computation_mode" ]; 
         quint64 model_computation_req_date      = model_test[ "_computation_req_date" ];
         quint64 model_computation_rep_date      = model_test[ "_computation_rep_date" ];
         
 //         qDebug() << "model_computation_mode : " << model_computation_mode << "  model_computation_state : " << model_computation_state;
+        qDebug() << "model_computation_state" << model_computation_state;
         if ( model_computation_state == true ){
             run_app = true;
         }
@@ -200,6 +201,9 @@ class Job : public QObject {
         
         
 //         qDebug() << "run_app : " << run_app;
+        quint64 auto_compute = model_test[ "auto_compute" ]; 
+        if ( auto_compute )
+            return true;
         
         return run_app;
     }
@@ -327,8 +331,8 @@ public:
     int find_job_index( MP mp_test, SodaClient &sc ){
 //         qDebug() << "find_job_index " ;
 //         qDebug() << "model : " << mp_test;
-        for (int i = 0; i < jobs.size(); ++i) {
-            if (jobs[i]->find_job_model(mp_test)){
+        for( int i = 0; i < jobs.size(); ++i ) {
+            if ( jobs[i]->find_job_model( mp_test ) ){
                 
                 jobs[i]->model = mp_test;
                 jobs[i]->sc = &sc;
@@ -337,20 +341,19 @@ public:
             }
         }
         Job *new_job = new Job();
-        if(new_job->run_model_test(mp_test)){
-            
+        if ( new_job->run_model_test( mp_test ) ) {
             new_job->model = mp_test;
             new_job->sc = &sc;
-            new_job->initialize(mp_test);
-            jobs.append(new_job);
+            new_job->initialize( mp_test );
+            jobs.append( new_job );
             //return &(jobs.last());
             qDebug() << "run_model_test";
-            return (jobs.size()-1);
+            return jobs.size() - 1;
         }
-        if(new_job->waiting_something_to_compute){
-            return (-1);
+        if ( new_job->waiting_something_to_compute ){
+            return -1;
         }
-        return (-2);
+        return -2;
     }
     
 };
