@@ -11,8 +11,8 @@ class CorreliDemoItem extends TreeItem
             demo_app : "CorreliDemoItem"
             directory : "Correli"
             video_link : undefined
+            tutorial_link : '<iframe width="1100" height="1550" frameborder="0" style="border:0" id="pdfviewer" src="http://eikosim.com/PluginsManuals/CorreliPlugin_lmt.pdf">Preview not available in your browser.</iframe>'
             publication_link : undefined
-            
 
     associated_application: ()->
         apps = new Lst
