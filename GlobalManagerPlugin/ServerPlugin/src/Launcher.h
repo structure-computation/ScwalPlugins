@@ -137,8 +137,8 @@ class Launcher : public QObject {
 //           }   
 
           qDebug() << "----------------- output : " << output;
-          if(output){
-              mp[ "_computation_mode" ]   = false;
+//           if(output){
+//               mp[ "_computation_mode" ]   = false;
               mp[ "_ready_state" ]        = false;
               mp[ "_computation_state" ]  = false;
               mp[ "_pending_state" ]      = false;
@@ -146,7 +146,7 @@ class Launcher : public QObject {
               mp[ "_finish_state" ]       = false;
               mp[ "_stop_state" ]         = true;
               mp.flush();
-          }
+//           }
           
           return output;
       }; 
@@ -182,12 +182,12 @@ class Launcher : public QObject {
               
       void launch(){ 
           qDebug() << "###############   launch tool ###############" ;
-          mp[ "_ready_state" ]        = false;
-          mp[ "_computation_state" ]  = true;
-          mp[ "_pending_state" ]      = false;
+//           mp[ "_ready_state" ]        = false;
+//           mp[ "_computation_state" ]  = true;
+//           mp[ "_pending_state" ]      = false;
           mp[ "_processing_state" ]   = true;
-          mp[ "_finish_state" ]       = false;
-          mp[ "_stop_state" ]         = false;
+//           mp[ "_finish_state" ]       = false;
+//           mp[ "_stop_state" ]         = false;
           mp.flush();
           TicToc tic;
           tic.start();

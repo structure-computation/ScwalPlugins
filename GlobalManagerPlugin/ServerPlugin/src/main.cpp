@@ -18,7 +18,7 @@ int main( int argc, char **argv ) {
     sc.reg_type( "Scills2DItem" );
     sc.reg_type( "Scills3DItem" );
     sc.reg_type( "FieldsComparatorItem" );
-    sc.reg_type( "CorrelationItem" );
+//     sc.reg_type( "CorrelationItem" );
     sc.reg_type( "GmshItem" );
     sc.reg_type( "StepReaderItem" );
     sc.reg_type( "ScilabItem" );
@@ -66,7 +66,7 @@ int main( int argc, char **argv ) {
             } else if( i_job == -1 ) {
                 qDebug() << "something to compute !";   
             } else if( i_job == -2 ) {
-                mp[ "_computation_mode" ]   = false;
+//                 mp[ "_computation_mode" ]   = false;
                 mp[ "_ready_state" ]        = false;
                 mp[ "_computation_state" ]  = false;
                 mp[ "_pending_state" ]      = false;

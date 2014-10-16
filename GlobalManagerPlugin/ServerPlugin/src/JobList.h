@@ -14,6 +14,7 @@ class Job : public QObject {
     quint64 model_id;
     quint64 model_ready_state;
     quint64 model_computation_state;
+    quint64 model_computation_mode;
     quint64 model_pending_state;
     quint64 model_processing_state;
     quint64 model_finish_state;
@@ -115,6 +116,7 @@ class Job : public QObject {
         // model state
         model_ready_state               = model_test[ "_ready_state" ];
         model_computation_state         = model_test[ "_computation_state" ];
+        model_computation_mode          = model_test[ "_computation_mode" ];
         model_pending_state             = model_test[ "_pending_state" ];
         model_processing_state          = model_test[ "_processing_state" ];
         model_finish_state              = model_test[ "_finish_state" ];
@@ -123,6 +125,7 @@ class Job : public QObject {
 //         qDebug() << "--------------------------------------------------------------- ";
 //         qDebug() << "model_ready_state : " << model_ready_state;
 //         qDebug() << "model_computation_state : " << model_computation_state;
+//         qDebug() << "model_computation_mode : " << model_computation_mode;
 //         qDebug() << "model_pending_state : " << model_pending_state;
 //         qDebug() << "model_processing_state : " << model_processing_state;
 //         qDebug() << "model_finish_state : " << model_finish_state;
@@ -135,7 +138,7 @@ class Job : public QObject {
         finish          = false;
         stop            = false;
         
-        if ( model_computation_state == true ){
+        if ( model_computation_state == true or model_computation_mode){
             run = true;
         }
         if ( model_pending_state == true ){
@@ -253,13 +256,13 @@ class Job : public QObject {
         qDebug() << "launcher_exists : " << launcher_exists << ", thread_exists : " << thread_exists << ", run : " << run << ", stop : " << stop;
         if(launcher_exists and thread_exists and run){
             qDebug() << "job lance model------------------------- : " << model_id;
-            mp[ "_ready_state" ]        = false;
-            mp[ "_computation_state" ]  = true;
-            mp[ "_pending_state" ]      = true;
-            mp[ "_processing_state" ]   = false;
-            mp[ "_finish_state" ]       = false;
-            mp[ "_stop_state" ]         = false;
-            mp.flush();
+//             mp[ "_ready_state" ]        = false;
+//             mp[ "_computation_state" ]  = true;
+//             mp[ "_pending_state" ]      = true;
+//             mp[ "_processing_state" ]   = false;
+//             mp[ "_finish_state" ]       = false;
+//             mp[ "_stop_state" ]         = false;
+//             mp.flush();
             launcher->sc = sc;
             launcher->mp.reassign(model);
             connect(thread, SIGNAL(started()), launcher, SLOT(launch()));
