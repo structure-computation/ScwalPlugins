@@ -66,7 +66,7 @@ int main( int argc, char **argv ) {
     }
     
     sleep(1);
-    mp[ "_computation_mode" ] = false;
+//     mp[ "_computation_mode" ] = false;
     mp[ "_computation_state" ] = false;
     mp[ "_processing_state" ] = false;
     mp.flush();

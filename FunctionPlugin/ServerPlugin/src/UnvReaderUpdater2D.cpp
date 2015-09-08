@@ -139,7 +139,7 @@ bool UnvReaderUpdater2D::run( MP mp ) {
         new_list_elements_mesh_2D(om, mesh_user);
       
         //mp[ "_output[ 0 ].mesh" ] << om;
-        mp[ "_computation_mode" ] = false;
+//         mp[ "_computation_mode" ] = false;
         mp.flush();
         add_message( mp, ET_Info, "UnvReaderUpdater2D just finish" );
     }

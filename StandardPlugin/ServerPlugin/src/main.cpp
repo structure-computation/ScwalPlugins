@@ -33,7 +33,7 @@ int main( int argc, char **argv ) {
     }
     
     qDebug() << mp;
-    mp[ "_computation_mode" ] = false;
+//     mp[ "_computation_mode" ] = false;
     mp[ "_computation_state" ] = false;
     mp[ "_processing_state" ] = false; 
     mp.flush();

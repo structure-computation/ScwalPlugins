@@ -29,12 +29,19 @@ class SurfaceFunctionItem extends TreeItem
             _box          : new Mesh( not_editable: true )
              
           
-          
         @add_attr  
-          visualization : @_mesh.visualization
-          _field        : new NodalField @_mesh
+            _visualization : @_mesh.visualization
+            _field        : new NodalField @_mesh
           
-        @visualization.display_style.num.set 1
+        @add_attr
+            _np           : new NamedParametrizedDrawable( "z_field", new InterpolatedField )
+            field_set     : new FieldSet
+          
+        @field_set.color_by.lst.push @_np
+        @field_set.warp_by.lst.push new NamedParametrizedDrawable "dep", new VectorialField "dep", [ @_np, @_np, @_np ] 
+          
+          
+        @_visualization.display_style.num.set 1
         
         @bind =>
             if @f_z.has_been_modified() or @z_axe_scale.has_been_modified() or @z_axe_bound.has_been_modified() or @y_bound.has_been_modified() or @x_bound.has_been_modified() or @nb_values.has_been_modified() or @x_axe_bound.has_been_modified() or @y_axe_bound.has_been_modified() or @x_axe_scale.has_been_modified() or @y_axe_scale.has_been_modified()
@@ -49,7 +56,6 @@ class SurfaceFunctionItem extends TreeItem
         @_v1_scale.clear()
         @_v2_scale.clear()
         @_v3_scale.clear()
-        @_field._data.resize(@_mesh.nb_points())
         #alert @_f_t + " " + @_tmin + " " + @_tmax + " " + @nb_values
         
         for i in [ 0 ... @nb_values.get() ]
@@ -179,33 +185,40 @@ class SurfaceFunctionItem extends TreeItem
 
         #@_mesh._elements.set el.indices
         @_mesh.add_element el
-        @_field._mesh = @_mesh
+        
+        delete @_field
+        @_field = new NodalField @_mesh
+        
+        pos = new Lst
+        pos_v = { axe_name: "time", axe_value: 0 }
+        pos.push pos_v
+        
+        @_np.data._data.clear()
+        @_np.data._data.push 
+            pos : pos
+            field : @_field
+        
+#         @_np.data = @_field
+        
         for i in [ 0 ... @_mesh.nb_points() ]
-            @_field._data.set_val [i], @_mesh.points[i].pos[2]
+            @_field._data.set_val i, @_mesh.points[i].pos[2].get()
             
-        #alert @_mesh.nb_points()
-        #alert @_field._data
+#         console.log @_np.drawing_parameters
     
     
     cosmetic_attribute: ( name ) ->
-        super( name ) or ( name in [ "_mesh", "visualization" ] )
+        super( name ) or ( name in [ "_mesh", "_field", "_np", "_visualization" ] )
     
     accept_child: ( ch ) ->
         
         
     sub_canvas_items: ->
-        [ @_mesh,  @_box]
+        [ @_box, @field_set]
     #    if @nothing_to_do()
     #        [ @_mesh ]
     #    else
     #        []
     
-    #     draw: ( info ) ->
-    #         draw_point = info.sel_item[ @model_id ]
-    #         if @p_mesher.length && draw_point
-    #             for pm in @p_mesher
-    #                 pm.draw info
-        #we may need to add @_mesh.draw info and remove it from sub_canvas_items
     
     z_index: ->
         @_mesh.z_index()
