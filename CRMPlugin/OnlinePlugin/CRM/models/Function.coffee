@@ -1,5 +1,4 @@
 # Copyright 2012 Structure Computation  www.structure-computation.com
-# Copyright 2012 Hugo Leclerc
 #
 # This file is part of Soda.
 #
